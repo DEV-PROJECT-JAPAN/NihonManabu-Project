@@ -1,0 +1,182 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Grammar.IndexModel
+@{
+    ViewData["Title"] = "Học Ngữ Pháp Tiếng Nhật";
+}
+
+<div class="container-fluid py-4" style="background-color: #f8f9fa; min-height: 100vh;">
+
+    @* CẤP ĐỘ 1: NẾU TRÊN URL CHƯA CÓ BÀI HỌC (Tránh lỗi 404 như ảnh 1) *@
+    @if (!Model.LessonId.HasValue || Model.Grammars.Count == 0)
+    {
+        <div class="card shadow-sm text-center p-5 border-0 mx-auto" style="max-width: 600px; margin-top: 50px; rounded: 15px;">
+            <div class="card-body">
+                <img src="https://cdn-icons-png.flaticon.com/512/3429/3429146.png" style="width: 100px;" class="mb-4" alt="chọn bài" />
+                <h4 class="text-primary font-weight-bold">Chào mừng Đội trưởng Khôi!</h4>
+                <p class="text-muted">Vui lòng chọn Cấp độ (N5 - N1) và Bài học ở thanh Menu bên trái để hệ thống hiển thị danh sách ngữ pháp nhé!</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        @* ========================================================================= *@
+        @* CẤP ĐỘ 2: KHI BẤM VÀO BÀI -> HIỂN THỊ TOÀN BỘ DANH SÁCH NGỮ PHÁP (DẠNG GRID CARD) *@
+        @* ========================================================================= *@
+        <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px;">
+            <div class="card-header bg-white border-0 pt-4 pb-0">
+                <h4 class="font-weight-bold text-dark m-0">
+                    <i class="fa-solid fa-layer-group text-primary mr-2"></i> Danh sách Ngữ pháp: Bài @Model.LessonId
+                </h4>
+                <p class="text-muted small">Bấm chọn vào một cấu trúc dưới đây để xem mô tả chi tiết và làm bài tập kiểm tra</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @foreach (var g in Model.Grammars)
+                    {
+                        // Nếu card này đang được click chọn, bôi viền xanh nổi bật
+                        var isSelected = Model.SelectedGrammarId == g.Id;
+                        var cardStyle = isSelected ? "border: 2px solid #007bff; background-color: #e9f5ff;" : "border: 1px solid #dee2e6;";
+
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <a href="?levelId=@Model.LevelId&lessonId=@Model.LessonId&selectedGrammarId=@g.Id&questionType=0" class="text-decoration-none text-dark">
+                                <div class="card h-100 shadow-sm btn-grammar-item" style="@cardStyle; border-radius: 10px; cursor: pointer; transition: transform 0.2s;">
+                                    <div class="card-body d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge badge-pill @(isSelected ? "badge-primary" : "badge-secondary") mr-3 p-2" style="font-size: 0.9rem;">
+                                                文法
+                                            </span>
+                                            <h5 class="m-0 font-weight-bold @(isSelected ? "text-primary" : "")">@g.Structure</h5>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-muted small"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @* ========================================================================= *@
+        @* CẤP ĐỘ 3: CHỈ KHI CHỌN VÀO NGỮ PHÁP MỚI HIỆN MÔ TẢ VÀ 3 CHỨC NĂNG KIỂM TRA *@
+        @* ========================================================================= *@
+        @if (Model.SelectedGrammarId.HasValue && Model.SelectedGrammarId.Value > 0)
+        {
+            var currentGrammar = Model.Grammars.FirstOrDefault(x => x.Id == Model.SelectedGrammarId);
+
+            if (currentGrammar != null)
+            {
+                <div class="card shadow-sm border-0 mb-4" style="border-radius: 12px; border-left: 5px solid #dc3545 !important;">
+                    <div class="card-header bg-white border-0 pt-4 pb-1">
+                        <span class="text-danger font-weight-bold text-uppercase" style="letter-spacing: 1px; font-size: 0.85rem;">📚 Chi tiết cấu trúc</span>
+                        <h3 class="text-danger font-weight-bold mt-1 mb-0">@currentGrammar.Structure</h3>
+                    </div>
+                    <div class="card-body pt-2">
+                        <div class="p-3 rounded" style="background-color: #fff5f5; font-size: 1.15rem; line-height: 1.7; color: #495057; white-space: pre-line;">
+                            <strong>Ý nghĩa / Cách dùng:</strong><br />
+                            @currentGrammar.Explanation
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0" style="border-radius: 12px;">
+                    <div class="card-header bg-dark text-white d-flex flex-wrap justify-content-between align-items-center py-3" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                        <h5 class="m-0 font-weight-bold"><i class="fa-solid fa-graduation-cap text-warning mr-2"></i> Luyện tập kiểm tra ngữ pháp</h5>
+
+                        <div class="btn-group mt-2 mt-sm-0" role="group">
+                            <a href="?levelId=@Model.LevelId&lessonId=@Model.LessonId&selectedGrammarId=@Model.SelectedGrammarId&questionType=1"
+                               class="btn btn-sm px-3 @(Model.QuestionType == 1 ? "btn-warning text-dark font-weight-bold" : "btn-outline-light")">
+                                📝 1. Kiểm tra Trắc nghiệm
+                            </a>
+                            <a href="?levelId=@Model.LevelId&lessonId=@Model.LessonId&selectedGrammarId=@Model.SelectedGrammarId&questionType=2"
+                               class="btn btn-sm px-3 @(Model.QuestionType == 2 ? "btn-warning text-dark font-weight-bold" : "btn-outline-light")">
+                                🧩 2. Kiểm tra Sắp xếp câu
+                            </a>
+                            <a href="?levelId=@Model.LevelId&lessonId=@Model.LessonId&selectedGrammarId=@Model.SelectedGrammarId&questionType=0"
+                               class="btn btn-sm px-3 @(Model.QuestionType == 0 ? "btn-warning text-dark font-weight-bold" : "btn-outline-light")">
+                                🔄 3. Kiểm tra Tổng hợp
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body bg-light-gray p-4">
+                        @if (Model.Questions == null || Model.Questions.Count == 0)
+                        {
+                            <div class="text-center p-5 bg-white rounded border border-0 shadow-sm">
+                                <img src="https://cdn-icons-png.flaticon.com/512/7486/7486744.png" style="width: 70px;" class="mb-3" />
+                                <h5 class="text-muted font-weight-bold">Chế độ này hiện chưa có câu hỏi nào dưới cơ sở dữ liệu!</h5>
+                            </div>
+                        }
+                        else
+                        {
+                            @for (int i = 0; i < Model.Questions.Count; i++)
+                            {
+                                var q = Model.Questions[i];
+                                <div class="card mb-4 border-0 shadow-sm rounded-lg p-4 bg-white">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="badge @(q.QuestionType == 1 ? "badge-info" : "badge-success") px-3 py-2 text-white" style="font-size: 0.85rem; border-radius: 20px;">
+                                            @(q.QuestionType == 1 ? "📝 Trắc nghiệm" : "🧩 Sắp xếp câu")
+                                        </span>
+                                        <span class="text-muted font-weight-bold">Câu hỏi @(i + 1)/@Model.Questions.Count</span>
+                                    </div>
+
+                                    <h5 class="card-title text-dark font-weight-bold mb-4" style="font-size: 1.2rem; line-height: 1.5;">
+                                        👉 @q.Content
+                                    </h5>
+
+                                    @* LOẠI 1: HIỂN THỊ ĐÁP ÁN TRẮC NGHIỆM *@
+                                    @if (q.QuestionType == 1)
+                                    {
+                                        <div class="row">
+                                            @foreach (var ans in q.Answers)
+                                            {
+                                                <div class="col-md-6 mb-3">
+                                                    <button class="btn btn-block btn-outline-secondary text-left py-3 px-4" style="border-radius: 8px; font-size: 1.05rem; background-color: #fff; border: 1px solid #ced4da; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: all 0.2s;">
+                                                        <i class="fa-regular fa-circle text-muted mr-3"></i> @ans.Text
+                                                    </button>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    @* LOẠI 2: HIỂN THỊ ĐÁP ÁN SẮP XẾP CÂU *@
+                                    else if (q.QuestionType == 2)
+                                    {
+                                        <div class="p-3 bg-light rounded border mb-3 text-muted text-center" style="border: 2px dashed #dee2e6 !important;">
+                                            <i class="fa-solid fa-arrow-down-short-wide text-success mr-2"></i> Nhấp chuột vào các ô chữ dưới đây để ghép thành câu hoàn chỉnh:
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-2 justify-content-center mt-3">
+                                            @foreach (var ans in q.Answers.OrderBy(a => a.DisplayOrder))
+                                            {
+                                                <span class="badge badge-pill badge-light border p-3 m-2 shadow-sm text-dark font-weight-bold" style="font-size: 1.1rem; cursor: pointer; transition: transform 0.1s; border-radius: 8px;">
+                                                    @ans.Text
+                                                </span>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        }
+    }
+</div>
+
+<style>
+    .btn-grammar-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+    }
+
+    .badge-light:hover {
+        background-color: #e2e6ea !important;
+        transform: scale(1.05);
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #f1f3f5 !important;
+        color: #212529 !important;
+        border-color: #adb5bd !important;
+    }
+</style>
