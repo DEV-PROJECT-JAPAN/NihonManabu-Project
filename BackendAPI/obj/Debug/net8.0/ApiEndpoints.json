@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "BackendAPI.Controllers.GrammarController",
+    "Method": "GetById",
+    "RelativePath": "api/Grammar/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendAPI.Controllers.GrammarController",
     "Method": "GetByLesson",
     "RelativePath": "api/Grammar/lesson/{lessonId}",
     "HttpMethod": "GET",

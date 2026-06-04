@@ -17,6 +17,17 @@ namespace BackendAPI.Controllers
         {
             _grammarService = grammarService;
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("ID ngữ pháp không hợp lệ rồi trai đẹp!");
+            }
+            var result = await _grammarService.GetGrammarByIdAsync(id);
+            return Ok(result);
+        }
+        /// <summary>
 
         // Đường dẫn gọi API: GET /api/grammar/lesson/1
         [HttpGet("lesson/{lessonId}")]
@@ -26,7 +37,7 @@ namespace BackendAPI.Controllers
         {
             if (lessonId <= 0)
             {
-                return BadRequest("ID bài học không hợp lệ Đội trưởng ơi!");
+                return BadRequest("ID bài học không hợp lệ rồi trai đẹp!");
             }
 
             var result = await _grammarService.GetGrammarByLessonAsync(lessonId);

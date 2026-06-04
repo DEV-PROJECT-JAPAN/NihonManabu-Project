@@ -15,6 +15,22 @@ namespace FrontendRazorPage.Services
             _http = httpClient;
         }
 
+        public async Task<GrammarModel> GetGrammarByIdAsync(int grammarId)
+        {
+            if (grammarId <= 0) return new GrammarModel();
+            try
+            {
+                // Bắn lệnh GET sang endpoint: /api/Grammar/{grammarId}
+                // Nếu lỗi mạng hoặc null, toán tử ?? new() sẽ trả về object trống để chống sập giao diện
+                return await _http.GetFromJsonAsync<GrammarModel>($"{_apiBase}/{grammarId}") ?? new();
+            }
+            catch
+            {
+                // Nếu Backend sập hoặc mất mạng, trả về object trống để app chạy tiếp mượt mà
+                return new GrammarModel();
+            }
+        }
+
         public async Task<List<GrammarModel>> GetGrammarByLessonAsync(int lessonId)
         {
             if (lessonId <= 0) return new List<GrammarModel>();

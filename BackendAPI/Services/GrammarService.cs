@@ -14,6 +14,19 @@ namespace BackendAPI.Services
             _context = context;
         }
 
+        public async Task<GrammarDTO> GetGrammarByIdAsync(int grammarId)
+        {
+            return await _context.Grammars.Where(g => g.Id == grammarId)
+                .Select(g => new GrammarDTO
+                {
+                    Id = g.Id,
+                    LessonId = g.LessonId,
+                    Structure = g.Structure ?? string.Empty,
+                    Explanation = g.Explanation ?? string.Empty
+                })
+                .FirstOrDefaultAsync() ?? new GrammarDTO();
+        }
+
         public async Task<List<GrammarDTO>> GetGrammarByLessonAsync(int lessonId)
         {
             if (lessonId <= 0) return new List<GrammarDTO>();
@@ -50,26 +63,26 @@ namespace BackendAPI.Services
                 query = query.Where(q => q.QuestionType == questionType);
             }
 
-            return await query
-                .Select(q => new QuestionDTO
-                {
-                    Id = q.Id,
-                    GrammarId = q.GrammarId ?? 0,
-                    Content = q.Content ?? string.Empty,
-                    QuestionType = q.QuestionType, // Bây giờ nó trả về int (1 hoặc 2)
+                return await query
+                    .Select(q => new QuestionDTO
+                    {
+                        Id = q.Id,
+                        GrammarId = q.GrammarId ?? 0,
+                        Content = q.Content ?? string.Empty, // câu hỏi 
+                        QuestionType = q.QuestionType, // Bây giờ nó trả về int (1 hoặc 2)
 
-                    Answers = q.Answers != null
-                        ? q.Answers.Select(a => new AnswerDTO
-                        {
-                            Id = a.Id,
-                            QuestionId = a.QuestionId,
-                            Text = a.Text ?? string.Empty,
-                            IsCorrect = a.IsCorrect,
-                            DisplayOrder = a.DisplayOrder ?? string.Empty
-                        }).ToList()
-                        : new List<AnswerDTO>()
-                })
-                .ToListAsync();
+                        Answers = q.Answers != null
+                            ? q.Answers.Select(a => new AnswerDTO
+                            {
+                                Id = a.Id,
+                                QuestionId = a.QuestionId,
+                                Text = a.Text ?? string.Empty,
+                                IsCorrect = a.IsCorrect,
+                                DisplayOrder = a.DisplayOrder ?? string.Empty
+                            }).ToList()
+                            : new List<AnswerDTO>()
+                    })
+                    .ToListAsync();
         }
 
        

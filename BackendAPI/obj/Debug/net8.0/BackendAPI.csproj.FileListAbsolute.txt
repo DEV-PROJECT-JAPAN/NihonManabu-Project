@@ -306,3 +306,4 @@ D:\MY STUDY\ProjectCK\BackendAPI\obj\Debug\net8.0\refint\BackendAPI.dll
 D:\MY STUDY\ProjectCK\BackendAPI\obj\Debug\net8.0\BackendAPI.pdb
 D:\MY STUDY\ProjectCK\BackendAPI\obj\Debug\net8.0\BackendAPI.genruntimeconfig.cache
 D:\MY STUDY\ProjectCK\BackendAPI\obj\Debug\net8.0\ref\BackendAPI.dll
+D:\MY STUDY\ProjectCK\BackendAPI\obj\Debug\net8.0\BackendAPI.sourcelink.json

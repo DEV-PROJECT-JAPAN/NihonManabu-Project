@@ -62,3 +62,4 @@ D:\MY STUDY\ProjectCK\FrontendRazorPage\obj\Debug\net8.0\refint\FrontendRazorPag
 D:\MY STUDY\ProjectCK\FrontendRazorPage\obj\Debug\net8.0\FrontendRazorPage.pdb
 D:\MY STUDY\ProjectCK\FrontendRazorPage\obj\Debug\net8.0\FrontendRazorPage.genruntimeconfig.cache
 D:\MY STUDY\ProjectCK\FrontendRazorPage\obj\Debug\net8.0\ref\FrontendRazorPage.dll
+D:\MY STUDY\ProjectCK\FrontendRazorPage\obj\Debug\net8.0\FrontendRazorPage.sourcelink.json
