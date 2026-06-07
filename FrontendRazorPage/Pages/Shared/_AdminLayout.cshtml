@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin NihonManabu</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body class="bg-light">
+
+    <div class="d-flex" style="min-height: 100vh;">
+
+        <div class="bg-dark text-white p-3 d-flex flex-column" style="width: 250px;">
+            <a href="/Admin/Level" class="text-white text-decoration-none mb-4 fs-4 fw-bold text-center border-bottom pb-2">
+                <i class="fa-solid fa-user-shield me-2 text-warning"></i>Trang Admin
+            </a>
+
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li class="nav-item">
+                    <a href="/Admin/Level" class="nav-link text-white active bg-primary">
+                        <i class="fa-solid fa-layer-group me-2"></i>Quản lý Cấp độ
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/Lesson" class="nav-link text-white hover-opacity">
+                        <i class="fa-solid fa-book-open me-2"></i>Quản lý Bài học
+                    </a>
+                </li>
+                <li>
+                    <a href="/Admin/Vocabulary" class="nav-link text-white hover-opacity">
+                        <i class="fa-solid fa-language me-2"></i>Quản lý Từ vựng
+                    </a>
+                </li>
+            </ul>
+
+            <div class="border-top pt-2 text-center text-muted small">
+                NihonManabu v1.0
+            </div>
+        </div>
+
+        <div class="flex-grow-1 d-flex flex-column">
+            <header class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-secondary"><i class="fa-solid fa-bars me-2"></i> Hệ thống quản trị</span>
+                <a href="/" class="btn btn-sm btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Về trang chủ học viên
+                </a>
+            </header>
+
+            <main class="p-4 flex-grow-1">
+                @RenderBody()
+            </main>
+        </div>
+
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 1. Lấy đường dẫn hiện tại trên thanh địa chỉ (VD: /Admin/Level/Create)
+            const currentPath = window.location.pathname.toLowerCase();
+
+            // 2. Tìm tất cả các thẻ a trong thanh menu
+            const navLinks = document.querySelectorAll('.nav-pills .nav-link');
+
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href').toLowerCase();
+
+                // 3. Nếu đường dẫn hiện tại có chứa đường dẫn của menu -> Bật sáng
+                if (currentPath.startsWith(linkHref)) {
+                    link.classList.add('active', 'bg-primary', 'fw-bold', 'shadow-sm');
+                } else {
+                    link.classList.remove('active', 'bg-primary', 'fw-bold', 'shadow-sm');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
