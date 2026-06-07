@@ -1,0 +1,60 @@
+﻿@page
+@model FrontendRazorPage.Pages.Admin.Vocabulary.EditModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Chỉnh sửa Từ vựng";
+}
+
+<div class="mb-4">
+    <a href="/Admin/Vocabulary/Index?lessonId=@Model.VocabData.LessonId" class="btn btn-light btn-sm shadow-sm mb-2">
+        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+    </a>
+    <h2 class="fw-bold m-0">Chỉnh sửa Từ Vựng</h2>
+</div>
+
+<div class="card border-0 shadow-sm p-4" style="max-width: 800px;">
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <input type="hidden" asp-for="VocabData.Id" />
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Thuộc Bài học nào?</label>
+            <select class="form-select" asp-for="VocabData.LessonId" required>
+                @foreach (var lesson in Model.Lessons)
+                {
+                    <option value="@lesson.Id">Bài @lesson.Order - @lesson.Title</option>
+                }
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Kanji</label>
+                <input type="text" class="form-control fs-5 text-danger" asp-for="VocabData.Kanji" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Hiragana <span class="text-danger">*</span></label>
+                <input type="text" class="form-control text-primary" asp-for="VocabData.Hiragana" required />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Romaji <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" asp-for="VocabData.Romaji" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Ý nghĩa <span class="text-danger">*</span></label>
+                <input type="text" class="form-control fw-bold" asp-for="VocabData.Meaning" required />
+            </div>
+        </div>
+       
+        <div class="mb-4">
+            <label class="form-label fw-bold">Câu ví dụ</label>
+            <textarea class="form-control" asp-for="VocabData.ExampleSentence" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-warning px-4 fw-bold"><i class="fa-solid fa-floppy-disk me-1"></i> Cập nhật</button>
+    </form>
+</div>

@@ -1,0 +1,87 @@
+﻿@page
+@model FrontendRazorPage.Pages.Admin.Vocabulary.IndexModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Quản lý Từ vựng";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark m-0">Quản lý Từ vựng</h2>
+    <a href="/Admin/Vocabulary/Create" class="btn btn-primary shadow-sm">
+        <i class="fa-solid fa-plus me-1"></i> Thêm từ vựng
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm rounded-3 bg-white p-3 mb-4">
+    <form method="get" class="d-flex align-items-end gap-3">
+        <div style="min-width: 300px;">
+            <label class="form-label text-secondary fw-bold mb-1">Lọc theo Bài học:</label>
+            <select class="form-select border-primary" asp-for="LessonId" name="lessonId">
+                @foreach (var lesson in Model.Lessons)
+                {
+                    <option value="@lesson.Id">Bài @lesson.Order - @lesson.Title</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">
+            <i class="fa-solid fa-filter me-1"></i> Lọc
+        </button>
+    </form>
+</div>
+<div class="card border-0 shadow-sm rounded-3 bg-white p-3 mb-4">
+    <form method="post" enctype="multipart/form-data" asp-page-handler="Import" class="d-flex align-items-end gap-3">
+        <input type="hidden" name="currentLessonId" value="@Model.LessonId" />
+
+        <div style="flex-grow: 1; max-width: 400px;">
+            <label class="form-label text-secondary fw-bold mb-1">Nhập hàng loạt (Tải lên file .csv hoặc .json)</label>
+            <input type="file" class="form-control border-success" asp-for="UploadFile" accept=".csv, .json" required />
+        </div>
+        <button type="submit" class="btn btn-success text-white">
+            <i class="fa-solid fa-file-import me-1"></i> Import Dữ liệu
+        </button>
+    </form>
+</div>
+<div class="card border-0 shadow-sm rounded-3 bg-white overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-4">Kanji</th>
+                    <th>Hiragana / Romaji</th>
+                    <th>Ý nghĩa</th>
+                    <th class="pe-4 text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Vocabularies != null && Model.Vocabularies.Any())
+                {
+                    @foreach (var item in Model.Vocabularies)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold fs-5 text-danger">@item.Kanji</td>
+                            <td>
+                                <div class="fw-bold text-primary">@item.Hiragana</div>
+                                <div class="text-muted small">@item.Romaji</div>
+                            </td>
+                            <td class="fw-bold text-dark">@item.Meaning</td>
+                           
+
+                            <td class="pe-4 text-center">
+                                <a href="/Admin/Vocabulary/Edit?id=@item.Id" class="btn btn-sm btn-outline-warning me-1">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" asp-route-currentLessonId="@Model.LessonId" class="d-inline" onsubmit="return confirm('Chắc chắn xóa từ này?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="4" class="text-center py-4 text-muted">Chưa có từ vựng nào trong bài học này.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

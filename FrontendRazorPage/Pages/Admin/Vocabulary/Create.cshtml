@@ -1,0 +1,58 @@
+﻿@page
+@model FrontendRazorPage.Pages.Admin.Vocabulary.CreateModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Thêm Từ vựng";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold m-0">Thêm Từ Vựng Mới</h2>
+</div>
+
+<div class="card border-0 shadow-sm p-4" style="max-width: 800px;">
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Thuộc Bài học nào?</label>
+            <select class="form-select" asp-for="NewVocab.LessonId" required>
+                <option value="">-- Chọn Bài học --</option>
+                @foreach (var lesson in Model.Lessons)
+                {
+                    <option value="@lesson.Id">Bài @lesson.Order - @lesson.Title</option>
+                }
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Kanji (Có thể để trống)</label>
+                <input type="text" class="form-control fs-5 text-danger" asp-for="NewVocab.Kanji" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Hiragana <span class="text-danger">*</span></label>
+                <input type="text" class="form-control text-primary" asp-for="NewVocab.Hiragana" required />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Romaji <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" asp-for="NewVocab.Romaji" required />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Ý nghĩa tiếng Việt <span class="text-danger">*</span></label>
+                <input type="text" class="form-control fw-bold" asp-for="NewVocab.Meaning" required />
+            </div>
+        </div>
+   
+        <div class="mb-4">
+            <label class="form-label fw-bold">Câu ví dụ (Tùy chọn) <span class="text-danger">*</span></label>
+            <textarea class="form-control" asp-for="NewVocab.ExampleSentence" rows="3"></textarea>
+        </div>
+        <div class="d-flex gap-2 pt-2">
+            <button type="submit" class="btn btn-success px-4">Lưu từ vựng</button>
+            <a href="/Admin/Vocabulary " class="btn btn-outline-secondary px-4">Hủy bỏ</a>
+        </div>
+    </form>
+</div>
