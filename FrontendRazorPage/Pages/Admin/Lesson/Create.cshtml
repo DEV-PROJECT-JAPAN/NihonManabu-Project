@@ -1,0 +1,44 @@
+﻿@page
+@model FrontendRazorPage.Pages.Admin.Lesson.CreateModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Thêm Bài học mới";
+}
+<div class="mb-4">
+   
+    <h2 class="fw-bold text-dark m-0">Thêm Bài học mới</h2>
+</div>
+<div class="card border-0 shadow-sm p-4" style="max-width: 600px;">
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <!-- 1. Dropdown chọn Khóa Ngoại (LevelId) -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Thuộc Cấp độ nào?</label>
+            <select class="form-select" asp-for="NewLesson.LevelId" required>
+                <option value="">-- Chọn Cấp độ --</option>
+                @foreach (var level in Model.Levels)
+                {
+                    <option value="@level.Id">@level.Name</option>
+                }
+            </select>
+        </div>
+
+        <!-- 2. Nhập Tiêu đề bài học -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Tiêu đề bài học</label>
+            <input type="text" class="form-control" asp-for="NewLesson.Title" required />
+        </div>
+
+        <!-- 3. Nhập Thứ tự -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Thứ tự hiển thị (Ví dụ: 1, 2, 3)</label>
+            <input type="number" class="form-control" asp-for="NewLesson.Order" required />
+        </div>
+        <div class="d-flex gap-2 pt-2">
+            <button type="submit" class="btn btn-success px-4">Lưu Bài học</button>
+            <a href="/Admin/Lesson" class="btn btn-outline-secondary px-4">Hủy bỏ</a>
+        </div>
+        
+    </form>
+</div>

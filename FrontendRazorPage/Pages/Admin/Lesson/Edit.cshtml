@@ -1,0 +1,49 @@
+﻿@page
+@model FrontendRazorPage.Pages.Admin.Lesson.EditModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Chỉnh sửa Bài học";
+}
+
+<div class="mb-4">
+    <a href="/Admin/Lesson/Index?levelId=@Model.LessonData.LevelId" class="btn btn-light btn-sm text-secondary shadow-sm mb-2">
+        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại danh sách
+    </a>
+    <h2 class="fw-bold text-dark m-0">Chỉnh sửa Bài học</h2>
+</div>
+
+<div class="card border-0 shadow-sm p-4" style="max-width: 600px;">
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <input type="hidden" asp-for="LessonData.Id" />
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Thuộc Cấp độ nào?</label>
+            <select class="form-select" asp-for="LessonData.LevelId" required>
+                <option value="">-- Chọn Cấp độ --</option>
+                @foreach (var level in Model.Levels)
+                {
+                    <option value="@level.Id">@level.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Tiêu đề bài học</label>
+            <input type="text" class="form-control" asp-for="LessonData.Title" required />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Thứ tự hiển thị (Ví dụ: 1, 2, 3)</label>
+            <input type="number" class="form-control" asp-for="LessonData.Order" required />
+        </div>
+
+        <div class="d-flex gap-2 pt-2">
+            <button type="submit" class="btn btn-warning px-4 shadow-sm text-dark fw-bold">
+                <i class="fa-solid fa-floppy-disk me-1"></i> Lưu thay đổi
+            </button>
+            <a href="/Admin/Lesson/Index?levelId=@Model.LessonData.LevelId" class="btn btn-outline-secondary px-4">Hủy bỏ</a>
+        </div>
+    </form>
+</div>

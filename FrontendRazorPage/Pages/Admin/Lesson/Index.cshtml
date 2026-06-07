@@ -1,0 +1,85 @@
+﻿@page
+@model FrontendRazorPage.Pages.Admin.Lesson.IndexModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Quản lý Bài học";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-dark m-0">Quản lý Bài học</h2>
+
+    <a href="/Admin/Lesson/Create" class="btn btn-primary shadow-sm">
+        <i class="fa-solid fa-plus me-1"></i> Thêm bài học mới
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm rounded-3 bg-white p-3 mb-4">
+    <form method="get" class="d-flex align-items-end gap-3">
+        <div style="min-width: 250px;">
+            <label class="form-label text-secondary fw-bold mb-1">Lọc theo Cấp độ:</label>
+            <select class="form-select border-primary" asp-for="LevelId" name="levelId">
+                @foreach (var level in Model.Levels)
+                {
+                    <option value="@level.Id">@level.Name - @level.Description</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">
+            <i class="fa-solid fa-filter me-1"></i> Lọc dữ liệu
+        </button>
+    </form>
+</div>
+
+<div asp-validation-summary="All" class="text-danger fw-bold mb-3"></div>
+
+<div class="card border-0 shadow-sm rounded-3 bg-white overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-4 text-secondary">ID</th>
+                    <th class="text-secondary">Tiêu đề bài học</th>
+                    <th class="text-secondary text-center">Thứ tự hiển thị</th>
+                    <th class="pe-4 text-center text-secondary">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Lessons != null && Model.Lessons.Any())
+                {
+                    @foreach (var item in Model.Lessons)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-muted">@item.Id</td>
+                            <td class="fw-bold text-primary">@item.Title</td>
+                            <td class="text-center">
+                                <span class="badge bg-secondary rounded-pill px-3 py-2">
+                                    Bài @item.Order
+                                </span>
+                            </td>
+                            <td class="pe-4 text-center">
+                                <a href="/Admin/Lesson/Edit?id=@item.Id" class="btn btn-sm btn-outline-warning me-1" title="Sửa">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
+
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" asp-route-currentLevelId="@Model.LevelId" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bài học này không?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted fst-italic">
+                            <i class="fa-solid fa-folder-open fs-1 mb-2 opacity-50 d-block"></i>
+                            Chưa có bài học nào trong Cấp độ này.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
