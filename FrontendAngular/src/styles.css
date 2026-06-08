@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+/* Đưa biến cấu hình màu sắc lên tầng cao nhất của ứng dụng */
+:root {
+    --primary-color: #3B82F6;
+    --primary-light: rgba(59, 130, 246, 0.12);
+    --primary-glow: rgba(59, 130, 246, 0.3);
+    --card-bg: #1E293B;
+    --text-main: #F1F5F9;
+    --text-muted: #94A3B8;
+    --border-color: #334155;
+    --bg-inner: #0F172A;
+    --success-color: #10B981;
+    --success-light: rgba(16, 185, 129, 0.15);
+    --danger-color: #EF4444;
+    --danger-light: rgba(239, 68, 68, 0.15);
+
+    --mode-quiz: #3B82F6;
+    --mode-arrange: #10B981;
+    --mode-all: #8B5CF6;
+}
+
+/* Đảm bảo toàn bộ nền trình duyệt chuyển sang tối sẫm và không bị font răng cưa */
+body {
+    background-color: #0F172A !important;
+    color: var(--text-main) !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+}

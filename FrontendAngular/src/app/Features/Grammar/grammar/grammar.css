@@ -1,0 +1,28 @@
+/* grammars.css */
+.grammar-modern-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.grammar-modern-row {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 18px 24px;
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.25s ease;
+    cursor: pointer;
+}
+
+.grammar-modern-row:hover {
+    border-color: var(--danger-color);
+    background: rgba(239, 68, 68, 0.15);
+    transform: translateX(6px);
+}
