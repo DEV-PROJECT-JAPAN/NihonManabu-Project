@@ -1,8 +1,11 @@
 ﻿using BackendAPI.DTOs;
 using BackendAPI.Interfaces;
+using BackendAPI.Models;
 using BackendAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using BackendAPI.DTOs.AdminDTO;
 
 namespace BackendAPI.Controllers
 {
@@ -10,12 +13,14 @@ namespace BackendAPI.Controllers
     [Route("api/[controller]")]
     public class GrammarController : ControllerBase
     {
-        private readonly IGrammarService _grammarService;
+        private readonly IGrammarService<GrammarDTO> _grammarService;
+        private readonly IGrammarService<Grammar> _grammarAdminService;
 
         // Tiêm cái Service xử lý dữ liệu Ngữ pháp lồng Câu hỏi vào đây
-        public GrammarController(IGrammarService grammarService)
+        public GrammarController(IGrammarService<GrammarDTO> grammarService, IGrammarService<Grammar> grammarAdminService)
         {
             _grammarService = grammarService;
+            _grammarAdminService = grammarAdminService;
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -57,6 +62,54 @@ namespace BackendAPI.Controllers
 
             var result = await _grammarService.GetQuestionsByGrammarAsync(grammarId, questionType);
             return Ok(result);
+        }
+
+
+
+
+        // ==========================================
+        // 🔐 ĐẦU QUẢN TRỊ - ADMIN ENDPOINTS (Dùng bảng gốc)
+        // ==========================================
+
+        [HttpGet("admin-list")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllForAdmin()
+        {
+            // Trả thẳng danh sách thực thể gốc kèm thực thể liên kết Lesson
+            return Ok(await _grammarAdminService.GetAllGrammarsAsync());
+        }
+
+        [HttpGet("admin/{id}")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetByIdForAdmin(int id)
+        {
+            // Gọi hàm Generics truyền kiểu bảng gốc Grammar cho Admin thấy đủ ngày giờ hệ thống
+            var result = await _grammarAdminService.GetGrammarByIdAsync(id);
+            return result != null ? Ok(result) : NotFound();
+        }
+
+        [HttpPost]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([FromBody] Grammar grammar)
+        {
+            var result = await _grammarAdminService.CreateAsync(grammar);
+            return CreatedAtAction(nameof(GetByIdForAdmin), new { id = result.Id }, result);
+        }
+
+        [HttpPut("{id}")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Update(int id, [FromBody] Grammar grammar)
+        {
+            var success = await _grammarAdminService.UpdateAsync(id, grammar);
+            return success ? Ok(new { message = "Cập nhật dữ liệu hệ thống thành công!" }) : NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _grammarAdminService.DeleteAsync(id);
+            return success ? Ok(new { message = "Đã xóa bản ghi vĩnh viễn khỏi Database!" }) : NotFound();
         }
     }
 }

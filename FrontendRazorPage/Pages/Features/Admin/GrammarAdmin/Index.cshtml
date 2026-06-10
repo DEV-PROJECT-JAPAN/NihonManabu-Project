@@ -1,0 +1,47 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Admin.GrammarAdmin.IndexModel
+@{
+    ViewData["Title"] = "Quản lý Ngữ Pháp";
+    Layout = "_LayoutAdmin"; // Dùng Layout Admin có sẵn của bạnD
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>📚 Quản Lý Mẫu Ngữ Pháp</h2>
+        <a asp-page="./Create" class="btn btn-primary">➕ Thêm Ngữ Pháp Mới</a>
+    </div>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>ID Bài Học</th>
+                <th>Cấu Trúc</th>
+                <th>Giải Thích</th>
+                <th>Ngày Tạo</th>
+                <th>Ngày Cập Nhật</th>
+                <th>Hành Động</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Grammars)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.LessonId</td>
+                    <td><strong>@item.Structure</strong></td>
+                    <td>@item.Explanation</td>
+                    <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bản ghi vĩnh viễn?');" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,35 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Admin.GrammarAdmin.CreateModel
+@{
+    ViewData["Title"] = "Thêm Ngữ Pháp";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h2>➕ Thêm Mẫu Ngữ Pháp Mới</h2>
+    <hr />
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Grammar.LessonId" class="form-label">ID Bài Học</label>
+            <input asp-for="Grammar.LessonId" class="form-control" type="number" required />
+            <span asp-validation-for="Grammar.LessonId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Grammar.Structure" class="form-label">Cấu Trúc Ngữ Pháp</label>
+            <input asp-for="Grammar.Structure" class="form-control" placeholder="Ví dụ: ~ Vると" required />
+            <span asp-validation-for="Grammar.Structure" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Grammar.Explanation" class="form-label">Giải Thích Ý Nghĩa</label>
+            <textarea asp-for="Grammar.Explanation" class="form-control" rows="4" placeholder="Giải thích chi tiết cách dùng..." required></textarea>
+            <span asp-validation-for="Grammar.Explanation" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success">Lưu Hệ Thống</button>
+        <a asp-page="./Index" class="btn btn-secondary">Quay Lại</a>
+    </form>
+</div>

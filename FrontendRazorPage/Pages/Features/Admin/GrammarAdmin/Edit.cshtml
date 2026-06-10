@@ -1,0 +1,40 @@
+﻿@page "{id:int}"
+@model FrontendRazorPage.Pages.Features.Admin.GrammarAdmin.EditModel
+@{
+    ViewData["Title"] = "Chỉnh sửa Ngữ Pháp";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h2>📝 Chỉnh Sửa Mẫu Ngữ Pháp (ID: @Model.Grammar.Id)</h2>
+    <hr />
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Grammar.Id" />
+
+        <div class="mb-3">
+            <label asp-for="Grammar.LessonId" class="form-label">ID Bài Học</label>
+            <input asp-for="Grammar.LessonId" class="form-control" type="number" required />
+            <span asp-validation-for="Grammar.LessonId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Grammar.Structure" class="form-label">Cấu Trúc Ngữ Pháp</label>
+            <input asp-for="Grammar.Structure" class="form-control" required />
+            <span asp-validation-for="Grammar.Structure" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Grammar.Explanation" class="form-label">Giải Thích Ý Nghĩa</label>
+            <textarea asp-for="Grammar.Explanation" class="form-control" rows="4" required></textarea>
+            <span asp-validation-for="Grammar.Explanation" class="text-danger"></span>
+        </div>
+
+        <div class="text-muted mb-3 small">
+            <p>Ngày cập nhật: @Model.Grammar.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+        </div>
+
+        <button type="submit" class="btn btn-warning">Cập Nhật Ngay</button>
+        <a asp-page="./Index" class="btn btn-secondary">Hủy bỏ</a>
+    </form>
+</div>

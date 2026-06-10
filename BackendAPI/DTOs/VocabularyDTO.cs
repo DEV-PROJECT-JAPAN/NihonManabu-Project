@@ -1,4 +1,4 @@
-﻿namespace BackendAPI.Models // Hoặc đặt theo Namespace dự án Razor của bạn, ví dụ: RazorFrontend.Models
+﻿namespace BackendAPI.DTOs // Hoặc đặt theo Namespace dự án Razor của bạn, ví dụ: RazorFrontend.Models
 {
     public class VocabularyDTO
 

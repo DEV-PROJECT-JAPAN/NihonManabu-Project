@@ -1,5 +1,7 @@
-﻿using BackendAPI.Interfaces;
+﻿using BackendAPI.DTOs;
+using BackendAPI.Interfaces;
 using BackendAPI.Models.Data;
+using BackendAPI.Models;
 using BackendAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +38,11 @@ builder.Services.AddDbContext<JapaneseDbContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IVocabularyService, VocabularyService>();
-builder.Services.AddScoped<IGrammarService, GrammarService>();
+builder.Services.AddScoped<IGrammarService<GrammarDTO>, GrammarService<GrammarDTO>>();
+
+
+// Đăng ký Service dành cho Admin (Dùng bảng gốc Grammar)
+builder.Services.AddScoped<IGrammarService<Grammar>, GrammarService<Grammar>>();
 
 // =========================================================================
 // 4. XÂY DỰNG VÀ CẤU HÌNH PIPELINE XỬ LÝ REQUEST (MIDDLEWARES)

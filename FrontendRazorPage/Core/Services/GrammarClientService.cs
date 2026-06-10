@@ -1,6 +1,8 @@
 ﻿using FrontendRazorPage.Models;
+using System.Net.Http;
 using System.Net.Http.Json;
 using static System.Net.WebRequestMethods;
+using FrontendRazorPage.Models.AdminModel;
 
 namespace FrontendRazorPage.Services
 {
@@ -65,5 +67,79 @@ namespace FrontendRazorPage.Services
         }
 
 
+
+        /// ////////////////////////////ADMIN//////////////////////////////
+
+
+
+        // 1. Lấy danh sách cho Admin 
+        public async Task<List<GrammarAdminModel>> GetAllForAdminAsync()
+        {
+            try
+            {
+                // Sửa thành đường dẫn tuyệt đối chuẩn xác kết hợp với _apiBase
+                return await _http.GetFromJsonAsync<List<GrammarAdminModel>>($"{_apiBase}/admin-list") ?? new();
+            }
+            catch
+            {
+                return new List<GrammarAdminModel>();
+            }
+        }
+
+        // 2. Lấy chi tiết theo ID cho Admin
+        public async Task<GrammarAdminModel?> GetByIdForAdminAsync(int id)
+        {
+            try
+            {
+                return await _http.GetFromJsonAsync<GrammarAdminModel>($"{_apiBase}/admin/{id}");
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> CreateAsync(GrammarAdminModel grammar)
+        {
+            try
+            {
+                var response = await _http.PostAsJsonAsync($"{_apiBase}", grammar);
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        // 4. Cập nhật mẫu ngữ pháp
+        public async Task<bool> UpdateAsync(int id, GrammarAdminModel grammar)
+        {
+            try
+            {
+                var response = await _http.PutAsJsonAsync($"{_apiBase}/{id}", grammar);
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // 5. Xóa mẫu ngữ pháp
+        public async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                var response = await _http.DeleteAsync($"{_apiBase}/{id}");
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
+
 }
