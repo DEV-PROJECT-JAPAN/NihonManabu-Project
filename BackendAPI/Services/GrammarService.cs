@@ -3,7 +3,7 @@ using BackendAPI.Interfaces;
 using BackendAPI.Models;
 using BackendAPI.Models.Data;
 using Microsoft.EntityFrameworkCore;
-using BackendAPI.DTOs.AdminDTO;
+
 
 namespace BackendAPI.Services
 {
@@ -16,20 +16,7 @@ namespace BackendAPI.Services
             _context = context;
         }
 
-        //public async Task<GrammarDTO> GetGrammarByIdAsync(int grammarId)
-        //{
-        //    return await _context.Grammars.Where(g => g.Id == grammarId)
-        //        .Select(g => new GrammarDTO
-        //        {
-        //            Id = g.Id,
-        //            LessonId = g.LessonId,
-        //            Structure = g.Structure ?? string.Empty,
-        //            Explanation = g.Explanation ?? string.Empty
-        //        })
-        //        .FirstOrDefaultAsync() ?? new GrammarDTO();
-        //}
-
-
+    
         public async Task<List<GrammarDTO>> GetGrammarByLessonAsync(int lessonId)
         {
             if (lessonId <= 0) return new List<GrammarDTO>();
@@ -89,21 +76,6 @@ namespace BackendAPI.Services
         }
 
 
-        public async Task<GrammarAdminDTO?> GetByIdAsync(int id)
-        {
-            return await _context.Grammars
-                .Include(g => g.Lesson)
-                .Select(g => new GrammarAdminDTO
-                {
-                    Id = g.Id,
-                    LessonId = g.LessonId,
-                    Structure = g.Structure,
-                    Explanation = g.Explanation,
-                    CreatedAt = g.CreatedAt,
-                    UpdatedAt = g.UpdatedAt
-                })
-                .FirstOrDefaultAsync(x => x.Id == id);
-        }
 
         public async Task<Grammar> CreateAsync(Grammar grammar)
         {
@@ -120,38 +92,6 @@ namespace BackendAPI.Services
             // 4. Trả về chính đối tượng grammar đã có đầy đủ Id và ngày giờ
             return grammar;
         }
-
-        //public async Task<GrammarAdminDTO> CreateAsync(GrammarAdminDTO grammar)
-        //{
-        //    // Tự động gán thời gian tạo/cập nhật tại Server 
-        //    // Sử dụng DateTime.UtcNow là chuẩn tốt nhất cho API tách rời
-        //    grammar.CreatedAt = DateTime.UtcNow;
-        //    grammar.UpdatedAt = DateTime.UtcNow;
-
-        //    // Map từ DTO sang Entity gốc (Sửa tên từ "GrammarD" thành "Grammar" chuẩn theo Model của bạn)
-        //    var entity = new Grammar
-        //    {
-        //        LessonId = grammar.LessonId,
-        //        Structure = grammar.Structure,
-        //        Explanation = grammar.Explanation,
-        //        CreatedAt = grammar.CreatedAt,
-        //        UpdatedAt = grammar.UpdatedAt
-        //    };
-
-        //    _context.Grammars.Add(entity);
-        //    await _context.SaveChangesAsync(); // Sau dòng này, entity sẽ tự động có Id từ DB sinh ra
-
-        //    // Trả về DTO kèm Id mới và thời gian chính xác
-        //    return new GrammarAdminDTO
-        //    {
-        //        Id = entity.Id,
-        //        LessonId = entity.LessonId,
-        //        Structure = entity.Structure,
-        //        Explanation = entity.Explanation,
-        //        CreatedAt = entity.CreatedAt,
-        //        UpdatedAt = entity.UpdatedAt
-        //    };
-        //}
 
 
         public async Task<bool> UpdateAsync(int id, Grammar grammar)

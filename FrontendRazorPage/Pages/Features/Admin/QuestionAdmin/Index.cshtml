@@ -1,0 +1,430 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Admin.QuestionAdmin.IndexModel
+@{
+    ViewData["Title"] = "Quản lý Câu hỏi & Đáp án";
+   
+}
+
+<style>
+    /* ✨ Hệ màu và hiệu ứng đồng bộ với Menu Slate Admin */
+    :root {
+        --slate-dark: #1e293b;
+        --slate-light: #f8fafc;
+        --blue-highlight: #3b82f6;
+    }
+
+    .filter-card {
+        border-left: 5px solid var(--blue-highlight);
+        background: linear-gradient(to right, #ffffff, #f1f5f9);
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .table-responsive {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .custom-thead {
+        background-color: var(--slate-dark) !important;
+        color: #ffffff !important;
+    }
+
+    .answer-badge {
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        cursor: default;
+    }
+
+        .answer-badge:hover {
+            transform: translateY(-2px);
+        }
+
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    .input-group-text-custom {
+        background-color: #e2e8f0;
+        font-weight: 600;
+        min-width: 45px;
+        justify-content: center;
+        color: var(--slate-dark);
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+
+<div class="container-fluid px-4 py-3">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h1 class="h3 mb-1 text-slate-800 font-weight-bold" style="color: var(--slate-dark);">
+                <i class="fa-solid fa-layer-group text-primary me-2"></i>Kho Đề & Câu Hỏi Học Tập
+            </h1>
+            <p class="text-muted small mb-0">Quản lý ngân hàng câu hỏi trắc nghiệm và câu hỏi sắp xếp lồng ghép theo từng mẫu ngữ pháp.</p>
+        </div>
+        <button class="btn btn-primary shadow-sm font-weight-600 px-4 py-2" style="background-color: var(--blue-highlight); border: none;" onclick="openCreateModal()">
+            <i class="fa-solid fa-plus-circle me-2"></i>Thêm Câu Hỏi Mới
+        </button>
+    </div>
+
+    <div class="card filter-card mb-4">
+        <div class="card-body py-3">
+            <div class="row align-items-center gap-3 gap-md-0">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white text-primary border-end-0">
+                            <i class="fa-solid fa-book-open"></i>
+                        </span>
+                        <select id="FilterLesson" class="form-select border-start-0 font-weight-500 cursor-pointer" onchange="loadQuestionsTable()">
+                            <option value="">-- Chọn bài học Giáo trình Minna --</option>
+                            @for (int i = 1; i <= 25; i++)
+                            {
+                                <option value="@i">Bài học số @i (Minna no Nihongo)</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-7 text-md-end">
+                    <div id="QuestionCountSummary" class="badge bg-light text-secondary border px-3 py-2 font-weight-500" style="font-size: 0.9rem;">
+                        <i class="fa-solid fa-circle-info me-1 text-primary"></i>Hệ thống đang chờ bạn chọn bài học...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="QuestionTable">
+                    <thead class="custom-thead">
+                        <tr>
+                            <th style="width: 70px;" class="text-center py-3">STT</th>
+                            <th style="min-width: 250px;">Nội dung câu hỏi hệ thống</th>
+                            <th style="width: 160px;">Phân loại đề</th>
+                            <th style="min-width: 300px;">Danh sách đáp án thiết lập</th>
+                            <th style="width: 130px;" class="text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="QuestionTableBody">
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="fa-solid fa-folder-open fa-3x d-block mb-3 text-slate-300"></i>
+                                <span class="font-weight-500">Vui lòng chọn một Bài học ở bộ lọc phía trên để hiển thị dữ liệu câu hỏi.</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="QuestionModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header text-white" style="background-color: var(--slate-dark);">
+                <h5 class="modal-title font-weight-bold" id="ModalTitle"><i class="fa-solid fa-pen-to-square me-2"></i>Thêm Câu Hỏi Mới</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4 py-3">
+                <form id="QuestionForm">
+                    <input type="hidden" id="FormQuestionId" value="0" />
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-weight-bold text-dark small">Mẫu Ngữ Pháp Liên Kết</label>
+                            <select id="FormGrammarId" class="form-select font-weight-500" required>
+                                <option value="">-- Chọn cấu trúc ngữ pháp --</option>
+                                @if (Model.Grammars != null)
+                                {
+                                    @foreach (var grammar in Model.Grammars)
+                                    {
+                                        <option value="@grammar.Id">[@grammar.Structure] - @grammar.Explanation</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-weight-bold text-dark small">Loại Hình Câu Hỏi</label>
+                            <select id="FormQuestionType" class="form-select font-weight-500" onchange="renderAnswerUI()">
+                                <option value="1">Trắc nghiệm chọn một (Quiz)</option>
+                                <option value="2">Sắp xếp chuỗi câu (Arrange)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label font-weight-bold text-dark small">Nội Dung Câu Hỏi</label>
+                        <textarea id="FormContent" class="form-control" rows="2" placeholder="Ví dụ: これ は 何 ___ か。 (Mẹo: Dùng kí tự ___ để tạo khoảng trống dữ liệu)" required></textarea>
+                    </div>
+
+                    <div id="DynamicAnswerArea" class="p-3 border rounded-3 bg-light">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top bg-slate-50">
+                <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Đóng lại</button>
+                <button type="button" class="btn btn-success px-4" onclick="saveQuestionData()">
+                    <i class="fa-solid fa-circle-check me-2"></i>Ghi Lên Hệ Thống
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const API_BASE_URL = "https://localhost:7104/api/QuestionAdmin";
+    let bootstrapModal;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        bootstrapModal = new bootstrap.Modal(document.getElementById('QuestionModal'));
+        // Khởi tạo trạng thái rỗng cho vùng đáp án ngay khi sẵn sàng
+        renderAnswerUI();
+    });
+
+    // 🔍 1. TẢI DỮ LIỆU ĐỔ VÀO BẢNG
+    async function loadQuestionsTable() {
+        const lessonId = document.getElementById("FilterLesson").value;
+        const tbody = document.getElementById("QuestionTableBody");
+        const summary = document.getElementById("QuestionCountSummary");
+
+        if (!lessonId) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted"><i class="fa-solid fa-folder-open fa-3x d-block mb-3 text-slate-300"></i>Vui lòng chọn Bài học ở bộ lọc phía trên để hiển thị dữ liệu.</td></tr>`;
+            summary.innerHTML = `<i class="fa-solid fa-circle-info me-1 text-primary"></i>Hệ thống đang chờ chọn bài...`;
+            return;
+        }
+
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5"><div class="spinner-border text-primary" role="status"></div><div class="text-muted small mt-2">Đang tải cấu trúc dữ liệu bài học...</div></td></tr>`;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/admin/lesson/${lessonId}`);
+            if (!response.ok) throw new Error();
+            const questions = await response.json();
+
+            summary.innerHTML = `<i class="fa-solid fa-square-poll-vertical me-1 text-success"></i>Tổng số: <strong class="text-dark">${questions.length}</strong> câu hỏi liên kết.`;
+
+            if (questions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-secondary"><i class="fa-solid fa-comment-slash fa-2x d-block mb-2 text-warning"></i>Bài học này chưa được cấu hình câu hỏi nào cả.</td></tr>`;
+                return;
+            }
+
+            let html = "";
+            questions.forEach((q, index) => {
+                let answerBadges = "";
+                if(q.answers) {
+                    q.answers.forEach(a => {
+                        const badgeColor = a.isCorrect ? 'bg-success text-white shadow-sm' : 'bg-white text-secondary border';
+                        const checkIcon = a.isCorrect ? '<i class="fa-solid fa-circle-check me-1"></i>' : '';
+                        answerBadges += `<span class="badge answer-badge ${badgeColor} p-2 me-1 mb-1 font-weight-500">${checkIcon}${a.displayOrder || ''}. ${a.text}</span> `;
+                    });
+                }
+
+                html += `
+                    <tr>
+                        <td class="text-center font-weight-bold text-secondary">${index + 1}</td>
+                        <td class="font-weight-600 text-slate-700 text-wrap" style="max-width: 400px;">${q.content}</td>
+                        <td>${q.questionType === 1 ? '<span class="badge px-2 py-1" style="background-color: #e0f2fe; color:#0369a1; font-size: 0.8rem;">Trắc nghiệm</span>' : '<span class="badge px-2 py-1" style="background-color: #ecfeff; color:#0e7490; font-size: 0.8rem;">Sắp xếp câu</span>'}</td>
+                        <td><div class="d-flex flex-wrap align-items-center">${answerBadges}</div></td>
+                        <td class="text-center">
+                            <button class="btn btn-action btn-outline-warning me-1" onclick="openEditModal(${q.id})"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="btn btn-action btn-outline-danger" onclick="deleteQuestion(${q.id})"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        } catch (error) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-danger"><i class="fa-solid fa-triangle-exclamation fa-2x d-block mb-2"></i>Không kết nối được API Backend! Vui lòng kiểm tra lại cổng kết nối hoặc Swagger.</td></tr>`;
+        }
+    }
+
+    // 🧩 2. RENDER FORM ĐÁP ÁN ĐỘNG
+    function renderAnswerUI(savedAnswers = null) {
+        const type = document.getElementById("FormQuestionType").value;
+        const area = document.getElementById("DynamicAnswerArea");
+
+        if (type === "1") {
+            let html = `<div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0 text-dark font-weight-bold"><i class="fa-solid fa-list-ol me-2 text-primary"></i>Thiết lập đáp án trắc nghiệm:</h6>
+                            <span class="badge bg-secondary small">Bắt buộc chọn 1 dòng đúng</span>
+                        </div>`;
+            const letters = ["A", "B", "C", "D"];
+
+            letters.forEach((item, i) => {
+                let textVal = savedAnswers && savedAnswers[i] ? savedAnswers[i].text : "";
+                let isChecked = savedAnswers && savedAnswers[i] ? savedAnswers[i].isCorrect : (i === 0);
+                let answerId = savedAnswers && savedAnswers[i] ? savedAnswers[i].id : 0;
+
+                html += `
+                    <div class="input-group mb-2 answer-item-row shadow-sm rounded-2 overflow-hidden" data-id="${answerId}" data-order="${item}">
+                        <div class="input-group-text input-group-text-custom">
+                            <input class="form-check-input answer-correct-radio cursor-pointer" type="radio" name="correctRadio" ${isChecked ? 'checked' : ''} value="${item}">
+                            <span class="ms-2 text-slate-600 font-weight-bold">${item}</span>
+                        </div>
+                        <input type="text" class="form-control border-start-0 answer-text-input" placeholder="Nhập nội dung hiển thị đáp án..." value="${textVal}" required>
+                    </div>`;
+            });
+            area.innerHTML = html;
+        } else {
+            let defaultVal = "";
+            if (savedAnswers) {
+                // Khôi phục mảng đáp án sắp xếp thành chuỗi phân cách bằng dấu /
+                defaultVal = savedAnswers.map(a => a.text).join(" / ");
+            }
+            area.innerHTML = `
+                <h6 class="text-dark font-weight-bold mb-2"><i class="fa-solid fa-shuffle me-2 text-info"></i>Thiết lập câu ghép chuỗi sắp xếp:</h6>
+                <div class="bg-white p-3 border rounded-2">
+                    <input type="text" id="ArrangeStringInput" class="form-control form-control-lg font-weight-500 text-info border-info" placeholder="Ví dụ: 日本語 / を / 勉強します" value="${defaultVal}" required>
+                    <div class="form-text text-muted small mt-2">
+                        <i class="fa-solid fa-circle-exclamation text-warning me-1"></i>Ngắt cách các cụm từ cần tách nhỏ bằng kí tự gạch chéo <strong class="text-dark">" / "</strong> để hệ thống phân rã tự động.
+                    </div>
+                </div>`;
+        }
+    }
+
+    // ➕ 3. MỞ MODAL THÊM MỚI
+    function openCreateModal() {
+        document.getElementById("ModalTitle").innerHTML = "<i class='fa-solid fa-circle-plus text-success me-2'></i>Thêm Mới Câu Hỏi Học Tập";
+        document.getElementById("QuestionForm").reset();
+        document.getElementById("FormQuestionId").value = "0";
+        document.getElementById("FormGrammarId").value = "";
+        renderAnswerUI();
+        bootstrapModal.show();
+    }
+
+    // ✏️ 4. MỞ MODAL SỬA
+    async function openEditModal(id) {
+        document.getElementById("ModalTitle").innerHTML = "<i class='fa-solid fa-user-gear text-warning me-2'></i>Chỉnh Sửa Câu Hỏi";
+        try {
+            const response = await fetch(`${API_BASE_URL}/${id}`);
+            if (!response.ok) throw new Error();
+            const q = await response.json();
+
+            document.getElementById("FormQuestionId").value = q.id;
+            document.getElementById("FormGrammarId").value = q.grammarId;
+            document.getElementById("FormContent").value = q.content;
+            document.getElementById("FormQuestionType").value = q.questionType;
+
+            renderAnswerUI(q.answers);
+            bootstrapModal.show();
+        } catch (error) {
+            Swal.fire("Lỗi kết nối", "Không tìm thấy thông tin cấu trúc từ Backend!", "error");
+        }
+    }
+
+    // 💾 5. LƯU DỮ LIỆU (ĐỒNG BỘ ĐÁP ÁN LỒNG)
+    async function saveQuestionData() {
+        const form = document.getElementById("QuestionForm");
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const id = parseInt(document.getElementById("FormQuestionId").value);
+        const grammarId = parseInt(document.getElementById("FormGrammarId").value);
+        const content = document.getElementById("FormContent").value;
+        const questionType = parseInt(document.getElementById("FormQuestionType").value);
+
+        let answersArray = [];
+
+        if (questionType === 1) {
+            const rows = document.querySelectorAll(".answer-item-row");
+            rows.forEach(row => {
+                const ansId = parseInt(row.getAttribute("data-id"));
+                const order = row.getAttribute("data-order");
+                const text = row.querySelector(".answer-text-input").value;
+                const isCorrect = row.querySelector(".answer-correct-radio").checked;
+
+                answersArray.push({
+                    id: ansId,
+                    questionId: id,
+                    text: text,
+                    isCorrect: isCorrect,
+                    displayOrder: order
+                });
+            });
+        } else {
+            const rawString = document.getElementById("ArrangeStringInput").value;
+            const words = rawString.split("/").map(w => w.trim()).filter(w => w !== "");
+
+            words.forEach((word, index) => {
+                answersArray.push({
+                    id: 0,
+                    questionId: id,
+                    text: word,
+                    isCorrect: true,
+                    displayOrder: (index + 1).toString()
+                });
+            });
+        }
+
+        const payload = {
+            id: id,
+            grammarId: grammarId,
+            content: content,
+            questionType: questionType,
+            answers: answersArray
+        };
+
+        const method = id === 0 ? "POST" : "PUT";
+        const url = id === 0 ? API_BASE_URL : `${API_BASE_URL}/${id}`;
+
+        try {
+            const response = await fetch(url, {
+                method: method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                bootstrapModal.hide();
+                Swal.fire({ title: "Thành công!", text: "Dữ liệu ngân hàng câu hỏi đã được đồng bộ!", icon: "success", timer: 1500, showConfirmButton: false });
+                loadQuestionsTable();
+            } else {
+                Swal.fire("Lỗi cấu trúc", "Backend từ chối tiếp nhận định dạng JSON gửi lên.", "error");
+            }
+        } catch (error) {
+            Swal.fire("Sập tín hiệu", "Mất kết nối mạng tới Server API Backend.", "error");
+        }
+    }
+
+    // ❌ 6. XÓA CÂU HỎI
+    function deleteQuestion(id) {
+        Swal.fire({
+            title: "Xác nhận xóa vĩnh viễn?",
+            text: "Cảnh báo dữ liệu: Toàn bộ các đáp án thuộc câu hỏi này sẽ bị xóa sạch khỏi hệ thống!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#64748b",
+            confirmButtonText: "Vẫn xóa, tôi đồng ý!",
+            cancelButtonText: "Hủy bỏ"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/${id}`, { method: "DELETE" });
+                    if (response.ok) {
+                        Swal.fire({ title: "Đã xóa vĩnh viễn!", icon: "success", timer: 1200, showConfirmButton: false });
+                        loadQuestionsTable();
+                    } else {
+                        Swal.fire("Lỗi", "Không thể xóa bản ghi.", "error");
+                    }
+                } catch (error) {
+                    Swal.fire("Lỗi", "Hệ thống Backend sập hoặc không phản hồi.", "error");
+                }
+            }
+        });
+    }
+</script>

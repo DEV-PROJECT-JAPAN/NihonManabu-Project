@@ -16,13 +16,12 @@ namespace BackendAPI.Services
 
         public async Task<List<LevelDTO>> GetAllLevelsAsync()
         {
-           return await _context.Levels.Select(l => new LevelDTO
-                {
-                    Id = l.Id,
-                    Name = l.Name,
-                    Description = l.Description
-                })
-                .ToListAsync();
+            return await _context.Levels.Select(l => new LevelDTO
+            {
+                Id = l.Id,
+                Name = l.Name,
+                Description = l.Description
+            }).ToListAsync();
         }
 
         public async Task<List<LessonDTO>> GetLessonsByLevelAsync(int levelId)
@@ -57,7 +56,7 @@ namespace BackendAPI.Services
                  .ToListAsync();
         }
 
-         
+
 
         public async Task<bool> UpdateProgressAsync(int userId, UpdateLearningProgresByUserDTO input)
         {

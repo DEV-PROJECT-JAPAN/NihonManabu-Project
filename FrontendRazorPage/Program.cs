@@ -17,6 +17,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<VocabularyClientService>();
 
 builder.Services.AddScoped<GrammarClientService>();
+builder.Services.AddScoped<QuestionClientService>();
+builder.Services.AddScoped<LevelClientService>();
 
 
 builder.Services.AddRazorPages();

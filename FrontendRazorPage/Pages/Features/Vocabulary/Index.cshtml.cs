@@ -8,7 +8,12 @@ namespace FrontendRazorPage.Pages.Vocabulary
     public class IndexModel : PageModel
     {
         private readonly VocabularyClientService _service;
-        public IndexModel(VocabularyClientService service) => _service = service;
+        private readonly LevelClientService _levelClientService;
+        public IndexModel(VocabularyClientService service, LevelClientService levelClientService)
+        {
+            _service = service;
+            _levelClientService = levelClientService;
+        }
 
         // "State" của Component
         public List<LevelModel> Levels { get; set; } = new();
@@ -34,7 +39,7 @@ namespace FrontendRazorPage.Pages.Vocabulary
             }
             else
             {
-                Levels = await _service.GetLevelsAsync();
+                Levels = await _levelClientService.GetLevelsAsync();
             }
         }
 

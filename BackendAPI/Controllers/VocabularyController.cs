@@ -20,12 +20,12 @@ namespace BackendAPI.Controllers
         }
 
         // TẦNG 1: GET api/vocabulary/levels
-        [HttpGet("levels")]
-        public async Task<IActionResult> GetLevels()
-        {
-            var data = await _backendService.GetAllLevelsAsync();
-            return Ok(data);
-        }
+        //[HttpGet("levels")]
+        //public async Task<IActionResult> GetLevels()
+        //{
+        //    var data = await _backendService.GetAllLevelsAsync();
+        //    return Ok(data);
+        //}
 
         // TẦNG 2: GET api/vocabulary/lessons?levelId=1
         [HttpGet("lessons")]

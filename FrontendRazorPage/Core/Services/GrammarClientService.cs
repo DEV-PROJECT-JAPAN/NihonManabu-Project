@@ -1,21 +1,20 @@
-﻿using FrontendRazorPage.Models;
+﻿using FrontendRazorPage.Core.Services;
+using FrontendRazorPage.Models;
+using FrontendRazorPage.Models.AdminModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using static System.Net.WebRequestMethods;
-using FrontendRazorPage.Models.AdminModel;
 
 namespace FrontendRazorPage.Services
 {
-    public class GrammarClientService
+    public class GrammarClientService : BaseClientService
     {
 
-        private readonly HttpClient _http;
-        private readonly string _apiBase = "https://localhost:7104/api/grammar";
+       
+        private readonly string _apiBase = "api/grammar";
 
-        public GrammarClientService(HttpClient httpClient)
-        {
-            _http = httpClient;
-        }
+        public GrammarClientService(HttpClient httpClient) : base(httpClient) { }
+        
 
         public async Task<GrammarModel> GetGrammarByIdAsync(int grammarId)
         {
@@ -24,7 +23,7 @@ namespace FrontendRazorPage.Services
             {
                 // Bắn lệnh GET sang endpoint: /api/Grammar/{grammarId}
                 // Nếu lỗi mạng hoặc null, toán tử ?? new() sẽ trả về object trống để chống sập giao diện
-                return await _http.GetFromJsonAsync<GrammarModel>($"{_apiBase}/{grammarId}") ?? new();
+                return await _httpClient.GetFromJsonAsync<GrammarModel>($"{_apiBase}/{grammarId}") ?? new();
             }
             catch
             {
@@ -41,7 +40,7 @@ namespace FrontendRazorPage.Services
             {
                 // Bắn lệnh GET sang endpoint: /api/Grammar/lesson/{lessonId}
                 // Nếu lỗi mạng hoặc null, toán tử ?? new() sẽ trả về danh sách trống để chống sập giao diện
-                return await _http.GetFromJsonAsync<List<GrammarModel>>($"{_apiBase}/lesson/{lessonId}") ?? new();
+                return await _httpClient.GetFromJsonAsync<List<GrammarModel>>($"{_apiBase}/lesson/{lessonId}") ?? new();
             }
             catch
             {
@@ -58,7 +57,7 @@ namespace FrontendRazorPage.Services
             {
                 // Bắn URL dạng số: /api/Grammar/questions?grammarId=1&questionType=1
                 string url = $"{_apiBase}/questions?grammarId={grammarId}&questionType={questionType}";
-                return await _http.GetFromJsonAsync<List<QuestionModel>>(url) ?? new();
+                return await _httpClient.GetFromJsonAsync<List<QuestionModel>>(url) ?? new();
             }
             catch
             {
@@ -78,7 +77,7 @@ namespace FrontendRazorPage.Services
             try
             {
                 // Sửa thành đường dẫn tuyệt đối chuẩn xác kết hợp với _apiBase
-                return await _http.GetFromJsonAsync<List<GrammarAdminModel>>($"{_apiBase}/admin-list") ?? new();
+                return await _httpClient.GetFromJsonAsync<List<GrammarAdminModel>>($"{_apiBase}/admin-list") ?? new();
             }
             catch
             {
@@ -91,7 +90,7 @@ namespace FrontendRazorPage.Services
         {
             try
             {
-                return await _http.GetFromJsonAsync<GrammarAdminModel>($"{_apiBase}/admin/{id}");
+                return await _httpClient.GetFromJsonAsync<GrammarAdminModel>($"{_apiBase}/admin/{id}");
             }
             catch
             {
@@ -103,7 +102,7 @@ namespace FrontendRazorPage.Services
         {
             try
             {
-                var response = await _http.PostAsJsonAsync($"{_apiBase}", grammar);
+                var response = await _httpClient.PostAsJsonAsync($"{_apiBase}", grammar);
                 return response.IsSuccessStatusCode;
             }
             catch
@@ -118,7 +117,7 @@ namespace FrontendRazorPage.Services
         {
             try
             {
-                var response = await _http.PutAsJsonAsync($"{_apiBase}/{id}", grammar);
+                var response = await _httpClient.PutAsJsonAsync($"{_apiBase}/{id}", grammar);
                 return response.IsSuccessStatusCode;
             }
             catch
@@ -132,7 +131,7 @@ namespace FrontendRazorPage.Services
         {
             try
             {
-                var response = await _http.DeleteAsync($"{_apiBase}/{id}");
+                var response = await _httpClient.DeleteAsync($"{_apiBase}/{id}");
                 return response.IsSuccessStatusCode;
             }
             catch

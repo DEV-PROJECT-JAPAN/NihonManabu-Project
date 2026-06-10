@@ -15,7 +15,7 @@
                     <i class="fa-solid fa-chess-rook"></i>
                     <span>Hán tự</span>
                 </a>
-                <a class="menu-item" asp-page="Features/Vocabulary/Index">
+                <a class="menu-item" asp-page="/Features/Vocabulary/Index">
                     <i class="fa-solid fa-crown"></i>
                     <span>Từ vựng</span>
                 </a>
@@ -70,6 +70,31 @@
                     </div>
                 </div>
             </header>
+
+
+
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const menuLinks = document.querySelectorAll('.sidebar .menu-items a.menu-item');
+                    const currentPath = window.location.pathname.toLowerCase();
+
+                    menuLinks.forEach(link => link.classList.remove('active'));
+
+                    let matched = false;
+                    menuLinks.forEach(link => {
+                        const href = link.getAttribute('href');
+                        if (!href || href === '#') return;
+
+                        const lowerHref = href.toLowerCase();
+                        if (currentPath === lowerHref || (lowerHref !== '/' && currentPath.startsWith(lowerHref))) {
+                            link.classList.add('active');
+                            matched = true;
+                        }
+                    });
+                });
+            </script>
+
 
             <main class="content-body">
                 @RenderBody()

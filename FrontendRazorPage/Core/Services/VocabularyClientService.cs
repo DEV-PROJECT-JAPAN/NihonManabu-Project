@@ -1,30 +1,29 @@
-﻿using System.Net.Http.Json;
-using FrontendRazorPage.Models;
+﻿using FrontendRazorPage.Models;
+using System.Net.Http;
+using System.Net.Http.Json;
 
 namespace FrontendRazorPage.Core.Services
 {
-    public class VocabularyClientService
+    public class VocabularyClientService : BaseClientService
     {
-        private readonly HttpClient _http;
-        private readonly string _apiBase = "https://localhost:7104/api/vocabulary";
+    
+        private readonly string _apiBase = "api/vocabulary";
 
-        public VocabularyClientService(HttpClient http) => _http = http;
+        public VocabularyClientService(HttpClient httpClient) : base(httpClient) { }
 
-        public async Task<List<LevelModel>> GetLevelsAsync() =>
-            await _http.GetFromJsonAsync<List<LevelModel>>($"{_apiBase}/levels") ?? new();
 
         public async Task<List<LessonModel>> GetLessonsAsync(int levelId) =>
-            await _http.GetFromJsonAsync<List<LessonModel>>($"{_apiBase}/lessons?levelId={levelId}") ?? new();
+            await _httpClient.GetFromJsonAsync<List<LessonModel>>($"{_apiBase}/lessons?levelId={levelId}") ?? new();
 
         public async Task<List<VocabularyModel>> GetCardsAsync(int lessonId) =>
-            await _http.GetFromJsonAsync<List<VocabularyModel>>($"{_apiBase}/cards?lessonId={lessonId}") ?? new();
+            await _httpClient.GetFromJsonAsync<List<VocabularyModel>>($"{_apiBase}/cards?lessonId={lessonId}") ?? new();
 
         public async Task<bool> UpdateProgressAsync(UpdateLearningProgresByUserModel input)
         {
             try
             {
                 // Bắn trực tiếp sang endpoint mới bóc tách ở BackendAPI
-                var response = await _http.PostAsJsonAsync($"{_apiBase}/update-LearningProgressByUser", input);
+                var response = await _httpClient.PostAsJsonAsync($"{_apiBase}/update-LearningProgressByUser", input);
                 return response.IsSuccessStatusCode;
             }
             catch

@@ -4,130 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NihonManabu - Hệ Thống Quản Trị</title>
-  
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
 
     <style>
-                :root {
-                        --sidebar-width: 260px;
-                        --bg-sidebar: #1e293b; /* Màu xanh đen Slate huyền thoại */
-                        --bg-content: #f8fafc;
-                        --text-muted: #64748b;
-
+        :root {
+            --sidebar-width: 260px;
+            --bg-sidebar: #1e293b; /* Màu xanh đen Slate huyền thoại */
+            --bg-content: #f8fafc;
+            --text-muted: #64748b;
         }
 
-                body {
-                        background-color: var(--bg-content);
-                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                        overflow-x: hidden;
-
+        body {
+            background-color: var(--bg-content);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
         }
-
 
         /* 📊 STYLE THANH MENU SIDEBAR BÊN TRÁI */
-                .admin-sidebar {
-                        width: var(--sidebar-width);
-                        background-color: var(--bg-sidebar);
-                        height: 100vh;
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        z-index: 100;
-                        color: #cbd5e1;
-                        padding-top: 1.5rem;
-                        transition: all 0.3s;
-
+        .admin-sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-sidebar);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            color: #cbd5e1;
+            padding-top: 1.5rem;
+            transition: all 0.3s;
         }
 
-                .sidebar-brand {
-                        padding: 0 1.5rem 1.5rem 1.5rem;
-                        border-bottom: 1px solid #334155;
-                        font-weight: 700;
-                        font-size: 1.2rem;
-                        color: #fff;
-                        letter-spacing: 1px;
-
+        .sidebar-brand {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            border-bottom: 1px solid #334155;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #fff;
+            letter-spacing: 1px;
         }
 
-                .sidebar-heading {
-                        font-size: 0.75rem;
-                        text-transform: uppercase;
-                        letter-spacing: 1px;
-                        font-weight: 700;
-                        color: var(--text-muted);
-                        padding: 1.5rem 1.5rem 0.5rem 1.5rem;
-
+        .sidebar-heading {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: var(--text-muted);
+            padding: 1.5rem 1.5rem 0.5rem 1.5rem;
         }
 
-                .nav-menu {
-                        list-style: none;
-                        padding: 0;
-                        margin: 0;
-
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
-                .nav-menu-item a {
-                        display: flex;
-                        align-items: center;
-                        padding: 0.75rem 1.5rem;
-                        color: #94a3b8;
-                        text-decoration: none;
-                        transition: all 0.2s;
-                        font-weight: 500;
-
+        .nav-menu-item a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 500;
         }
 
-                    .nav-menu-item a:hover, .nav-menu-item.active a {
-                            color: #fff;
-                            background-color: #334155;
-                            border-left: 4px solid #3b82f6; /* Vạch xanh highlight */
+            .nav-menu-item a:hover, .nav-menu-item.active a {
+                color: #fff;
+                background-color: #334155;
+                border-left: 4px solid #3b82f6; /* Vạch xanh highlight */
+            }
 
+        .nav-menu-item i {
+            margin-right: 0.75rem;
+            width: 20px;
+            font-size: 1.1rem;
         }
-
-                .nav-menu-item i {
-                        margin-right: 0.75rem;
-                        width: 20px;
-                        font-size: 1.1rem;
-
-        }
-
 
         /* 🏛️ STYLE VÙNG NỘI DUNG CHÍNH BÊN PHẢI */
-                .admin-main-content {
-                        margin-left: var(--sidebar-width);
-                        padding: 2rem;
-                        min-height: 100vh;
-
+        .admin-main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
         }
-
 
         /* STYLE CÁC THẺ THỐNG KÊ (WIDGET CARDS) */
-                .stat-card {
-                        border: none;
-                        border-radius: 12px;
-                        background: #fff;
-                        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-                        transition: transform 0.2s;
-
+        .stat-card {
+            border: none;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            transition: transform 0.2s;
         }
 
-                    .stat-card:hover {
-                            transform: translateY(-3px);
+            .stat-card:hover {
+                transform: translateY(-3px);
+            }
 
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
         }
-
-                .stat-icon {
-                        width: 48px;
-                        height: 48px;
-                        border-radius: 10px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 1.5rem;
-
-        }
-
-
     </style>
 </head>
 <body>
@@ -138,52 +120,80 @@
         </div>
 
         <ul class="nav-menu mt-3">
-            <li class="nav-menu-item active">
-                <a href="#"><i class="fa-solid fa-chart-pie"></i>Tổng quan (Dashboard)</a>
+            <li class="nav-menu-item">
+                <a asp-page="/Features/Admin/Dashboard/Index"><i class="fa-solid fa-chart-pie"></i>Tổng quan (Dashboard)</a>
             </li>
 
-            <div class="sidebar-heading">Quản lý nội dung học</div>
+            <li class="sidebar-heading">Quản lý nội dung học</li>
             <li class="nav-menu-item">
-                <a href="#"><i class="fa-solid fa-layer-group"></i>Cấp độ (Levels)</a>
+                <a asp-page="/Features/Admin/LevelAdmin/Index"><i class="fa-solid fa-layer-group"></i>Cấp độ (Levels)</a>
             </li>
             <li class="nav-menu-item">
-                <a href="#"><i class="fa-solid fa-book-open"></i>Bài học (Lessons)</a>
+                <a asp-page="/Features/Admin/Lessons/Index"><i class="fa-solid fa-book-open"></i>Bài học (Lessons)</a>
             </li>
             <li class="nav-menu-item">
-                <a href="#"><i class="fa-solid fa-spell-check"></i>Từ vựng (Vocabularies)</a>
+                <a asp-page="/Features/Admin/Vocabularies/Index"><i class="fa-solid fa-spell-check"></i>Từ vựng (Vocabularies)</a>
             </li>
             <li class="nav-menu-item">
-                <a href="#"><i class="fa-solid fa-brain"></i>Ngữ pháp (Grammars)</a>
-            </li>
-
-            <div class="sidebar-heading">Kho Câu Hỏi & Đáp Án</div>
-            <li class="nav-menu-item">
-                <a href="#"><i class="fa-solid fa-circle-question"></i>Danh sách Câu hỏi</a>
+                <a asp-page="/Features/Admin/GrammarAdmin/Index"><i class="fa-solid fa-brain"></i>Ngữ pháp (Grammars)</a>
             </li>
 
-            <div class="sidebar-heading">Người dùng & Hệ thống</div>
+            <li class="sidebar-heading">Kho Câu Hỏi & Đáp Án</li>
             <li class="nav-menu-item">
-                <a href="#"><i class="fa-solid fa-users"></i>Học viên (Users)</a>
+                <a asp-page="/Features/Admin/Questions/Index"><i class="fa-solid fa-circle-question"></i>Danh sách Câu hỏi</a>
+            </li>
+
+            <li class="sidebar-heading">Người dùng & Hệ thống</li>
+            <li class="nav-menu-item">
+                <a asp-page="/Features/Admin/Users/Index"><i class="fa-solid fa-users"></i>Học viên (Users)</a>
             </li>
             <li class="nav-menu-item">
-                <a href="#"><i class="fa-solid fa-credit-card"></i>Giao dịch (Transactions)</a>
+                <a asp-page="/Features/Admin/Transactions/Index"><i class="fa-solid fa-credit-card"></i>Giao dịch (Transactions)</a>
             </li>
             <li class="nav-menu-item">
-                <a href="#"><i class="fa-solid fa-medal"></i>Danh hiệu (Badges)</a>
+                <a asp-page="/Features/Admin/Badges/Index"><i class="fa-solid fa-medal"></i>Danh hiệu (Badges)</a>
             </li>
         </ul>
     </div>
 
     <div class="admin-main-content">
-
         @RenderBody()
-        @* @await RenderSectionAsync("Scripts", required: false) *@
-
-
     </div>
-    @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/dist/js/bootstrap.bundle.min.js"></script> *@
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const menuItems = document.querySelectorAll('.nav-menu .nav-menu-item');
+            const currentPath = window.location.pathname.toLowerCase();
+
+            menuItems.forEach(item => item.classList.remove('active'));
+
+            let isMatched = false;
+
+            menuItems.forEach(item => {
+                const link = item.querySelector('a');
+                if (!link) return;
+
+                const href = link.getAttribute('href');
+                if (!href || href === '#') return;
+
+                const lowerHref = href.toLowerCase();
+
+                // So sánh chính xác hoặc kiểm tra thư mục con (ví dụ: /GrammarAdmin/Create vẫn active mục Grammar)
+                if (currentPath === lowerHref || (lowerHref !== '/' && currentPath.startsWith(lowerHref))) {
+                    item.classList.add('active');
+                    isMatched = true;
+                }
+            });
+
+            // Fallback: Nếu không khớp trang nào, mặc định sáng mục Dashboard đầu tiên
+            if (!isMatched && menuItems.length > 0) {
+                menuItems[0].classList.add('active');
+            }
+        });
+    </script>
+
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
     }
 </body>
-</html> 
+</html>
