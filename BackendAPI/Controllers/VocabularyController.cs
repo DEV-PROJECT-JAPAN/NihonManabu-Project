@@ -55,8 +55,5 @@ namespace BackendAPI.Controllers
             if (isSuccess) return Ok(new { success = true });
             return BadRequest(new { success = false, message = "Lỗi lưu tiến độ" });
         }
-
-
-
     }
 }
