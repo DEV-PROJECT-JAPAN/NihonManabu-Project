@@ -18,7 +18,9 @@ namespace FrontendRazorPage.Core.Services
 
         public async Task<List<VocabularyModel>> GetCardsAsync(int lessonId) =>
             await _http.GetFromJsonAsync<List<VocabularyModel>>($"{_apiBase}/cards?lessonId={lessonId}") ?? new();
-
+        //api practice
+        public async Task<List<PracticeModel>> GetPracticeAsync(int Idlesson) =>
+            await _http.GetFromJsonAsync<List<PracticeModel>>($"{_apiBase}/practice?Idlesson={Idlesson}") ?? new();
         public async Task<bool> UpdateProgressAsync(UpdateLearningProgresByUserModel input)
         {
             try

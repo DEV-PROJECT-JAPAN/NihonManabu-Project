@@ -8,16 +8,6 @@ using System.Threading.Tasks;
 
 namespace FrontendRazorPage.Pages.Features.Practice
 {
-    /// <summary>
-    /// ViewModel for vocabulary items displayed in the Daily Draw
-    /// </summary>
-    public class DailyVocabularyItemDto
-    {
-        public int Id { get; set; }
-        public string Kanji { get; set; }
-        public string Hiragana { get; set; }
-        public string Meaning { get; set; }
-    }
 
     /// <summary>
     /// IndexModel - Handles Daily Vocabulary Draw (Gacha/Lootbox style)
@@ -33,7 +23,7 @@ namespace FrontendRazorPage.Pages.Features.Practice
         /// Public property binding: Collection of 5 random vocabulary items
         /// Accessible from the Razor view via @Model.DailyVocabulary
         /// </summary>
-        public List<DailyVocabularyItemDto> DailyVocabulary { get; set; } = new();
+        public List<PracticeModel> PracticeVocabulary { get; set; } = new();
 
         public IndexModel(VocabularyClientService vocabularyService)
         {
@@ -50,28 +40,31 @@ namespace FrontendRazorPage.Pages.Features.Practice
             {
                 // For demonstration, we'll fetch vocabulary from the first lesson
                 // In production, you might want to fetch from all lessons or a specific category
-                var lessons = await _vocabularyService.GetLessonsAsync(1);
+                var lessons = await _vocabularyService.GetPracticeAsync(1);
 
                 if (lessons.Any())
                 {
                     var firstLesson = lessons.First();
-                    var allVocab = await _vocabularyService.GetCardsAsync(firstLesson.Id);
+                    var allVocab = await _vocabularyService.GetPracticeAsync(firstLesson.Id);
 
                     if (allVocab.Any())
                     {
                         // Randomly select 5 items from the available vocabulary
                         // If less than 5 items exist, return all available items
-                        DailyVocabulary = allVocab
+                        PracticeVocabulary = allVocab
                             .OrderBy(x => _random.Next())
                             .Take(5)
-                            .Select(v => new DailyVocabularyItemDto
+                            .Select(v => new PracticeModel
                             {
                                 Id = v.Id,
+                                IdLesson = v.IdLesson,
                                 Kanji = v.Kanji,
                                 Hiragana = v.Hiragana,
+                                Romaji = v.Romaji,
                                 Meaning = v.Meaning
                             })
                             .ToList();
+                        Console.WriteLine($"Fetched {PracticeVocabulary.Count} vocabulary items for practice.");
                     }
                 }
             }
@@ -79,7 +72,7 @@ namespace FrontendRazorPage.Pages.Features.Practice
             {
                 // Log error and provide empty list as fallback
                 Console.WriteLine($"Error fetching daily vocabulary: {ex.Message}");
-                DailyVocabulary = new List<DailyVocabularyItemDto>();
+                PracticeVocabulary = new List<PracticeModel>();
             }
         }
     }

@@ -17,8 +17,9 @@ builder.Services.AddHttpContextAccessor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IVocabularyService, VocabularyService>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IVocabularyService, MockVocabularyService>();
+builder.Services.AddScoped<IPracticeService, PracticeService>();
+builder.Services.AddScoped<IUserService, MockUserService>();
 builder.Services.AddScoped<IGrammarService, GrammarService>();
 
 builder.Services.AddDbContext<JapaneseDbContext>(options =>

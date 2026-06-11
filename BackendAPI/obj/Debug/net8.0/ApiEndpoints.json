@@ -43,6 +43,22 @@
   },
   {
     "ContainingType": "BackendAPI.Controllers.VocabularyController",
+    "Method": "Practice",
+    "RelativePath": "api/Vocabulary/practice",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdLesson",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendAPI.Controllers.VocabularyController",
     "Method": "UpdateProgress",
     "RelativePath": "api/Vocabulary/update-LearningProgressByUser",
     "HttpMethod": "POST",

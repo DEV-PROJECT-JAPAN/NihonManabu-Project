@@ -11,12 +11,14 @@ namespace BackendAPI.Controllers
     {
         private readonly IVocabularyService _backendService;
         private readonly IUserService _userContext;
+        private readonly IPracticeService _practiceService;
 
         // Tiêm thẳng Service của Backend vào đây
-        public VocabularyController(IVocabularyService backendService, IUserService userContext)
+        public VocabularyController(IVocabularyService backendService, IUserService userContext, IPracticeService practiceService)
         {
             _backendService = backendService;
             _userContext = userContext;
+            _practiceService = practiceService;
         }
 
         // TẦNG 1: GET api/vocabulary/levels
@@ -54,6 +56,13 @@ namespace BackendAPI.Controllers
 
             if (isSuccess) return Ok(new { success = true });
             return BadRequest(new { success = false, message = "Lỗi lưu tiến độ" });
+        }
+        //chức năng ôn tập, test lấy từ vựng của hệ thống
+        [HttpGet("practice")]
+        public async Task<IActionResult> Practice([FromQuery] int IdLesson)
+        {
+            var data = await _practiceService.GetAllPracticesAsync(IdLesson);
+            return Ok(data);
         }
     }
 }
