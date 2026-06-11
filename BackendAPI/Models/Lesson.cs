@@ -8,7 +8,7 @@ namespace BackendAPI.Models
     {
         public int LevelId { get; set; }
         [ForeignKey("LevelId")]
-        public virtual Level Level { get; set; }
+        public virtual Level  Level { get; set; }
 
         [Required, Column(TypeName = "nvarchar(200)")]
         public string Title { get; set; }

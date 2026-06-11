@@ -72,8 +72,8 @@ namespace BackendAPI.Services
         {
             if (levelData == null) throw new ArgumentNullException(nameof(levelData));
 
-            levelData.CreatedAt = DateTime.UtcNow;
-            levelData.UpdatedAt = DateTime.UtcNow;
+            levelData.CreatedAt = DateTime.Now;
+            levelData.UpdatedAt = DateTime.Now;
 
             _context.Levels.Add(levelData);
             await _context.SaveChangesAsync();
@@ -92,7 +92,7 @@ namespace BackendAPI.Services
             // Cập nhật các thông tin sửa đổi
             existingLevel.Name = levelData.Name;
             existingLevel.Description = levelData.Description;
-            existingLevel.UpdatedAt = DateTime.UtcNow; // Ghi nhận thời gian cập nhật
+            existingLevel.UpdatedAt = DateTime.Now; // Ghi nhận thời gian cập nhật
 
             _context.Levels.Update(existingLevel);
             await _context.SaveChangesAsync();

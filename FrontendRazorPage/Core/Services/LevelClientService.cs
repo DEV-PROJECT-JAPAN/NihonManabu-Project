@@ -16,6 +16,7 @@ namespace FrontendRazorPage.Core.Services
         public async Task<List<LevelModel>> GetLevelsAsync() =>
            await _httpClient.GetFromJsonAsync<List<LevelModel>>($"{_baseUrl}") ?? new();
 
+
         // 1. Lấy danh sách cho ADMIN (Trả về LevelAdminModel)
         public async Task<List<LevelAdminModel>> GetLevelsForAdminAsync()
         {

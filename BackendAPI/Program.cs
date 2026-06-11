@@ -46,6 +46,7 @@ builder.Services.AddDbContext<JapaneseDbContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILevelService, LevelService>();
 builder.Services.AddScoped<IVocabularyService, VocabularyService>();
+builder.Services.AddScoped<ILessonService, LessonService>();
 
 
 ////DTO

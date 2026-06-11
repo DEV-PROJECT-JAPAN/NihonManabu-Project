@@ -14,12 +14,13 @@ namespace FrontendRazorPage.Pages.Features.Grammar
         private readonly GrammarClientService _grammarService;
         private readonly VocabularyClientService _vocabularyService;
         private readonly LevelClientService _levelClientService;
-
-        public IndexModel(GrammarClientService grammarService, VocabularyClientService vocabularyService, LevelClientService levelClientService)
+        private readonly LessonClientService _lessonClientService;
+        public IndexModel(GrammarClientService grammarService, VocabularyClientService vocabularyService, LevelClientService levelClientService,LessonClientService lessonClientService)
         {
             _grammarService = grammarService;
             _vocabularyService = vocabularyService;
             _levelClientService = levelClientService;
+            _lessonClientService = lessonClientService;
         }
 
         [BindProperty(SupportsGet = true, Name = "levelId")]
@@ -59,7 +60,7 @@ namespace FrontendRazorPage.Pages.Features.Grammar
             // TẦNG 2: Nếu đã chọn Cấp độ -> Lấy danh sách Bài học
             else if (LevelId.HasValue && LevelId > 0)
             {
-                Lessons = await _vocabularyService.GetLessonsAsync(LevelId.Value);
+                Lessons = await _lessonClientService.GetLessonsByLevelAsync(LevelId.Value);
             } else // TẦNG 1: Mặc định -> Lấy danh sách Cấp độ
             {
                 Levels = await _levelClientService.GetLevelsAsync();

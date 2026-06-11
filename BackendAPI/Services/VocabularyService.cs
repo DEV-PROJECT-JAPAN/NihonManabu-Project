@@ -13,7 +13,7 @@ namespace BackendAPI.Services
     {
         private readonly JapaneseDbContext _context;
         public VocabularyService(JapaneseDbContext context) => _context = context;
-
+        // ==================== KHU VỰC DÀNH CHO USER  =======
         public async Task<List<LevelDTO>> GetAllLevelsAsync()
         {
             return await _context.Levels.Select(l => new LevelDTO
@@ -82,6 +82,83 @@ namespace BackendAPI.Services
                 _context.LearningProgresses.Update(progress);
             }
 
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        // ==================== KHU VỰC XỬ LÝ DÀNH CHO ADMIN ====================
+
+
+        public async Task<IEnumerable<Vocabulary>> GetVocabulariesByLessonForAdminAsync(int lessonId)
+        {
+            return await _context.Vocabularies
+                .AsNoTracking() // Tối ưu hiệu năng đọc dữ liệu danh sách
+                .Where(v => v.LessonId == lessonId)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// 2. Lấy chi tiết 1 từ vựng theo ID để đổ lên Form Sửa (Edit)
+        /// </summary>
+        public async Task<Vocabulary?> GetVocabByIdAsync(int id)
+        {
+            return await _context.Vocabularies
+                .AsNoTracking()
+                .FirstOrDefaultAsync(v => v.Id == id);
+        }
+
+        /// <summary>
+        /// 3. Hàm tạo mới Từ vựng (Tự động bốc TextToSpeak sạch để ép sinh link âm thanh Google TTS)
+        /// </summary>
+        public async Task<Vocabulary> CreateVocabularyAsync(Vocabulary vocabData)
+        {
+            if (vocabData == null) throw new ArgumentNullException(nameof(vocabData));
+
+            // Đóng dấu thời gian hệ thống chuẩn quốc tế UTC
+            vocabData.CreatedAt = DateTime.Now;
+            vocabData.UpdatedAt = DateTime.Now;
+
+            // Đẩy vào context chuẩn bị lưu (Trường AudioUrl sẽ tự nhận null từ Frontend gửi qua)
+            _context.Vocabularies.Add(vocabData);
+
+            // Chốt hạ lưu xuống cơ sở dữ liệu SQL Server
+            await _context.SaveChangesAsync();
+            return vocabData;
+        }
+        /// <summary>
+        /// 4. Hàm cập nhật dữ liệu sửa đổi của Admin (Giữ nguyên ngày tạo, tự động đẩy ngày giờ cập nhật)
+        /// </summary>
+        public async Task<bool> UpdateVocabularyAsync(int id, Vocabulary vocabData)
+        {
+            var existing = await _context.Vocabularies.FindAsync(id);
+            if (existing == null || vocabData == null) return false;
+
+            // Tiến hành map đè dữ liệu mới từ Form sang bản ghi cũ trong DB
+            existing.Kanji = vocabData.Kanji;
+            existing.Hiragana = vocabData.Hiragana;
+            existing.Meaning = vocabData.Meaning;
+            existing.Romaji = vocabData.Romaji;
+            existing.ExampleSentence = vocabData.ExampleSentence;
+            existing.LessonId = vocabData.LessonId;
+
+            // Admin giấu trường này đi nên giá trị truyền qua lại luôn là null an toàn
+            existing.AudioUrl = vocabData.AudioUrl;
+
+            // Cập nhật lại mốc thời gian chỉnh sửa mới nhất, tuyệt đối giữ nguyên CreatedAt gốc
+            existing.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        /// <summary>
+        /// 5. Hàm xóa vĩnh viễn từ vựng ra khỏi bài học
+        /// </summary>
+        public async Task<bool> DeleteVocabularyAsync(int id)
+        {
+            var vocab = await _context.Vocabularies.FindAsync(id);
+            if (vocab == null) return false;
+
+            _context.Vocabularies.Remove(vocab);
             return await _context.SaveChangesAsync() > 0;
         }
     }

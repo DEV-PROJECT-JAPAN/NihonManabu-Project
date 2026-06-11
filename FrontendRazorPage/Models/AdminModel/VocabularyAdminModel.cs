@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-
-namespace FrontendRazorPage.Models
+﻿namespace FrontendRazorPage.Models.AdminModel
 {
-    public class VocabularyModel
+    public class VocabularyAdminModel
     {
         public int Id { get; set; }
         public int LessonId { get; set; }
-        public string? Kanji { get; set; }
+        public string ?Kanji { get; set; }
         public string Hiragana { get; set; }
         public string Romaji { get; set; }
         public string Meaning { get; set; }
         public string? ExampleSentence { get; set; }
-        [ValidateNever]
-        public string ? TextToSpeak { get; set; }
+        public string? AudioUrl { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
