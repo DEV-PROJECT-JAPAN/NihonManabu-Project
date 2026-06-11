@@ -42,3 +42,11 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+# Chặn vĩnh viễn tất cả các thư mục bin, obj, dist trong toàn bộ solution
+**/bin/
+**/obj/
+**/dist/
+**/.angular/
+dist/
+.angular/
+node_modules/

@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<div class="container py-4">
+    <div class="custom-breadcrumb">
+        <a [routerLink]="['/grammar']" class="breadcrumb-step"><i class="fas fa-home mr-1"></i> Trang chủ</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <a [routerLink]="['/grammar/level', levelId]" class="breadcrumb-step">🎯 Trình độ</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <span class="breadcrumb-step active-step">📖 Bài học</span>
+    </div>
+
+    <div class="card custom-card">
+        <div class="card-header">
+            <i class="fas fa-bookmark text-danger mr-2"></i> Bước 3: Chọn cấu trúc Ngữ Pháp cần luyện tập
+        </div>
+        <div class="card-body p-4">
+            <div class="grammar-modern-list">
+                @for (g of grammars; track g.id) {
+                <a href="javascript:void(0)" class="grammar-modern-row" (click)="selectGrammar(g.id)">
+                    <span>📢 {{ g.structure }}</span>
+                    <i class="fas fa-arrow-right opacity-40"></i>
+                </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

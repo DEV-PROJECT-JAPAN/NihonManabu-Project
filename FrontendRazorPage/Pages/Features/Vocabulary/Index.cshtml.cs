@@ -24,18 +24,9 @@ namespace FrontendRazorPage.Pages.Vocabulary
         // ngOnInit của Angular
         public async Task OnGetAsync()
         {
-            if (LevelId.HasValue && LessonId.HasValue)
-            {
-                Cards = await _service.GetCardsAsync(LessonId.Value);
-            }
-            else if (LevelId.HasValue)
-            {
-                Lessons = await _service.GetLessonsAsync(LevelId.Value);
-            }
-            else
-            {
-                Levels = await _service.GetLevelsAsync();
-            }
+          
+                Levels = await _levelClientService.GetLevelsAsync();
+            
         }
 
         public async Task<JsonResult> OnPostUpdateProgressAsync([FromBody] UpdateLearningProgresByUserModel input)
