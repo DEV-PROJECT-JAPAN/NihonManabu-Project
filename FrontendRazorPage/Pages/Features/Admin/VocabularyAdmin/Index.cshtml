@@ -1,0 +1,130 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Admin.Vocabularies.IndexModel
+@{
+    ViewData["Title"] = "Quản Lý Từ Vựng";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-dark m-0">QUẢN LÝ TỪ VỰNG TIẾNG NHẬT</h2>
+        <a asp-page="./Create" asp-route-lessonId="@Model.SelectedLessonId" class="btn btn-primary shadow-sm" style="background-color: #ff9f43; border-color: #ff9f43;">
+            ➕ Thêm Từ Vựng Mới
+        </a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert">
+            @Model.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0 mb-4 bg-light">
+        <div class="card-body py-3">
+            <form method="get" class="row align-items-center g-3">
+
+                <div class="col-md-4">
+                    <label class="fw-semibold text-secondary small d-block mb-1">
+                        <i class="fa-solid fa-filter me-1"></i> Bước 1: Chọn Cấp Độ
+                    </label>
+                    <select asp-for="SelectedLevelId" class="form-select border-2" onchange="window.location.href='?SelectedLevelId=' + this.value" style="border-radius: 8px;">
+                        <option value="">-- Chọn Cấp Độ --</option>
+                        @foreach (var lvl in Model.Levels)
+                        {
+                            <option value="@lvl.Id">@lvl.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-5">
+                    <label class="fw-semibold text-secondary small d-block mb-1">
+                        <i class="fa-solid fa-book-open me-1"></i> Bước 2: Chọn Bài Học
+                    </label>
+                    <select asp-for="SelectedLessonId" class="form-select border-2" onchange="this.form.submit()" style="border-radius: 8px;" disabled="@(Model.SelectedLevelId == null || !Model.Lessons.Any())">
+                        <option value="">-- Chọn Bài Học --</option>
+                        @foreach (var les in Model.Lessons)
+                        {
+                            <option value="@les.Id">@les.Title</option>
+                        }
+                    </select>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+        <table class="table table-hover table-striped mb-0 align-middle">
+            <thead class="table-dark text-uppercase fs-7">
+                <tr>
+                    <th style="width: 5%">ID</th>
+                    <th style="width: 12%">Chữ Hán (Kanji)</th>
+                    <th style="width: 12%">Hiragana</th>
+                    <th style="width: 10%">Romaji</th>
+                    <th style="width: 16%">Ý Nghĩa Tiếng Việt</th>
+                    <th style="width: 15%">Câu Ví Dụ</th>
+                    <th style="width: 10%">Ngày Tạo</th>
+                    <th style="width: 10%">Cập Nhật</th>
+                    <th style="width: 10%">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.SelectedLessonId == null || Model.SelectedLessonId == 0)
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <i class="fa-solid fa-arrow-pointer fs-2 d-block mb-2 text-warning opacity-75"></i>
+                            Vui lòng chọn cụ thể một <b>Cấp độ</b> và <b>Bài học</b> ở trên để xem danh sách từ vựng.
+                        </td>
+                    </tr>
+                }
+                else if (!Model.Vocabularies.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <i class="fa-regular fa-folder-open fs-2 d-block mb-2 text-opacity-25"></i>
+                            Bài học này hiện tại chưa có từ vựng nào. Bạn hãy bấm nút thêm mới nhé!
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Vocabularies)
+                    {
+                        <tr>
+                            <td><code>#@item.Id</code></td>
+                            <td class="fs-5 fw-bold text-dark font-monospace">@item.Kanji</td>
+                            <td class="text-primary fw-semibold">@item.Hiragana</td>
+                            <td class="text-secondary font-monospace">@item.Romaji</td>
+                            <td class="text-dark fw-medium">@item.Meaning</td>
+                            <td class="text-muted small">@item.ExampleSentence</td>
+
+                            <td class="text-muted small">
+                                @item.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                            <td class="text-secondary small fw-medium">
+                               
+                                    @item.UpdatedAt.ToString("dd/MM/yyyy HH:mm")
+                                
+                                
+                            </td>
+
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm fw-semibold text-white px-2" style="border-radius: 6px;">Sửa</a>
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" onsubmit="return confirm('Bạn có chắc chắn muốn xóa từ vựng này không?');">
+                                        <input type="hidden" name="SelectedLevelId" value="@Model.SelectedLevelId" />
+                                        <input type="hidden" name="SelectedLessonId" value="@Model.SelectedLessonId" />
+                                        <button type="submit" class="btn btn-danger btn-sm fw-semibold px-2" style="border-radius: 6px;">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
