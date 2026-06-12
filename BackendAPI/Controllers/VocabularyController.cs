@@ -57,12 +57,5 @@ namespace BackendAPI.Controllers
             if (isSuccess) return Ok(new { success = true });
             return BadRequest(new { success = false, message = "Lỗi lưu tiến độ" });
         }
-        //chức năng ôn tập, test lấy từ vựng của hệ thống
-        [HttpGet("practice")]
-        public async Task<IActionResult> Practice([FromQuery] int IdLesson)
-        {
-            var data = await _practiceService.GetAllPracticesAsync(IdLesson);
-            return Ok(data);
-        }
     }
 }

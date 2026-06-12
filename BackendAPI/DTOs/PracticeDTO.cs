@@ -4,7 +4,7 @@
     {
         //thuoc tinh: Id, Kanji, Hiragana, Romaji, Meaning
         public int Id { get; set; }
-        public int IdLesson { get; set; }
+        public int ListId { get; set; }
         public string Kanji { get; set; }
         public string Hiragana { get; set; }
         public string Romaji { get; set; }

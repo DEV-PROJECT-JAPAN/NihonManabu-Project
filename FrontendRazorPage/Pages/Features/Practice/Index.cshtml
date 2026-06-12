@@ -529,10 +529,10 @@
 
             <div class="draw-info text-center mb-4">✨ LẮC 5 TỪ VỰNG NGẪU NHIÊN ✨</div>
 
-            @if (Model.PracticeVocabulary != null && Model.PracticeVocabulary.Count > 0)
+            @if (Model.PracticeVocabularyUser != null && Model.PracticeVocabularyUser.Count > 0)
             {
                 <div class="cards-grid">
-                    @foreach (var vocab in Model.PracticeVocabulary)
+                    @foreach (var vocab in Model.PracticeVocabularySystem)
                     {
                         <div class="flip-card" onclick="flipCard(this)">
                             <div class="flip-card-inner">
@@ -594,18 +594,14 @@
                     <div class="folder-name">Upload Data Mới</div>
                     <div class="folder-count">Tạo thư mục ôn tập</div>
                 </div>
-
-                <div class="folder-item" onclick="openFolderGacha('JLPT N4 - Tuần 1')">
+            @foreach (var vocal in Model.Userfolders)
+            {
+                <div class="folder-item" onclick="openFolderGacha('@vocal.Name')">
                     <div class="folder-icon"><i class="fas fa-folder"></i></div>
-                    <div class="folder-name">JLPT N4 - Tuần 1</div>
-                    <div class="folder-count">50 từ vựng</div>
+                    <div class="folder-name">@vocal.Name</div>
+                    <div class="folder-count">@vocal.Description</div>
                 </div>
-
-                <div class="folder-item" onclick="openFolderGacha('Kanji Căn bản')">
-                    <div class="folder-icon"><i class="fas fa-folder"></i></div>
-                    <div class="folder-name">Kanji Căn bản</div>
-                    <div class="folder-count">120 từ vựng</div>
-                </div>
+            }
 
             </div>
         </div>
@@ -622,10 +618,10 @@
                 <span id="currentFolderName" class="text-white fw-bold" style="font-size: 1.1rem;">Chưa chọn</span>
             </div>
 
-            @if (Model.PracticeVocabulary != null && Model.PracticeVocabulary.Count > 0)
+            @if (Model.PracticeVocabularyUser != null && Model.PracticeVocabularyUser.Count > 0)
             {
                 <div class="cards-grid">
-                    @foreach (var vocab in Model.PracticeVocabulary)
+                    @foreach (var vocab in Model.PracticeVocabularyUser)
                     {
                         <div class="flip-card" onclick="flipCard(this)">
                             <div class="flip-card-inner">

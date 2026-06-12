@@ -1,5 +1,79 @@
 [
   {
+    "ContainingType": "BackendAPI.Controllers.PracticeController",
+    "Method": "PracticeSystem",
+    "RelativePath": "api/Practice/practice-system",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LessonId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendAPI.Controllers.PracticeController",
+    "Method": "PracticeUser",
+    "RelativePath": "api/Practice/practice-user",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "FolderId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "UserId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendAPI.Controllers.PracticeController",
+    "Method": "UpdateProgress",
+    "RelativePath": "api/Practice/update-LearningProgressByUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "input",
+        "Type": "BackendAPI.DTOs.UpdateLearningProgresByUserDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendAPI.Controllers.PracticeController",
+    "Method": "UserFolders",
+    "RelativePath": "api/Practice/user-folders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "BackendAPI.Controllers.VocabularyController",
     "Method": "GetCards",
     "RelativePath": "api/Vocabulary/cards",
@@ -39,22 +113,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "BackendAPI.Controllers.VocabularyController",
-    "Method": "Practice",
-    "RelativePath": "api/Vocabulary/practice",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "IdLesson",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
     "ReturnTypes": []
   },
   {

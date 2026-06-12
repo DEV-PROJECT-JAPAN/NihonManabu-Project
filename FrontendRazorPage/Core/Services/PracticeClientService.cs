@@ -3,12 +3,12 @@ using FrontendRazorPage.Models;
 
 namespace FrontendRazorPage.Core.Services
 {
-    public class VocabularyClientService
+    public class PracticeClientService
     {
         private readonly HttpClient _http;
-        private readonly string _apiBase = "https://localhost:7104/api/vocabulary";
+        private readonly string _apiBase = "https://localhost:7104/api/practice";
 
-        public VocabularyClientService(HttpClient http) => _http = http;
+        public PracticeClientService(HttpClient http) => _http = http;
 
         public async Task<List<LevelModel>> GetLevelsAsync() =>
             await _http.GetFromJsonAsync<List<LevelModel>>($"{_apiBase}/levels") ?? new();
@@ -19,7 +19,14 @@ namespace FrontendRazorPage.Core.Services
         public async Task<List<VocabularyModel>> GetCardsAsync(int lessonId) =>
             await _http.GetFromJsonAsync<List<VocabularyModel>>($"{_apiBase}/cards?lessonId={lessonId}") ?? new();
         //api practice
-        public async Task<List<PracticeModel>> GetPracticeAsync(int FolderId) =>
+        //userVocabularyPractice
+        public async Task<List<PracticeModel>> GetUserVocabularyPracticeAsync(int ListId) =>
+            await _http.GetFromJsonAsync<List<PracticeModel>>($"{_apiBase}/practice?ListId={ListId}") ?? new();
+        //userVocabularySystemPractice
+        public async Task<List<PracticeModel>> GetUserVocabularySystemPracticeAsync(int LessonId) =>
+            await _http.GetFromJsonAsync<List<PracticeModel>>($"{_apiBase}/practice?LessonId={LessonId}") ?? new();
+
+        public async Task<List<PracticeModel>> GetUserFlashCardListAsync(int FolderId) =>
             await _http.GetFromJsonAsync<List<PracticeModel>>($"{_apiBase}/practice?FolderId={FolderId}") ?? new();
         public async Task<bool> UpdateProgressAsync(UpdateLearningProgresByUserModel input)
         {

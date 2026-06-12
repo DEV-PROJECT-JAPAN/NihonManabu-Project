@@ -5,6 +5,7 @@ using FrontendRazorPage.Core.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BackendAPI.DTOs;
 
 namespace FrontendRazorPage.Pages.Features.Practice
 {
@@ -16,18 +17,22 @@ namespace FrontendRazorPage.Pages.Features.Practice
     /// </summary>
     public class IndexModel : PageModel
     {
-        private readonly VocabularyClientService _vocabularyService;
+        private readonly PracticeClientService _PracticeService;
         private readonly Random _random = new();
+
+        public List<PracticeModel> PracticeVocabularySystem { get; set; } = new();
+
+        public List<UserFlashcardList> Userfolders { get; set; } = new();
 
         /// <summary>
         /// Public property binding: Collection of 5 random vocabulary items
         /// Accessible from the Razor view via @Model.DailyVocabulary
         /// </summary>
-        public List<PracticeModel> PracticeVocabulary { get; set; } = new();
+        public List<PracticeModel> PracticeVocabularyUser { get; set; } = new();
 
-        public IndexModel(VocabularyClientService vocabularyService)
+        public IndexModel(PracticeClientService PracticeService)
         {
-            _vocabularyService = vocabularyService;
+            _PracticeService = PracticeService;
         }
 
         /// <summary>
@@ -40,18 +45,18 @@ namespace FrontendRazorPage.Pages.Features.Practice
             {
                 // For demonstration, we'll fetch vocabulary from the first lesson
                 // In production, you might want to fetch from all lessons or a specific category
-                var lessons = await _vocabularyService.GetPracticeAsync(1);
+                var lessons = await _PracticeService.GetUserVocabularySystemPracticeAsync(1);
 
                 if (lessons.Any())
                 {
                     var firstLesson = lessons.First();
-                    var allVocab = await _vocabularyService.GetPracticeAsync(firstLesson.Id);
+                    var allVocab = await _PracticeService.GetUserVocabularySystemPracticeAsync(firstLesson.Id);
 
                     if (allVocab.Any())
                     {
                         // Randomly select 5 items from the available vocabulary
                         // If less than 5 items exist, return all available items
-                        PracticeVocabulary = allVocab
+                        PracticeVocabularyUser = allVocab
                             .OrderBy(x => _random.Next())
                             .Take(5)
                             .Select(v => new PracticeModel
@@ -64,15 +69,19 @@ namespace FrontendRazorPage.Pages.Features.Practice
                                 Meaning = v.Meaning
                             })
                             .ToList();
-                        Console.WriteLine($"Fetched {PracticeVocabulary.Count} vocabulary items for practice.");
+                        Console.WriteLine($"Fetched {PracticeVocabularyUser.Count} vocabulary items for practice.");
                     }
+                }
+                if (PracticeVocabularyUser.Any())
+                {
+                    Console.WriteLine("No vocabulary items found for practice.");
                 }
             }
             catch (Exception ex)
             {
                 // Log error and provide empty list as fallback
                 Console.WriteLine($"Error fetching daily vocabulary: {ex.Message}");
-                PracticeVocabulary = new List<PracticeModel>();
+                PracticeVocabularyUser = new List<PracticeModel>();
             }
         }
     }
