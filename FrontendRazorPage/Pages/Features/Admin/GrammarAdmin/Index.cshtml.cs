@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FrontendRazorPage.Models;
 using FrontendRazorPage.Services;
-using FrontendRazorPage.Core.Services; // Thêm namespace chứa VocabularyClientService
+using FrontendRazorPage.Core.Services;
 using FrontendRazorPage.Models.AdminModel;
 using System;
 using System.Collections.Generic;
@@ -14,69 +14,67 @@ namespace FrontendRazorPage.Pages.Features.Admin.GrammarAdmin
     public class IndexModel : PageModel
     {
         private readonly GrammarClientService _grammarService;
-        private readonly VocabularyClientService _vocabularyService; // Khai báo service lọc
+        private readonly LessonClientService _lessonClientService;
+        private readonly LevelClientService _levelClientService;
+        // Tái sử dụng service lấy danh mục cấp độ/bài học
 
-        public int CurrentPage { get; set; } = 1;
-        public int TotalPages { get; set; }
-        public int PageSize { get; set; } = 10;
-
-        // Các thuộc tính lưu giữ trạng thái bộ lọc trên UI
+        // Sử dụng thuộc tính ràng buộc dữ liệu BindProperty giống trang Từ Vựng
+        [BindProperty(SupportsGet = true)]
         public int? SelectedLevelId { get; set; }
+
+        [BindProperty(SupportsGet = true)]
         public int? SelectedLessonId { get; set; }
 
-        // Danh sách đổ vào các ô Select Box lọc
+        // Danh sách đổ vào các thanh bộ lọc Dropdown
         public List<LevelModel> Levels { get; set; } = new();
         public List<LessonModel> Lessons { get; set; } = new();
 
+        // Danh sách hiển thị lên bảng dữ liệu chính
         public List<GrammarAdminModel> Grammars { get; set; } = new();
 
-        // Inject bổ sung VocabularyClientService vào Constructor
-        public IndexModel(GrammarClientService grammarService, VocabularyClientService vocabularyService)
+        [TempData]
+        public string Message { get; set; } = string.Empty;
+
+        public IndexModel(GrammarClientService grammarService, LessonClientService lessonClientService, LevelClientService levelClientService)
         {
             _grammarService = grammarService;
-            _vocabularyService = vocabularyService;
+            _lessonClientService = lessonClientService;
+            _levelClientService = levelClientService;
         }
 
-        public async Task OnGetAsync(int p = 1, int? levelId = null, int? lessonId = null)
+        public async Task OnGetAsync()
         {
-            CurrentPage = p;
-            SelectedLevelId = levelId;
-            SelectedLessonId = lessonId;
+            // Bước 1: Luôn nạp danh sách Cấp độ (N5, N4...) cho Dropdown số 1
+            Levels = await _levelClientService.GetLevelsAsync() ?? new();
 
-            
+            // Bước 2: Nếu Admin đã chọn một Cấp độ cụ thể -> Load các Bài học tương ứng của cấp độ đó
+            if (SelectedLevelId.HasValue && SelectedLevelId.Value > 0)
+            {
+                Lessons = await _lessonClientService.GetLessonsByLevelAsync(SelectedLevelId.Value);
+            }
 
-            // 2. Lấy toàn bộ danh sách ngữ pháp gốc từ API về
-            var allGrammars = await _grammarService.GetAllForAdminAsync() ?? new List<GrammarAdminModel>();
-
-            // 3. Thực hiện lọc dữ liệu dựa trên bài học được chọn
-            // (Nếu chọn Level nhưng chưa chọn Bài, ta lọc theo danh sách ID bài học thuộc level đó)
+            // Bước 3: Logic lấy dữ liệu: Chỉ lôi ngữ pháp ra khi Admin đã chọn đích danh một Bài học cụ thể
             if (SelectedLessonId.HasValue && SelectedLessonId.Value > 0)
             {
-                allGrammars = allGrammars.Where(g => g.LessonId == SelectedLessonId.Value).ToList();
+                var allGrammars = await _grammarService.GetAllForAdminAsync() ?? new List<GrammarAdminModel>();
+
+                // Lọc chính xác theo mã bài học
+                Grammars = allGrammars.Where(g => g.LessonId == SelectedLessonId.Value).ToList();
             }
-            else if (SelectedLevelId.HasValue && SelectedLevelId.Value > 0)
+            else
             {
-                var lessonIdsInLevel = Lessons.Select(l => l.Id).ToList();
-                allGrammars = allGrammars.Where(g => lessonIdsInLevel.Contains(g.LessonId)).ToList();
+                // Nếu chưa chọn Bài học -> Để bảng trống, hướng dẫn Admin chọn bài học giống hệt bên Từ Vựng
+                Grammars = new List<GrammarAdminModel>();
             }
-
-            // 4. Tính toán tổng số trang dựa trên danh sách dữ liệu SAU KHI LỌC
-            int totalRecords = allGrammars.Count;
-            TotalPages = (int)Math.Ceiling((double)totalRecords / PageSize);
-
-            if (CurrentPage > TotalPages && TotalPages > 0) CurrentPage = TotalPages;
-
-            // 5. Cắt phân đoạn mảng hiển thị trang hiện tại
-            Grammars = allGrammars
-                .Skip((CurrentPage - 1) * PageSize)
-                .Take(PageSize)
-                .ToList();
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
             var success = await _grammarService.DeleteAsync(id);
-            return RedirectToPage();
+            Message = success ? "Xóa mẫu ngữ pháp thành công!" : "Xóa mẫu ngữ pháp thất bại.";
+
+            // Reload lại trang và giữ nguyên bộ lọc cũ để Admin không phải chọn lại từ đầu
+            return RedirectToPage(new { SelectedLevelId = SelectedLevelId, SelectedLessonId = SelectedLessonId });
         }
     }
 }

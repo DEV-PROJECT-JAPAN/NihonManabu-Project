@@ -8,7 +8,8 @@ namespace FrontendRazorPage.Pages.Vocabulary
     public class IndexModel : PageModel
     {
         private readonly VocabularyClientService _service;
-        public IndexModel(VocabularyClientService service) => _service = service;
+        private readonly LevelClientService _levelClientService;
+        public IndexModel(VocabularyClientService service, LevelClientService levelClientService) => (_service, _levelClientService) = (service, levelClientService);
 
         // "State" của Component
         public List<LevelModel> Levels { get; set; } = new();

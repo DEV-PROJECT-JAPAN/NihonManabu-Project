@@ -2,392 +2,142 @@
 @model FrontendRazorPage.Pages.Features.Admin.GrammarAdmin.IndexModel
 @{
     ViewData["Title"] = "Quản lý Ngữ Pháp";
-  
+    Layout = "_LayoutAdmin";
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<div class="container-fluid py-4 px-4">
+<div class="container mt-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h3 class="fw-bold text-dark mb-1">📚 Quản Lý Mẫu Ngữ Pháp</h3>
-            <p class="text-muted small mb-0">Xem, biên tập và phân bổ cấu trúc dữ liệu cốt lõi hệ thống</p>
-        </div>
-        <a asp-page="./Create" class="btn btn-success-custom shadow-sm px-4">
-            <i class="bi bi-plus-circle-fill me-2"></i> Thêm Ngữ Pháp Mới
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-dark m-0">QUẢN LÝ MẪU NGỮ PHÁP</h2>
+        <a asp-page="./Create" asp-route-lessonId="@Model.SelectedLessonId" class="btn btn-primary shadow-sm" style="background-color: #ff9f43; border-color: #ff9f43; font-weight: 600;">
+            ➕ Thêm Ngữ Pháp Mới
         </a>
     </div>
 
-    <div class="card shadow-sm border-0 rounded-4 mb-4 bg-white">
-        <div class="card-body p-4">
-            <form method="get" id="filterForm" class="row g-3 align-items-end">
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert">
+            @Model.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
-                <div class="col-md-4 col-sm-6">
-                    <label class="form-label fw-semibold text-secondary small mb-1.5">
-                        <i class="bi bi-layer-forward text-success me-1"></i> Lọc Theo Cấp Độ
+    <div class="card shadow-sm border-0 mb-4 bg-light" style="border-radius: 8px;">
+        <div class="card-body py-3">
+            <form method="get" class="row align-items-center g-3">
+
+                <div class="col-md-4">
+                    <label class="fw-semibold text-secondary small d-block mb-1">
+                        <i class="bi bi-filter me-1"></i> Bước 1: Chọn Cấp Độ
                     </label>
-                    <select name="levelId" id="levelSelect" class="form-select custom-filter-control">
-                        <option value="">-- Tất cả cấp độ --</option>
+                    <select asp-for="SelectedLevelId" class="form-select border-2" onchange="window.location.href='?SelectedLevelId=' + this.value" style="border-radius: 8px; font-size: 0.9rem;">
+                        <option value="">-- Chọn Cấp Độ --</option>
                         @foreach (var lvl in Model.Levels)
                         {
-                            <option value="@lvl.Id" selected="@(Model.SelectedLevelId == lvl.Id ? "selected" : null)">@lvl.Name</option>
+                            <option value="@lvl.Id">@lvl.Name</option>
                         }
                     </select>
                 </div>
 
-                <div class="col-md-4 col-sm-6">
-                    <label class="form-label fw-semibold text-secondary small mb-1.5">
-                        <i class="bi bi-journal-bookmark text-success me-1"></i> Tìm Theo Bài Học
+                <div class="col-md-5">
+                    <label class="fw-semibold text-secondary small d-block mb-1">
+                        <i class="bi bi-book-open me-1"></i> Bước 2: Chọn Bài Học
                     </label>
-                    <select name="lessonId" id="lessonSelect" class="form-select custom-filter-control" @(Model.SelectedLevelId.HasValue ? "" : "disabled")>
-                        <option value="">-- Tất cả bài học --</option>
-                        @foreach (var ls in Model.Lessons)
+                    <select asp-for="SelectedLessonId" class="form-select border-2" onchange="this.form.submit()" style="border-radius: 8px; font-size: 0.9rem;" disabled="@(Model.SelectedLevelId == null || !Model.Lessons.Any())">
+                        <option value="">-- Chọn Bài Học --</option>
+                        @foreach (var les in Model.Lessons)
                         {
-                            <option value="@ls.Id" selected="@(Model.SelectedLessonId == ls.Id ? "selected" : null)">Bài @ls.Order: @ls.Title</option>
+                            <option value="@les.Id">Bài @les.Order: @les.Title</option>
                         }
                     </select>
-                </div>
-
-                <div class="col-md-4 col-sm-12 d-flex gap-2">
-                    <button type="submit" class="btn btn-dark-custom flex-grow-1">
-                        <i class="bi bi-funnel-fill me-1"></i> Lọc Dữ Liệu
-                    </button>
-                    @if (Model.SelectedLevelId.HasValue || Model.SelectedLessonId.HasValue)
-                    {
-                        <a asp-page="./Index" class="btn btn-outline-secondary rounded-3 px-3 d-flex align-items-center justify-content-center" title="Xóa bộ lọc hiện tại">
-                            <i class="bi bi-x-circle me-1"></i> Xóa lọc
-                        </a>
-                    }
                 </div>
 
             </form>
         </div>
     </div>
 
-    <div class="card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
-        <div class="card-body p-0 bg-white">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead>
+    <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+        <table class="table table-hover table-striped mb-0 align-middle bg-white">
+            <thead class="table-dark text-uppercase fs-7">
+                <tr>
+                    <th style="width: 7%">ID</th>
+                    <th style="width: 25%">Cấu Trúc Ngữ Pháp</th>
+                    <th style="width: 38%">Giải Thích Chi Tiết</th>
+                    <th style="width: 10%">Ngày Tạo</th>
+                    <th style="width: 10%">Cập Nhật</th>
+                    <th style="width: 10%">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.SelectedLessonId == null || Model.SelectedLessonId == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <i class="bi bi-hand-index-thumb text-warning fs-2 d-block mb-2 opacity-75"></i>
+                            Vui lòng chọn cụ thể một <b>Cấp độ</b> và <b>Bài học</b> ở trên để xem danh sách cấu trúc ngữ pháp.
+                        </td>
+                    </tr>
+                }
+                else if (!Model.Grammars.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <i class="bi bi-folder-open fs-2 d-block mb-2 text-secondary opacity-50"></i>
+                            Bài học này hiện tại chưa có mẫu ngữ pháp nào. Bạn hãy bấm nút thêm mới nhé!
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Grammars)
+                    {
                         <tr>
-                            <th class="ps-4 text-center text-secondary py-3" style="width: 70px;">ID</th>
-                            <th class="text-secondary py-3" style="width: 140px;">Mã Bài Học</th>
-                            <th class="text-secondary py-3" style="width: 200px;">Cấu Trúc</th>
-                            <th class="text-secondary py-3">Giải Thích Chi Tiết</th>
-                            <th class="text-secondary py-3 text-center" style="width: 160px;">Ngày Tạo</th>
-                            <th class="text-secondary py-3 text-center" style="width: 160px;">Cập Nhật</th>
-                            <th class="pe-4 text-center text-secondary py-3" style="width: 150px;">Hành Động</th>
+                            <td><code>#@item.Id</code></td>
+                            <td>
+                                <span class="text-dark fw-bold font-monospace" style="font-size: 0.95rem;">@item.Structure</span>
+                            </td>
+                            <td>
+                                <div class="text-secondary small" style="max-width: 500px; white-space: pre-line;">
+                                    @item.Explanation
+                                </div>
+                            </td>
+                            <td class="text-muted small">
+                                @item.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+                            <td class="text-secondary small fw-medium">
+                                @(item.UpdatedAt != null ? item.UpdatedAt.ToString("dd/MM/yyyy HH:mm") : "---")
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm fw-semibold text-white px-2" style="border-radius: 6px;">Sửa</a>
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" onsubmit="return confirm('Khôi có chắc chắn muốn xóa mẫu ngữ pháp này vĩnh viễn khỏi Database?');">
+                                        <input type="hidden" name="SelectedLevelId" value="@Model.SelectedLevelId" />
+                                        <input type="hidden" name="SelectedLessonId" value="@Model.SelectedLessonId" />
+                                        <button type="submit" class="btn btn-danger btn-sm fw-semibold px-2" style="border-radius: 6px;">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Grammars != null && Model.Grammars.Any())
-                        {
-                            foreach (var item in Model.Grammars)
-                            {
-                                <tr>
-                                    <td class="ps-4 text-center fw-bold text-muted">#@item.Id</td>
-                                    <td>
-                                        <span class="badge bg-light text-dark border px-2.5 py-1.5 rounded-3">
-                                            <i class="bi bi-bookmark-fill text-success me-1"></i> Bài @item.LessonId
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="text-dark fw-bold font-monospace" style="font-size: 0.95rem;">@item.Structure</span>
-                                    </td>
-                                    <td>
-                                        <div class="text-secondary text-truncate small" style="max-width: 380px;" title="@item.Explanation">
-                                            @item.Explanation
-                                        </div>
-                                    </td>
-                                    <td class="text-center small text-muted">@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td class="text-center small text-muted">
-                                        @(item.UpdatedAt != null ? item.UpdatedAt.ToString("dd/MM/yyyy HH:mm") : "---")
-                                    </td>
-                                    <td class="pe-4 text-center">
-                                        <div class="d-flex gap-1 justify-content-center">
-                                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-action-edit btn-sm" title="Chỉnh sửa bản ghi">
-                                                <i class="bi bi-pencil-square"></i> Sửa
-                                            </a>
-                                            <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" onsubmit="return confirm('Khôi có chắc chắn muốn xóa mẫu ngữ pháp này vĩnh viễn khỏi Database?');" style="display:inline;">
-                                                <button type="submit" class="btn btn-action-delete btn-sm" title="Xóa vĩnh viễn">
-                                                    <i class="bi bi-trash3"></i> Xóa
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">
-                                    <i class="bi bi-folder-x fs-2 d-block mb-2 text-secondary"></i>
-                                    Không có dữ liệu cấu trúc ngữ pháp nào thỏa mãn bộ lọc.
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
-
-    @if (Model.TotalPages > 1)
-    {
-        int maxPagesToShow = 5;
-        int startPage = Math.Max(1, Model.CurrentPage - (maxPagesToShow / 2));
-        int endPage = Math.Min(Model.TotalPages, startPage + maxPagesToShow - 1);
-
-        if (endPage - startPage + 1 < maxPagesToShow)
-        {
-            startPage = Math.Max(1, endPage - maxPagesToShow + 1);
-        }
-
-        <div class="d-flex flex-column align-items-center bg-white p-4 rounded-4 shadow-sm border border-light mt-4">
-            <nav aria-label="Page navigation" class="mb-3">
-                <ul class="pagination custom-pro-pagination gap-1">
-
-                    <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
-                        <a class="page-link" asp-page="./Index" asp-route-p="1" asp-route-levelId="@Model.SelectedLevelId" asp-route-lessonId="@Model.SelectedLessonId" title="Về đầu trang">
-                            <i class="bi bi-chevron-double-left"></i>
-                        </a>
-                    </li>
-
-                    <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
-                        <a class="page-link" asp-page="./Index" asp-route-p="@(Model.CurrentPage - 1)" asp-route-levelId="@Model.SelectedLevelId" asp-route-lessonId="@Model.SelectedLessonId" title="Trang trước">
-                            <i class="bi bi-chevron-left"></i>
-                        </a>
-                    </li>
-
-                    @if (startPage > 1)
-                    {
-                        <li class="page-item disabled"><span class="page-link border-0 bg-transparent">...</span></li>
-                    }
-
-                    @for (int i = startPage; i <= endPage; i++)
-                    {
-                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                            <a class="page-link" asp-page="./Index" asp-route-p="@i" asp-route-levelId="@Model.SelectedLevelId" asp-route-lessonId="@Model.SelectedLessonId">@i</a>
-                        </li>
-                    }
-
-                    @if (endPage < Model.TotalPages)
-                    {
-                        <li class="page-item disabled"><span class="page-link border-0 bg-transparent">...</span></li>
-                    }
-
-                    <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
-                        <a class="page-link" asp-page="./Index" asp-route-p="@(Model.CurrentPage + 1)" asp-route-levelId="@Model.SelectedLevelId" asp-route-lessonId="@Model.SelectedLessonId" title="Trang kế tiếp">
-                            <i class="bi bi-chevron-right"></i>
-                        </a>
-                    </li>
-
-                    <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
-                        <a class="page-link" asp-page="./Index" asp-route-p="@Model.TotalPages" asp-route-levelId="@Model.SelectedLevelId" asp-route-lessonId="@Model.SelectedLessonId" title="Đến trang cuối">
-                            <i class="bi bi-chevron-double-right"></i>
-                        </a>
-                    </li>
-
-                </ul>
-            </nav>
-
-            <div class="text-muted text-center" style="font-size: 0.8rem; letter-spacing: 0.2px;">
-                Hiển thị trang <span class="fw-bold text-success">@Model.CurrentPage</span> / @Model.TotalPages
-            </div>
-        </div>
-    }
 </div>
-
-<script>
-    document.getElementById("levelSelect").addEventListener("change", function() {
-        document.getElementById("lessonSelect").value = ""; // Reset sạch bài học cũ
-        document.getElementById("filterForm").submit(); // Kích hoạt nạp lại mảng
-    });
-</script>
 
 <style>
     body {
         background-color: #f4f6f9 !important;
     }
 
-    .rounded-4 {
-        border-radius: 1rem !important;
+    .fs-7 {
+        font-size: 0.8rem !important;
     }
-
-    .rounded-3 {
-        border-radius: 0.5rem !important;
-    }
-
-    .mb-1.5 {
-        margin-bottom: 0.38rem !important;
-    }
-
-    thead {
-        background-color: #fafafa;
-        border-bottom: 1px solid #edf2f7;
-    }
-
-        thead th {
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-uppercase: uppercase;
-            letter-spacing: 0.5px;
-            padding: 1rem 0.75rem !important;
-        }
-
-    tbody tr {
-        transition: background-color 0.15s ease-in-out;
-    }
-
-        tbody tr:hover {
-            background-color: #f8fafc !important;
-        }
 
     tbody td {
         padding: 0.85rem 0.75rem !important;
         font-size: 0.9rem;
     }
-
-    .px-2.5 {
-        padding-left: 0.6rem !important;
-        padding-right: 0.6rem !important;
-    }
-
-    .py-1.5 {
-        padding-top: 0.35rem !important;
-        padding-bottom: 0.35rem !important;
-    }
-
-    .custom-filter-control {
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 0.5rem !important;
-        padding: 0.55rem 0.75rem !important;
-        font-size: 0.9rem !important;
-        color: #334155 !important;
-    }
-
-        .custom-filter-control:focus {
-            border-color: #198754 !important;
-            box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.12) !important;
-        }
-
-    .btn-success-custom {
-        background-color: #198754;
-        color: #ffffff;
-        font-weight: 600;
-        font-size: 0.85rem;
-        border: none;
-        border-radius: 0.5rem;
-        padding: 0.6rem 1.3rem;
-        transition: all 0.2s;
-    }
-
-        .btn-success-custom:hover {
-            background-color: #146c43;
-            color: #ffffff;
-            transform: translateY(-1px);
-        }
-
-    .btn-dark-custom {
-        background-color: #1e293b !important;
-        color: #ffffff !important;
-        font-weight: 600;
-        font-size: 0.9rem;
-        border: none;
-        border-radius: 0.5rem !important;
-        padding: 0.58rem 1.2rem !important;
-        transition: all 0.2s;
-    }
-
-        .btn-dark-custom:hover {
-            background-color: #0f172a !important;
-            transform: translateY(-1px);
-        }
-
-    .btn-action-edit {
-        background-color: rgba(255, 193, 7, 0.12);
-        color: #b27b00;
-        border: none;
-        font-weight: 600;
-        border-radius: 0.375rem;
-        padding: 0.35rem 0.75rem;
-        font-size: 0.8rem;
-        transition: all 0.15s;
-    }
-
-        .btn-action-edit:hover {
-            background-color: #ffc107;
-            color: #000000;
-        }
-
-    .btn-action-delete {
-        background-color: rgba(220, 53, 69, 0.1);
-        color: #dc3545;
-        border: none;
-        font-weight: 600;
-        border-radius: 0.375rem;
-        padding: 0.35rem 0.75rem;
-        font-size: 0.8rem;
-        transition: all 0.15s;
-    }
-
-        .btn-action-delete:hover {
-            background-color: #dc3545;
-            color: #ffffff;
-        }
-
-    .custom-pro-pagination {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        padding-left: 0 !important;
-        list-style: none !important;
-        margin: 0 !important;
-    }
-
-        .custom-pro-pagination .page-item {
-            list-style: none !important;
-        }
-
-        .custom-pro-pagination .page-link {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            min-width: 36px !important;
-            height: 36px !important;
-            padding: 0 8px !important;
-            color: #4b5563 !important;
-            background-color: #ffffff !important;
-            border: 1px solid #e5e7eb !important;
-            border-radius: 8px !important;
-            font-size: 0.85rem !important;
-            font-weight: 600 !important;
-            text-decoration: none !important;
-            transition: all 0.2s ease-in-out;
-        }
-
-            .custom-pro-pagination .page-link:hover {
-                background-color: #f3f4f6 !important;
-                color: #111827 !important;
-                border-color: #d1d5db !important;
-                transform: translateY(-1px);
-            }
-
-        .custom-pro-pagination .page-item.active .page-link {
-            background-color: #198754 !important;
-            color: #ffffff !important;
-            border-color: #198754 !important;
-            box-shadow: 0 4px 12px rgba(25, 135, 84, 0.2) !important;
-        }
-
-        .custom-pro-pagination .page-item.disabled .page-link {
-            opacity: 0.4 !important;
-            background-color: #f9fafb !important;
-            color: #9ca3af !important;
-            border-color: #e5e7eb !important;
-            cursor: not-allowed !important;
-            transform: none !important;
-        }
 </style>
