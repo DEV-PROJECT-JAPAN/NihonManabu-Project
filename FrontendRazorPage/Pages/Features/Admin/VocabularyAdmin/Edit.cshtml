@@ -28,6 +28,9 @@
         <hr class="text-muted opacity-25 mt-0 mb-4">
 
         <form method="post">
+            <input type="hidden" asp-for="SelectedLevelId" />
+            <input type="hidden" asp-for="SelectedLessonId" />
+
             <input type="hidden" asp-for="VocabularyInput.Id" />
             <input type="hidden" asp-for="VocabularyInput.LessonId" />
 

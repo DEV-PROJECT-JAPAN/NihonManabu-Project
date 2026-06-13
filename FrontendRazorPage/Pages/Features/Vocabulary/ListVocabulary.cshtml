@@ -10,7 +10,7 @@
 
 <div class="container py-5">
     <div class="d-flex align-items-center mb-4">
-        <a asp-page="./Lessons" asp-route-levelId="@Model.LevelId" class="btn btn-light rounded-circle me-3 shadow-sm p-2 text-dark">
+        <a asp-page="./Lesson" asp-route-levelId="@Model.LevelId" class="btn btn-light rounded-circle me-3 shadow-sm p-2 text-dark">
             <i class="fa-solid fa-arrow-left fs-5"></i>
         </a>
         <h2 class="fw-black text-dark m-0">Luyện tập từ vựng: @Model.LessonTitle</h2>
@@ -94,6 +94,7 @@
                 <a asp-page-handler="ExportPdf"
                    asp-route-lessonId="@Model.LessonId"
                    asp-route-levelId="@Model.LevelId"
+                   target="_blank"
                    class="btn btn-outline-danger rounded-pill px-3 shadow-sm" title="Tải xuống file PDF">
                     <i class="fa-solid fa-file-pdf me-1"></i> Xuất file PDF
                 </a>
@@ -144,7 +145,7 @@
     <script>
         // Nạp mảng dữ liệu C# sang JS thuần
         let originalCards = @Html.Raw(Json.Serialize(Model.Cards));
-        let cards = [...originalCards];
+        let cards = [...originalCards];//dùng bản sao để không lamg hỏng bản gốc 
         let currentIndex = 0;
         let isAutoPlay = false; // Cấu hình trạng thái tự động đọc mặc định tắt
         let starredState = {};
@@ -154,8 +155,8 @@
             isAutoPlay = !isAutoPlay;
             let btn = document.getElementById('btn-auto-play');
             if (isAutoPlay) {
-                btn.innerHTML = '<i class="fa-solid fa-volume-high me-1"></i> Auto: ON';
-                btn.classList.add('active-play');
+                btn.innerHTML = '<i class="fa-solid fa-volume-high me-1"></i> Auto: ON';//đổi chữ và icon
+                btn.classList.add('active-play');//đổi màu nút
                 speakText(cards[currentIndex].textToSpeak); // Phát âm luôn từ hiện tại khi vừa bật lại
             } else {
                 btn.innerHTML = '<i class="fa-solid fa-volume-xmark me-1"></i> Auto: OFF';
@@ -180,7 +181,7 @@
                 document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${cards.length}`;
 
                 updateButtonStates(item.id);
-
+                //thay đổi chữ (Kanji, Romaji, Ý nghĩa...) bên trong thẻ dựa vào từ vựng hiện tại
                 // 🔊 TỰ ĐỘNG PHÁT ÂM NẾU TRẠNG THÁI AUTO ĐANG BẬT
                 if (isAutoPlay) {
                     speakText(item.textToSpeak);
@@ -219,7 +220,7 @@
             let tokenContainer = document.getElementById('antiforgery-token-container');
             let token = tokenContainer ? tokenContainer.querySelector('input[name="__RequestVerificationToken"]').value : '';
 
-            // 2. Thêm tham số đường dẫn rõ ràng để không bị lạc đường Handler
+            // 2. Thêm tham số đường dẫn rõ ràng để chuyển xún  hàm OnPostUpdateProgressAsync
             let url = window.location.pathname + '?handler=UpdateProgress';
 
             fetch(url, {
@@ -248,20 +249,20 @@
         }
 
         function updateButtonStates(itemId) {
-            let btnStar = document.getElementById('btn-star');
+            let btnStar = document.getElementById('btn-star');//cái thẻ HTML nào có mã ID là btn-star
             if (starredState[itemId]) {
-                btnStar.innerHTML = '<i class="fa-solid fa-star text-warning"></i>';
+                btnStar.innerHTML = '<i class="fa-solid fa-star text-warning"></i>';//thay thế bằng icon khác 
             } else {
                 btnStar.innerHTML = '<i class="fa-regular fa-star text-light"></i>';
             }
         }
 
         function speakText(text) {
-            if ('speechSynthesis' in window) {
+            if ('speechSynthesis' in window) {//trình duyeẹt có hỗ trợ tính năng phát giọng nói kh
                 window.speechSynthesis.cancel(); // Triệt tiêu tiếng cũ ngay lập tức
-                var msg = new SpeechSynthesisUtterance(text);
+                var msg = new SpeechSynthesisUtterance(text);// đưa nd từ vào để chuẩn bị phát 
                 msg.lang = 'ja-JP'; // Ép giọng đọc Nhật chuẩn bản xứ
-                msg.rate = 0.9;
+                msg.rate = 0.9;//điều chỉnh tốc độ 
                 window.speechSynthesis.speak(msg);
             }
         }

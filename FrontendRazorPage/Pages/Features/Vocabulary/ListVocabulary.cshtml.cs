@@ -45,39 +45,25 @@ namespace FrontendRazorPage.Pages.Features.Vocabulary
             bool success = await _service.UpdateProgressAsync(input);
             return new JsonResult(new { success = success });
         }
-        public async Task<IActionResult> OnGetExportPdfAsync(int lessonId, int levelId)
+        public async Task<IActionResult> OnGetExportPdfAsync(int lessonId)
         {
-            string levelName = $"Level_{levelId}";
-            string lessonTitle = $"Bai_{lessonId}";
-            //var levels = await _service.GetLevelsAsync();
-            //var currentLevel = levels.FirstOrDefault(l => l.Id == levelId);
-            //if (currentLevel != null)
-            //{
-            //    levelName = currentLevel.Name;
-            //}
-
-            //// 3. Lấy Tên Bài Học (Sử dụng hàm GetLessonByIdAsync xịn xò của bạn)
-            //var currentLesson = await _service.GetLessonByIdAsync(lessonId);
-            //if (currentLesson != null)
-            //{
-            //    lessonTitle = currentLesson.Title;
-            //}
-            // 1. Lấy danh sách từ vựng của bài học này
+            
+           
             var vocabularies = await _service.GetCardsAsync(lessonId);
 
             // 2. Dùng code C# "vẽ" ra file PDF mới tinh (không liên quan gì đến HTML/CSS của web)
-            var document = Document.Create(container =>
+            var document = Document.Create(container =>//tạo một tài liệu PDF mới tinh. container chính là khung chứa toàn bộ nội dung.
             {
                 container.Page(page =>
                 {
                     page.Size(PageSizes.A4);
-                    page.Margin(2, Unit.Centimetre);
+                    page.Margin(2, Unit.Centimetre);//Căn lề 4 góc mỗi bên 2 cm.
                     page.PageColor(Colors.White);
                     page.DefaultTextStyle(x => x.FontSize(12));
 
                     // Tiêu đề file PDF
                     page.Header().Text($"Danh Sách Từ Vựng")
-                        .SemiBold().FontSize(20).FontColor(Colors.Blue.Darken2);
+              .SemiBold().FontSize(20).FontColor(Colors.Blue.Darken2);
 
                     // Bảng từ vựng
                     page.Content().PaddingVertical(1, Unit.Centimetre).Table(table =>
@@ -101,11 +87,11 @@ namespace FrontendRazorPage.Pages.Features.Vocabulary
                         foreach (var item in vocabularies)
                         {
                             table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5)
-                                 .Text($"{item.Kanji}\n({item.Hiragana})");
+                               .Text($"{item.Kanji}\n({item.Hiragana})");
                             table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5)
-                                 .Text(item.Meaning);
+                               .Text(item.Meaning);
                             table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5)
-                                 .Text(item.ExampleSentence).Italic();
+                               .Text(item.ExampleSentence).Italic();
                         }
                     });
 
@@ -122,7 +108,7 @@ namespace FrontendRazorPage.Pages.Features.Vocabulary
 
             // 3. Đóng gói thành file và ép trình duyệt tải về
             byte[] pdfBytes = document.GeneratePdf();
-            return File(pdfBytes, "application/pdf", $"TuVung_Bai_{levelName}_{lessonTitle}.pdf");
+            return File(pdfBytes, "application/pdf");
         }
     }
 }

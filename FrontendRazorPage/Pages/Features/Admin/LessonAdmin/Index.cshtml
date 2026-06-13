@@ -70,7 +70,7 @@
                             <td class="text-muted" style="font-size: 0.9rem;">@item.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</td>
                             <td>
                                 <div class="d-flex justify-content-center gap-2">
-                                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Sửa</a>
+                                    <a asp-page="./Edit" asp-route-id="@item.Id" asp-route-selectedLevelId="@Model.SelectedLevelId" class="btn btn-warning btn-sm">Sửa</a>
 
                                     <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bài học này?');">
                                         <button type="submit" class="btn btn-danger btn-sm">Xóa</button>

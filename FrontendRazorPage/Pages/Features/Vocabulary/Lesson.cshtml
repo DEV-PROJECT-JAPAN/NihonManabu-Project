@@ -19,7 +19,10 @@
         @foreach (var les in Model.Lessons)
         {
             <div class="col-12 col-md-6 col-lg-4">
-                <a asp-page="./ListVocabulary" asp-route-lessonId="@les.Id" class="text-decoration-none d-block h-100">
+                <a asp-page="./ListVocabulary"
+                   asp-route-lessonId="@les.Id"
+                   asp-route-levelId="@Model.LevelId"
+                   class="text-decoration-none d-block h-100">
                     <div class="card border-0 shadow-sm p-4 h-100 d-flex flex-column justify-content-between hover-card-jlpt" style="border-radius: 18px; background: white; border-left: 6px solid #ff9f43 !important;">
                         <div class="mb-3">
                             <h5 class="fw-black text-dark m-0">@les.Title</h5>

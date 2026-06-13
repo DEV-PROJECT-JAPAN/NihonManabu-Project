@@ -112,7 +112,8 @@ namespace BackendAPI.Services
         public async Task<Vocabulary> CreateVocabularyAsync(Vocabulary vocabData)
         {
             if (vocabData == null) throw new ArgumentNullException(nameof(vocabData));
-
+            vocabData.Kanji = vocabData.Kanji ?? "";
+            vocabData.ExampleSentence = vocabData.ExampleSentence ?? "";
             // Đóng dấu thời gian hệ thống chuẩn quốc tế UTC
             vocabData.CreatedAt = DateTime.Now;
             vocabData.UpdatedAt = DateTime.Now;
@@ -145,7 +146,6 @@ namespace BackendAPI.Services
 
             // Cập nhật lại mốc thời gian chỉnh sửa mới nhất, tuyệt đối giữ nguyên CreatedAt gốc
             existing.UpdatedAt = DateTime.Now;
-
             await _context.SaveChangesAsync();
             return true;
         }

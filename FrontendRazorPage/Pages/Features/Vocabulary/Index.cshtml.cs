@@ -8,7 +8,13 @@ namespace FrontendRazorPage.Pages.Vocabulary
     public class IndexModel : PageModel
     {
         private readonly VocabularyClientService _service;
-        public IndexModel(VocabularyClientService service) => _service = service;
+        private readonly LevelClientService _levelClientService;
+        public IndexModel(VocabularyClientService service, LevelClientService levelClientService)
+        {
+            _service = service;
+            _levelClientService = levelClientService;
+        }
+
 
         // "State" của Component
         public List<LevelModel> Levels { get; set; } = new();
@@ -28,7 +34,7 @@ namespace FrontendRazorPage.Pages.Vocabulary
                 Levels = await _levelClientService.GetLevelsAsync();
             
         }
-
+        //Nhiệm vụ chính của nó là nhận dữ liệu tiến độ học từ vựng
         public async Task<JsonResult> OnPostUpdateProgressAsync([FromBody] UpdateLearningProgresByUserModel input)
         {
             if (input == null || input.VocabularyId <= 0)

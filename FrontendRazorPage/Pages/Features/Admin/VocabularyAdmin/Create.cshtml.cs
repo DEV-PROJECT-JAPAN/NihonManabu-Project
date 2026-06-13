@@ -23,7 +23,7 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
         [BindProperty(SupportsGet = true)]
         public int SelectedLevelId { get; set; }
 
-        [BindProperty(SupportsGet = true)]
+        [BindProperty(SupportsGet = true, Name = "lessonId")]
         public int SelectedLessonId { get; set; }
 
         // Đối tượng hứng dữ liệu từ Form gõ tay
@@ -37,30 +37,32 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
         [TempData]
         public string Message { get; set; } = string.Empty;
 
-        [TempData]
+       
         public string ErrorMessage { get; set; } = string.Empty;
 
         public void OnGet()
         {
-            // Tự động gán LessonId từ bộ lọc URL vào đối tượng nhập liệu
-            VocabularyInput.LessonId = SelectedLessonId;
+            VocabularyInput = new VocabularyAdminModel
+            {
+                LessonId = SelectedLessonId
+            };
         }
 
-        /// <summary>
-        /// XỬ LÝ 1: Admin gõ tay thủ công bằng Form
-        /// </summary>
+      
         public async Task<IActionResult> OnPostAsync()
         {
-            
             if (!ModelState.IsValid)
             {
-                ErrorMessage = "Vui lòng điền đầy đủ các thông tin bắt buộc.";
-                return Page();
+                ErrorMessage = "Vui lòng kiểm tra lại các trường dữ liệu bắt buộc màu đỏ.";
+                return Page(); // Trả lại trang để hiện các dòng lỗi asp-validation-for
             }
+
+            VocabularyInput.LessonId = SelectedLessonId;
+      
             var success = await _vocabClientService.CreateVocabularyAsync(VocabularyInput);
             if (success)
             {
-                Message = $"Thêm từ vựng '{VocabularyInput.Kanji}' thành công!";
+              Message= $"Thêm từ vựng  thành công!";
                 return RedirectToPage("./Index", new { SelectedLevelId = SelectedLevelId, SelectedLessonId = SelectedLessonId });
             }
 
@@ -68,70 +70,66 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
             return Page();
         }
 
-        /// <summary>
-        /// XỬ LÝ 2: Admin Import file dữ liệu hàng loạt (CSV hoặc TXT phân tách bằng dấu phẩy)
-        /// </summary>
-        public async Task<IActionResult> OnPostImportAsync()
+      
+        public async Task<IActionResult> OnPostImportAsync(int lessonId)
         {
+            if (lessonId == 0) lessonId = SelectedLessonId;
+          
+            // 1. Kiểm tra file có tồn tại và đúng định dạng không
             if (FileUpload == null || FileUpload.Length == 0)
             {
-                ErrorMessage = "Vui lòng chọn một file dữ liệu hợp lệ (.csv hoặc .txt) để import.";
+                ErrorMessage = "Vui lòng chọn một file CSV hợp lệ!";
                 return Page();
             }
 
-            var extension = Path.GetExtension(FileUpload.FileName).ToLower();
-            if (extension != ".csv" && extension != ".txt")
-            {
-                ErrorMessage = "Hệ thống hiện tại chỉ hỗ trợ import từ file định dạng .csv hoặc .txt";
+            if (!FileUpload.FileName.EndsWith(".csv") && !FileUpload.FileName.EndsWith(".txt"))
+            
+                {
+                ErrorMessage = "Chỉ chấp nhận file định dạng .csv hoặc .txt!";
                 return Page();
             }
-
-            int successCount = 0;
-            int failCount = 0;
 
             try
             {
-                // 🟢 ĐỒNG BỘ: Sử dụng Encoding.UTF8 để triệt tiêu ký tự ẩn BOM chống lỗi tiếng Nhật
-                using var reader = new StreamReader(FileUpload.OpenReadStream(), System.Text.Encoding.UTF8);
-                bool isHeader = true;
-
-                while (!reader.EndOfStream)
+                using (var reader = new StreamReader(FileUpload.OpenReadStream()))//đọc 
                 {
-                    var line = await reader.ReadLineAsync();
-                    if (string.IsNullOrWhiteSpace(line)) continue;
-                    if (isHeader) { isHeader = false; continue; }
+                    // Bỏ qua dòng tiêu đề nếu file CSV của bạn có tiêu đề (ví dụ: Kanji,Hiragana...)
+                    var headerLine = await reader.ReadLineAsync();
 
-                    // Cấu trúc cột file CSV mới: Kanji, Hiragana, Meaning, Romaji, ExampleSentence, TextToSpeak
-                    var parts = line.Split(',');
-                    if (parts.Length >= 4)
+                    while (!reader.EndOfStream)// Vòng lặp này sẽ chạy liên tục cho đến khi chạm đáy file.
                     {
-                        var model = new VocabularyAdminModel
+                        var line = await reader.ReadLineAsync();//đọc 1 dòng văn bản
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+
+                        var values = line.Split(new char[] { ',', '\t' });//thành mảng chứa các từ 
+                        // Kiểm tra đủ số lượng cột cần thiết
+                        if (values.Length < 4) continue;
+
+                        // 2. Map dữ liệu từ CSV vào model
+                        var vocab = new VocabularyAdminModel
                         {
                             LessonId = SelectedLessonId,
-                            Kanji = string.IsNullOrEmpty(parts[0].Trim()) ? null : parts[0].Trim(),
-                            Hiragana = parts[1].Trim(),
-                            Meaning = parts[2].Trim(),
-                            Romaji = parts[3].Trim(),
-                            // Xử lý an toàn nếu câu ví dụ hoặc text chỉnh âm để trống
-                            ExampleSentence = parts.Length > 4 ? parts[4].Trim() : "",    };
+                            Kanji = values[0].Trim(),
+                            Hiragana = values[1].Trim(),
+                            Meaning = values[2].Trim(),
+                            Romaji = values[3].Trim(),
+                            ExampleSentence = values.Length > 4 ? values[4].Trim() : string.Empty
+                        };
 
-                        var isSaved = await _vocabClientService.CreateVocabularyAsync(model);
-                        if (isSaved) successCount++; else failCount++;
-                    }
-                    else
-                    {
-                        failCount++;
+                        // 3. Gọi Service để lưu vào DB
+                        // 3. Gọi Service để lưu vào DB
+                        await _vocabClientService.CreateVocabularyAsync(vocab);
                     }
                 }
-
-                Message = $"Import hoàn tất! Thêm thành công {successCount} từ vựng. Thất bại {failCount} từ.";
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Lỗi hệ thống khi đọc file: {ex.Message}";
+                ErrorMessage = "Lỗi khi đọc file: " + ex.Message;
+                return Page();
             }
-
-            return RedirectToPage("./Index", new { SelectedLevelId = SelectedLevelId, SelectedLessonId = SelectedLessonId });
+            Message = "Import file từ vựng thành công!";
+            // 4. Thành công thì quay lại trang danh sách
+            return RedirectToPage("./Index", new { SelectedLevelId, SelectedLessonId });
         }
     }
 }

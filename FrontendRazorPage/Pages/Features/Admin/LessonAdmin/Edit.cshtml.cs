@@ -25,7 +25,8 @@ namespace FrontendRazorPage.Pages.Features.Admin.Lessons
 
         // Danh sách cấp độ hiển thị cho ô Dropdown Select
         public List<LevelModel> Levels { get; set; } = new();
-
+        [BindProperty(SupportsGet = true)]
+        public int? SelectedLevelId { get; set; }
         [TempData]
         public string Message { get; set; } = string.Empty;
 
@@ -63,7 +64,7 @@ namespace FrontendRazorPage.Pages.Features.Admin.Lessons
             if (isSuccess)
             {
                 Message = "Cập nhật bài học thành công!";
-                return RedirectToPage("./Index");
+                return RedirectToPage("./Index", new { SelectedLevelId = SelectedLevelId });
             }
 
             ModelState.AddModelError(string.Empty, "Có lỗi xảy ra trong quá trình cập nhật dữ liệu.");

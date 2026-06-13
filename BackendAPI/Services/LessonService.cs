@@ -18,6 +18,7 @@ namespace BackendAPI.Services
             {
                 var adminData = await _context.Lessons.AsNoTracking().ToListAsync();
                 return adminData as IEnumerable<T> ?? throw new InvalidCastException();
+                //Ép kiểu danh sách vừa lấy được về đúng chuẩn đầu ra của hàm.Nếu việc ép kiểu thất bại, hệ thống sẽ ném ra lỗ
             }
             if (typeof(T) == typeof(LessonDTO)) // User
             {
