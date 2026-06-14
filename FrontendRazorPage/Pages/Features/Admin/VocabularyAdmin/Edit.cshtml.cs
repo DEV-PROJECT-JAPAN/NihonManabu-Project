@@ -48,6 +48,7 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
             return Page();
         }
 
+
         /// <summary>
         /// 2. XỬ LÝ LƯU DỮ LIỆU KHI ADMIN BẤM NÚT CẬP NHẬT
         /// </summary>

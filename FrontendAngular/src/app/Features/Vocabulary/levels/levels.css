@@ -1,0 +1,31 @@
+.fw-black {
+    font-weight: 900 !important;
+}
+
+.text-indigo {
+    color: #4f46e5 !important;
+}
+
+.bg-indigo-subtle {
+    background-color: #e0e7ff !important;
+    color: #4f46e5 !important;
+}
+
+.leading-relaxed {
+    line-height: 1.6;
+}
+
+.fs-8 {
+    font-size: 0.72rem !important;
+}
+
+/* Thêm hiệu ứng di chuột (Hover) cho mượt mà */
+.hover-card-jlpt {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card-jlpt:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+    cursor: pointer;
+}

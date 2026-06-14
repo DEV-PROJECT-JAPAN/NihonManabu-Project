@@ -31,7 +31,7 @@
 
                 <form method="post" class="d-flex flex-column h-100">
                     <input type="hidden" asp-for="VocabularyInput.LessonId" value="@Model.SelectedLessonId" />
-
+                    <input type="hidden" name="SelectedLevelId" value="@Model.SelectedLevelId" />
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label asp-for="VocabularyInput.Kanji" class="form-label fw-semibold text-secondary">Chữ Hán (Kanji)</label>
@@ -79,7 +79,7 @@
 
                 <form method="post" asp-page-handler="Import" enctype="multipart/form-data" class="d-flex flex-column h-100">
                     <input type="hidden" name="lessonId" value="@Model.SelectedLessonId" />
-
+                   
                     <div class="upload-area p-4 text-center mb-4 flex-grow-1 d-flex flex-column justify-content-center align-items-center position-relative"
                          style="border: 2px dashed #28a745; border-radius: 12px; background-color: #f4fbf6; transition: 0.3s;">
 

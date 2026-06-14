@@ -61,6 +61,19 @@ builder.Services.AddScoped(typeof(IQuestionAdminService<>), typeof(QuestionAdmin
 // 4. XÂY DỰNG VÀ CẤU HÌNH PIPELINE XỬ LÝ REQUEST (MIDDLEWARES)
 // =========================================================================
 
+// Thêm CORS policy cho Angular
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Cấp phép cho Angular
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // Thêm dòng này nếu bạn có dùng Cookie/Token đăng nhập
+    });
+});
+
+
 var app = builder.Build();
 
 // Cấu hình môi trường Phát triển (Development)
@@ -73,7 +86,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseCors("AllowAngular");
 app.MapControllers();
 
 // Kích hoạt nổ máy, đưa Server vào trạng thái lắng nghe mạng

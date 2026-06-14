@@ -8,6 +8,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="fw-bold text-dark m-0">QUẢN LÝ TỪ VỰNG TIẾNG NHẬT</h2>
         <a asp-page="./Create"
+           asp-route-SelectedLevelId="@Model.SelectedLevelId"
            asp-route-lessonId="@Model.SelectedLessonId"
            class="btn btn-primary">
             ➕ Thêm Từ Vựng Mới
