@@ -1,6 +1,7 @@
 ﻿using BackendAPI.DTOs;
 using BackendAPI.Interfaces;
 using BackendAPI.Models;
+using BackendAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendAPI.Controllers
@@ -29,6 +30,24 @@ namespace BackendAPI.Controllers
             return Ok(result);
         }
 
+
+        /// <summary>
+        /// 🌐 API 2: LẤY NGÂN HÀNG CÂU HỎI THEO MẪU NGỮ PHÁP VÀ LOẠI BÀI TẬP
+        /// Endpoint: GET /api/Grammar/questions?grammarId=1&questionType=Quiz
+        /// </summary>
+        /// <param name="grammarId">ID của mẫu ngữ pháp</param>
+        /// <param name="questionType">"Quiz" (Trắc nghiệm), "Arrange" (Sắp xếp), hoặc "All" (Tổng hợp)</param>
+        [HttpGet("questions")]
+        public async Task<IActionResult> GetQuestions([FromQuery] int grammarId, [FromQuery] int questionType = 0)
+        {
+            if (grammarId <= 0) return BadRequest("ID Ngữ pháp không hợp lệ!");
+
+            var result = await _questionService.GetQuestionsByGrammarAsync(grammarId, questionType);
+            return Ok(result);
+        }
+
+
+
         // 🔐 GET: api/QuestionAdmin/admin/lesson/5 -> Trả về danh sách Model đầy đủ thông số hệ thống
         [HttpGet("admin/lesson/{lessonId}")]
         public async Task<IActionResult> GetByLessonForAdmin(int lessonId)
@@ -37,6 +56,8 @@ namespace BackendAPI.Controllers
             var result = await _questionAdminService.GetQuestionsByLessonAsync(lessonId);
             return Ok(result);
         }
+
+
 
         // 🔍 GET: api/QuestionAdmin/5 -> Chi tiết 1 câu hỏi (Dùng Model gốc)
         [HttpGet("{id}")]

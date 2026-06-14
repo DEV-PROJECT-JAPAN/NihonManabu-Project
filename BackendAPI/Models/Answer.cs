@@ -8,7 +8,7 @@ namespace BackendAPI.Models
     {
         public int  QuestionId { get; set; }
         [ForeignKey("QuestionId")]
-        public virtual Question Question { get; set; }
+        public virtual Question? Question { get; set; }
 
         [Required, Column(TypeName = "nvarchar(500)")]
         public string Text { get; set; } // Nội dung câu trả lời

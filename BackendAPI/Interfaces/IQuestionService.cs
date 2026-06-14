@@ -1,4 +1,5 @@
-﻿using BackendAPI.Models;
+﻿using BackendAPI.DTOs;
+using BackendAPI.Models;
 
 namespace BackendAPI.Interfaces
 {
@@ -6,6 +7,9 @@ namespace BackendAPI.Interfaces
     {
         // 🎯 Hàm dùng chung cho cả User (DTO) và Admin (Model) thông qua kiểu T
         Task<IEnumerable<T>> GetQuestionsByLessonAsync(int lessonId);
+
+        Task<List<QuestionDTO>> GetQuestionsByGrammarAsync(int grammarId, int questionType);
+
         Task<T?> GetQuestionByIdAsync(int id);
 
         // 🔐 Các hàm ghi dữ liệu xuống DB luôn dùng Model gốc (Question) để quản lý cấu trúc

@@ -15,7 +15,6 @@ builder.Services.AddHttpClient();
 
 // 3. Đăng ký Client Service của phân hệ Từ vựng
 builder.Services.AddScoped<VocabularyClientService>();
-
 builder.Services.AddScoped<GrammarClientService>();
 builder.Services.AddScoped<QuestionClientService>();
 builder.Services.AddScoped<LevelClientService>();
