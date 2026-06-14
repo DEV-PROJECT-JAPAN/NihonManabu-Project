@@ -49,20 +49,7 @@ namespace BackendAPI.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// 🌐 API 2: LẤY NGÂN HÀNG CÂU HỎI THEO MẪU NGỮ PHÁP VÀ LOẠI BÀI TẬP
-        /// Endpoint: GET /api/Grammar/questions?grammarId=1&questionType=Quiz
-        /// </summary>
-        /// <param name="grammarId">ID của mẫu ngữ pháp</param>
-        /// <param name="questionType">"Quiz" (Trắc nghiệm), "Arrange" (Sắp xếp), hoặc "All" (Tổng hợp)</param>
-        [HttpGet("questions")]
-        public async Task<IActionResult> GetQuestions([FromQuery] int grammarId, [FromQuery] int questionType = 0)
-        {
-            if (grammarId <= 0) return BadRequest("ID Ngữ pháp không hợp lệ!");
-
-            var result = await _grammarService.GetQuestionsByGrammarAsync(grammarId, questionType);
-            return Ok(result);
-        }
+    
 
 
 

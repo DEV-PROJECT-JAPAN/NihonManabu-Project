@@ -49,21 +49,6 @@ namespace FrontendRazorPage.Services
             }
         }
 
-        public async Task<List<QuestionModel>> GetQuestionsByGrammarAsync(int grammarId, int questionType = 0)
-        {
-            if (grammarId <= 0) return new List<QuestionModel>();
-
-            try
-            {
-                // Bắn URL dạng số: /api/Grammar/questions?grammarId=1&questionType=1
-                string url = $"{_apiBase}/questions?grammarId={grammarId}&questionType={questionType}";
-                return await _httpClient.GetFromJsonAsync<List<QuestionModel>>(url) ?? new();
-            }
-            catch
-            {
-                return new List<QuestionModel>();
-            }
-        }
 
 
 

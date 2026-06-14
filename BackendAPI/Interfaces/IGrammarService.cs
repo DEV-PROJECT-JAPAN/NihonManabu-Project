@@ -6,7 +6,6 @@ namespace BackendAPI.Interfaces
     public interface IGrammarService<T> where T : class
     {
         Task<List<GrammarDTO>> GetGrammarByLessonAsync(int lessonId);
-        Task<List<QuestionDTO>> GetQuestionsByGrammarAsync(int grammarId, int questionType);
 
         Task<T?> GetGrammarByIdAsync(int grammarId);
 
