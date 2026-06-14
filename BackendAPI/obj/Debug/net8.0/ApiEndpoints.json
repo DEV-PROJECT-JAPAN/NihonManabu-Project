@@ -1,5 +1,15 @@
 [
   {
+    "ContainingType": "BackendAPI.Controllers.PaymentController",
+    "Method": "GenerateQrCode",
+    "RelativePath": "api/Payment/generate-vip-qr",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "BackendAPI.Controllers.PracticeController",
     "Method": "DeleteFolder",
     "RelativePath": "api/Practice/delete-folder/{folderId}",

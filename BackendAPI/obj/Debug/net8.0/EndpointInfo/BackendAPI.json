@@ -5,6 +5,18 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Payment/generate-vip-qr": {
+      "post": {
+        "tags": [
+          "Payment"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Practice/practice-system": {
       "get": {
         "tags": [
@@ -224,6 +236,9 @@
     }
   },
   "tags": [
+    {
+      "name": "Payment"
+    },
     {
       "name": "Practice"
     },

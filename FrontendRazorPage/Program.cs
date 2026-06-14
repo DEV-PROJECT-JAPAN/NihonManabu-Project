@@ -20,6 +20,8 @@ builder.Services.AddScoped<GrammarClientService>();
 
 builder.Services.AddScoped<PracticeClientService>();
 
+builder.Services.AddScoped<PaymentClientService>();
+
 
 builder.Services.AddRazorPages();
 
