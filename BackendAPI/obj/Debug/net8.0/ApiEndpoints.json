@@ -1,23 +1,28 @@
 [
   {
     "ContainingType": "BackendAPI.Controllers.PracticeController",
-    "Method": "PracticeSystem",
-    "RelativePath": "api/Practice/practice-system",
-    "HttpMethod": "GET",
+    "Method": "DeleteFolder",
+    "RelativePath": "api/Practice/delete-folder/{folderId}",
+    "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "LessonId",
+        "Name": "folderId",
         "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "UserId",
-        "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BackendAPI.Controllers.PracticeController",
+    "Method": "GetVocabularySystemAsync",
+    "RelativePath": "api/Practice/practice-system",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -32,27 +37,32 @@
         "Name": "FolderId",
         "Type": "System.Int32",
         "IsRequired": false
-      },
-      {
-        "Name": "UserId",
-        "Type": "System.Int32",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
   },
   {
     "ContainingType": "BackendAPI.Controllers.PracticeController",
-    "Method": "UpdateProgress",
-    "RelativePath": "api/Practice/update-LearningProgressByUser",
+    "Method": "UploadFolderExcel",
+    "RelativePath": "api/Practice/upload-folder-excel",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "input",
-        "Type": "BackendAPI.DTOs.UpdateLearningProgresByUserDTO",
-        "IsRequired": true
+        "Name": "FolderName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -64,13 +74,7 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "UserId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

@@ -20,9 +20,11 @@ namespace FrontendRazorPage.Pages.Features.Practice
         private readonly PracticeClientService _PracticeService;
         private readonly Random _random = new();
 
-        public List<PracticeModel> PracticeVocabularySystem { get; set; } = new();
+        public List<VocabularyModel> PracticeVocabularySystem { get; set; } = new();
 
         public List<UserFlashcardList> Userfolders { get; set; } = new();
+
+        public string DebugError { get; set; } = "";
 
         /// <summary>
         /// Public property binding: Collection of 5 random vocabulary items
@@ -35,54 +37,96 @@ namespace FrontendRazorPage.Pages.Features.Practice
             _PracticeService = PracticeService;
         }
 
-        /// <summary>
-        /// GET handler - Fetches 5 random vocabulary words on page load
-        /// Gets all available vocabulary and randomly selects 5 items
-        /// </summary>
+
+        // Hàm này sinh ra chỉ để đón cái ID từ JS gửi lên và trả về JSON
+        public async Task<JsonResult> OnGetLoadFolderVocabAsync(int folderId)
+        {
+            try
+            {
+                // Gọi Service lấy dữ liệu
+                var words = await _PracticeService.GetFolderVocabAsync(folderId);
+
+                // Trả về JSON với biến words viết thường
+                return new JsonResult(words);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi load từ vựng: {ex.Message}");
+                return new JsonResult(new List<PracticeModel>());
+            }
+        }
+        // Hàm này sẽ được gọi khi người dùng vào trang, nó sẽ lấy tất cả từ vựng của system và chọn ngẫu nhiên 5 từ theo lesson để hiển thị
         public async Task OnGetAsync()
         {
             try
             {
-                // For demonstration, we'll fetch vocabulary from the first lesson
-                // In production, you might want to fetch from all lessons or a specific category
-                var lessons = await _PracticeService.GetUserVocabularySystemPracticeAsync(1);
+                Userfolders = await _PracticeService.GetUserFoldersAsync();
+                Console.WriteLine($"Fetched {Userfolders.Count} user folders for dropdown.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching user folders: {ex.Message}");
+                Userfolders = new List<UserFlashcardList>();
+            }
 
-                if (lessons.Any())
+            try
+            {
+                var allVocab = await _PracticeService.GetVocabularySystemPracticeAsync();
+
+                if (allVocab.Any())
                 {
-                    var firstLesson = lessons.First();
-                    var allVocab = await _PracticeService.GetUserVocabularySystemPracticeAsync(firstLesson.Id);
-
-                    if (allVocab.Any())
-                    {
                         // Randomly select 5 items from the available vocabulary
                         // If less than 5 items exist, return all available items
-                        PracticeVocabularyUser = allVocab
+                        PracticeVocabularySystem = allVocab
                             .OrderBy(x => _random.Next())
                             .Take(5)
-                            .Select(v => new PracticeModel
+                            .Select(v => new VocabularyModel
                             {
                                 Id = v.Id,
-                                IdLesson = v.IdLesson,
+                                LessonId = v.LessonId,
                                 Kanji = v.Kanji,
                                 Hiragana = v.Hiragana,
                                 Romaji = v.Romaji,
-                                Meaning = v.Meaning
+                                Meaning = v.Meaning,
+                                ExampleSentence = v.ExampleSentence,
+                                TextToSpeak = v.TextToSpeak
                             })
                             .ToList();
-                        Console.WriteLine($"Fetched {PracticeVocabularyUser.Count} vocabulary items for practice.");
-                    }
-                }
-                if (PracticeVocabularyUser.Any())
-                {
-                    Console.WriteLine("No vocabulary items found for practice.");
                 }
             }
             catch (Exception ex)
             {
                 // Log error and provide empty list as fallback
-                Console.WriteLine($"Error fetching daily vocabulary: {ex.Message}");
-                PracticeVocabularyUser = new List<PracticeModel>();
+                DebugError += $"Error fetching daily vocabulary: {ex.Message}";
+                PracticeVocabularySystem = new List<VocabularyModel>();
             }
+        }
+        // Tên tham số FolderName và VocabularyFile phải khớp với thuộc tính name="..." trong thẻ <input> HTML của anh
+        public async Task<IActionResult> OnPostUploadDataAsync(string FolderName, string Description, IFormFile VocabularyFile)
+        {
+            if (VocabularyFile != null && !string.IsNullOrWhiteSpace(FolderName))
+            {
+                bool isSuccess = await _PracticeService.UploadExcelToApiAsync(FolderName, Description, VocabularyFile);
+
+                if (isSuccess)
+                {
+                    // Tải xong thì F5 lại trang để cập nhật cái Folder mới tinh lên giao diện
+                    return RedirectToPage();
+                }
+                else
+                {
+                    // Chỗ này anh có thể nhét lỗi vào biến DebugError như bữa trước
+                    Console.WriteLine("Upload thất bại!");
+                }
+            }
+
+            return Page(); // Lỗi thì ở lại trang cũ
+        }
+        // Hàm này đón lệnh từ nút Xóa trên giao diện
+        public async Task<JsonResult> OnGetDeleteFolderAsync(int folderId)
+        {
+            bool isSuccess = await _PracticeService.DeleteFolderAsync(folderId);
+            return new JsonResult(new { success = isSuccess });
         }
     }
 }

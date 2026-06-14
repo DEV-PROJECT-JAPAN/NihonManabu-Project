@@ -18,6 +18,8 @@ builder.Services.AddScoped<VocabularyClientService>();
 
 builder.Services.AddScoped<GrammarClientService>();
 
+builder.Services.AddScoped<PracticeClientService>();
+
 
 builder.Services.AddRazorPages();
 

@@ -21,35 +21,20 @@ namespace BackendAPI.Controllers
             _userContext = userContext;
             _practiceService = practiceService;
         }
-
-        [HttpPost("update-LearningProgressByUser")]
-        public async Task<IActionResult> UpdateProgress([FromBody] UpdateLearningProgresByUserDTO input)
+        //lấy danh sách từ vựng của user đã học
+        [HttpGet("practice-system")]
+        public async Task<IActionResult> GetVocabularySystemAsync()
         {
             // 1. Lấy ID người dùng từ trạm trung chuyển (Bây giờ ra 1, sau này ra ID thật)
             int userId = _userContext.GetCurrentUserId();
 
-            // 2. Đẩy nhiệm vụ xử lý Database xuống cho tầng Service gánh vác
-            bool isSuccess = await _backendService.UpdateProgressAsync(userId, input);
+            var vocabularies = await _practiceService.GetVocabularySystemAsync(userId);
 
-            if (isSuccess) return Ok(new { success = true });
-            return BadRequest(new { success = false, message = "Lỗi lưu tiến độ" });
-        }
-        //chức năng ôn tập, lấy từ vựng của hệ thống
-        [HttpGet("practice-system")]
-        public async Task<IActionResult> PracticeSystem([FromQuery] int LessonId, [FromQuery] int UserId)
-        {
-            //lấy id người dùng từ trạm trung chuyển (Bây giờ ra 1, sau này ra ID thật)
-            int userId = _userContext.GetCurrentUserId();
-
-            //id user lấy từ JWT
-            //int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-            var data = await _practiceService.GetVocabularySystemAsync(LessonId, UserId);
-            return Ok(data);
+            return Ok(vocabularies);
         }
         //chức năng ôn tập, lấy từ vựng của người dùng
         [HttpGet("practice-user")]
-        public async Task<IActionResult> PracticeUser([FromQuery] int FolderId, [FromQuery] int UserId)
+        public async Task<IActionResult> PracticeUser([FromQuery] int FolderId)
         {
             //lấy id người dùng từ trạm trung chuyển (Bây giờ ra 1, sau này ra ID thật)
             int userId = _userContext.GetCurrentUserId();
@@ -57,19 +42,51 @@ namespace BackendAPI.Controllers
             //id user lấy từ JWT
             //int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var data = await _practiceService.GetVocabularyUserAsync(FolderId, UserId);
+            var data = await _practiceService.GetVocabularyUserAsync(FolderId, userId);
             return Ok(data);
         }
         //danh sách các folder của người dùng
         [HttpGet("user-folders")]
-        public async Task<IActionResult> UserFolders([FromQuery] int UserId)
+        public async Task<IActionResult> UserFolders()
         {
             //lấy id người dùng từ trạm trung chuyển (Bây giờ ra 1, sau này ra ID thật)
             int userId = _userContext.GetCurrentUserId();
             //id user lấy từ JWT
             //int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var data = await _practiceService.GetUserFoldersAsync(UserId);
+            var data = await _practiceService.GetUserFoldersAsync(userId);
             return Ok(data);
+        }
+        // Tải file excel lên để nạp từ vựng vào flashcard list của user
+        [HttpPost("upload-folder-excel")]
+        public async Task<IActionResult> UploadFolderExcel([FromForm] UploadFolderRequestDTO request)
+        {
+            if (request.File == null || request.File.Length == 0)
+                return BadRequest(new { success = false, message = "File trống hoặc không nhận được file!" });
+
+            if (!request.File.FileName.EndsWith(".xlsx"))
+                return BadRequest(new { success = false, message = "Chỉ chấp nhận file Excel (.xlsx)!" });
+
+            int userId = _userContext.GetCurrentUserId();
+
+            // Lấy dữ liệu từ biến request truyền vào Service
+            var result = await _practiceService.UploadFolderExcelAsync(userId, request.FolderName, request.Description, request.File);
+
+            if (result.isSuccess)
+            {
+                return Ok("Folder uploaded successfully.");
+            }
+            return BadRequest(new { success = false, message = result.errorMessage });
+        }
+        // Xóa folder của người dùng
+        [HttpDelete("delete-folder/{folderId}")]
+        public async Task<IActionResult> DeleteFolder(int folderId)
+        {
+            int userId = _userContext.GetCurrentUserId();
+            var result = await _practiceService.DeleteFolderAsync(folderId, userId);
+
+            if (result) return Ok(new { success = true, message = "Đã xóa thư mục thành công." });
+
+            return BadRequest(new { success = false, message = "Lỗi không thể xóa thư mục!" });
         }
     }
 }

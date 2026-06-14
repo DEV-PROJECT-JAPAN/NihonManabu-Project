@@ -57,7 +57,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Badge", b =>
@@ -86,7 +86,36 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Badges");
+                    b.ToTable("Badges", (string)null);
+                });
+
+            modelBuilder.Entity("BackendAPI.Models.FolderVocabulary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ListId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VocabularyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListId");
+
+                    b.HasIndex("VocabularyId");
+
+                    b.ToTable("FolderVocabularies", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Grammar", b =>
@@ -118,7 +147,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.ToTable("Grammars");
+                    b.ToTable("Grammars", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.LearningProgress", b =>
@@ -156,7 +185,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("VocabularyId");
 
-                    b.ToTable("LearningProgresses");
+                    b.ToTable("LearningProgresses", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Lesson", b =>
@@ -187,7 +216,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("LevelId");
 
-                    b.ToTable("Lessons");
+                    b.ToTable("Lessons", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Level", b =>
@@ -214,7 +243,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Levels");
+                    b.ToTable("Levels", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Question", b =>
@@ -245,7 +274,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("GrammarId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Transaction", b =>
@@ -279,7 +308,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.User", b =>
@@ -335,7 +364,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.UserBadge", b =>
@@ -367,7 +396,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserBadges");
+                    b.ToTable("UserBadges", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.UserFlashcardList", b =>
@@ -399,7 +428,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserFlashcardLists");
+                    b.ToTable("UserFlashcardLists", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.UserVocabulary", b =>
@@ -409,11 +438,6 @@ namespace BackendAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AudioUrl")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -439,9 +463,6 @@ namespace BackendAPI.Migrations
                     b.Property<DateTime>("LastReviewed")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ListId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Meaning")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -460,9 +481,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ListId");
-
-                    b.ToTable("UserVocabularies");
+                    b.ToTable("UserVocabularies", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Vocabulary", b =>
@@ -514,7 +533,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.ToTable("Vocabularies");
+                    b.ToTable("Vocabularies", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Answer", b =>
@@ -526,6 +545,25 @@ namespace BackendAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("BackendAPI.Models.FolderVocabulary", b =>
+                {
+                    b.HasOne("BackendAPI.Models.UserFlashcardList", "UserFlashcardList")
+                        .WithMany("FolderVocabularies")
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackendAPI.Models.UserVocabulary", "UserVocabulary")
+                        .WithMany("FolderVocabularies")
+                        .HasForeignKey("VocabularyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserFlashcardList");
+
+                    b.Navigation("UserVocabulary");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Grammar", b =>
@@ -619,17 +657,6 @@ namespace BackendAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.UserVocabulary", b =>
-                {
-                    b.HasOne("BackendAPI.Models.UserFlashcardList", "UserFlashcardList")
-                        .WithMany("UserVocabularies")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserFlashcardList");
-                });
-
             modelBuilder.Entity("BackendAPI.Models.Vocabulary", b =>
                 {
                     b.HasOne("BackendAPI.Models.Lesson", "Lesson")
@@ -679,7 +706,12 @@ namespace BackendAPI.Migrations
 
             modelBuilder.Entity("BackendAPI.Models.UserFlashcardList", b =>
                 {
-                    b.Navigation("UserVocabularies");
+                    b.Navigation("FolderVocabularies");
+                });
+
+            modelBuilder.Entity("BackendAPI.Models.UserVocabulary", b =>
+                {
+                    b.Navigation("FolderVocabularies");
                 });
 #pragma warning restore 612, 618
         }
