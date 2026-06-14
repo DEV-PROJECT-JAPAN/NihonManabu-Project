@@ -1,0 +1,70 @@
+﻿@page "{id:int}"
+@model FrontendRazorPage.Pages.Features.Admin.Lessons.EditModel
+@{
+    ViewData["Title"] = "Chỉnh Sửa Bài Học";
+}
+
+<div class="container mt-5" style="max-width: 700px;">
+    <div class="d-flex align-items-center mb-4">
+        <a asp-page="./Index" class="btn btn-outline-secondary btn-sm rounded-circle me-3 p-2">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <h2 class="fw-bold m-0 text-dark text-uppercase fs-4">Cập nhật thông tin bài học</h2>
+    </div>
+
+    <div class="card shadow border-0" style="border-radius: 15px;">
+        <div class="card-body p-4">
+            <form method="post">
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <input type="hidden" asp-for="LessonInput.Id" />
+
+                <div class="mb-4">
+                    <label asp-for="LessonInput.LevelId" class="form-label fw-semibold text-secondary">
+                        <i class="fa-solid fa-layer-group me-1"></i> Cấp độ JLPT <span class="text-danger">*</span>
+                    </label>
+                    <select asp-for="LessonInput.LevelId" class="form-select form-select-lg border-2" style="border-radius: 10px;">
+                        <option value="">-- Chọn Cấp Độ Học --</option>
+                        @foreach (var lvl in Model.Levels)
+                        {
+                            <option value="@lvl.Id">@lvl.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="LessonInput.LevelId" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="LessonInput.Title" class="form-label fw-semibold text-secondary">
+                        <i class="fa-solid fa-heading me-1"></i> Tiêu đề bài học <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="LessonInput.Title" class="form-control form-control-lg border-2"
+                           placeholder="Ví dụ: Bài 1: Chào hỏi cơ bản" style="border-radius: 10px;" />
+                    <span asp-validation-for="LessonInput.Title" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="LessonInput.Order" class="form-label fw-semibold text-secondary">
+                        <i class="fa-solid fa-arrow-down-1-9 me-1"></i> Thứ tự sắp xếp <span class="text-danger">*</span>
+                    </label>
+                    <input asp-for="LessonInput.Order" type="number" class="form-control form-control-lg border-2"
+                           placeholder="Nhập số thứ tự (Ví dụ: 1, 2, 3...)" style="border-radius: 10px;" min="1" />
+                    <span asp-validation-for="LessonInput.Order" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <hr class="my-4 text-muted opacity-25">
+
+                <div class="d-flex justify-content-end gap-3">
+                    <a asp-page="./Index" class="btn btn-light btn-lg px-4 fw-semibold border" style="border-radius: 10px;">
+                        Hủy bỏ
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg px-5 fw-semibold shadow-sm" style="border-radius: 10px; background-color: #ff9f43; border-color: #ff9f43;">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Cập Nhật
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+

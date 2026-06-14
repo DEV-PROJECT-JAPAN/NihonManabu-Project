@@ -1,0 +1,595 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Grammar.ExerciseModel
+@{
+    ViewData["Title"] = "Không gian thực hành ngữ pháp";
+}
+
+<style>
+    :root {
+        --primary-color: #3B82F6;
+        --primary-light: rgba(59, 130, 246, 0.12);
+        --bg-inner: #0F172A;
+        --border-color: #334155;
+        --text-main: #F1F5F9;
+        --text-muted: #94A3B8;
+        --success-color: #10B981;
+        --success-light: rgba(16, 185, 129, 0.15);
+        --danger-color: #EF4444;
+        --danger-light: rgba(239, 68, 68, 0.15);
+        --mode-quiz: #3B82F6;
+        --mode-arrange: #10B981;
+        --mode-all: #8B5CF6;
+    }
+
+    body {
+        background-color: #0F172A !important;
+        color: var(--text-main) !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    .custom-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #172033;
+        border: 1px solid var(--border-color);
+        padding: 14px 24px;
+        border-radius: 14px;
+        margin-bottom: 28px;
+    }
+
+    .breadcrumb-step {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-decoration: none !important;
+    }
+
+    .breadcrumb-separator {
+        color: var(--border-color);
+        font-size: 12px;
+    }
+
+    .knowledge-premium-box {
+        background: #1E293B;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 28px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .knowledge-banner {
+        background: linear-gradient(90deg, #1E40AF, #3B82F6);
+        padding: 14px 24px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .knowledge-body {
+        padding: 28px;
+    }
+
+    .grammar-main-title {
+        font-size: 26px;
+        font-weight: 800;
+        color: #FFFFFF;
+        letter-spacing: -0.5px;
+        margin-bottom: 20px;
+        display: inline-block;
+        padding-bottom: 6px;
+        border-bottom: 3px solid var(--primary-color);
+    }
+
+    .explanation-inner-card {
+        background-color: var(--bg-inner);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 20px;
+    }
+
+    .mode-selection-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 24px;
+    }
+
+    @@media (max-width: 768px) {
+        .mode-selection-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .mode-card {
+        background: linear-gradient(145deg, #1E293B, #151F32) !important;
+        border: 2px solid var(--border-color) !important;
+        border-radius: 20px !important;
+        padding: 35px 20px;
+        text-align: center;
+        text-decoration: none !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+    .mode-quiz::before {
+        background: var(--mode-quiz);
+    }
+
+    .mode-quiz .mode-icon {
+        color: var(--mode-quiz);
+        background: rgba(59, 130, 246, 0.1);
+    }
+
+    .mode-quiz:hover {
+        border-color: var(--mode-quiz) !important;
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        transform: translateY(-5px);
+    }
+
+    .mode-arrange::before {
+        background: var(--mode-arrange);
+    }
+
+    .mode-arrange .mode-icon {
+        color: var(--mode-arrange);
+        background: rgba(16, 185, 129, 0.1);
+    }
+
+    .mode-arrange:hover {
+        border-color: var(--mode-arrange) !important;
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        transform: translateY(-5px);
+    }
+
+    .mode-all::before {
+        background: var(--mode-all);
+    }
+
+    .mode-all .mode-icon {
+        color: var(--mode-all);
+        background: rgba(139, 92, 246, 0.1);
+    }
+
+    .mode-all:hover {
+        border-color: var(--mode-all) !important;
+        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        transform: translateY(-5px);
+    }
+
+    .mode-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 16px;
+    }
+
+    .mode-title {
+        color: var(--text-main) !important;
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .mode-desc {
+        color: var(--text-muted) !important;
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    .custom-card {
+        border: 1px solid var(--border-color) !important;
+        border-radius: 20px !important;
+        background: linear-gradient(145deg, #1E293B, #131C2E) !important;
+        overflow: hidden;
+    }
+
+        .custom-card .card-header {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            padding: 20px 26px;
+            color: var(--text-main) !important;
+        }
+
+    .exercise-clean-row {
+        padding: 28px 12px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+        .exercise-clean-row:last-child {
+            border-bottom: none;
+        }
+
+    .btn-answer-box {
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        border-radius: 10px !important;
+        padding: 14px 18px;
+        background: rgba(15, 23, 42, 0.5) !important;
+        color: #CBD5E1 !important;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.15s ease;
+        text-align: left;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .btn-answer-box:hover:not([disabled]) {
+            border-color: var(--primary-color) !important;
+            background: rgba(255, 255, 255, 0.02) !important;
+            color: #FFFFFF !important;
+        }
+
+        .btn-answer-box.correct-answer {
+            background-color: var(--success-light) !important;
+            border-color: var(--success-color) !important;
+            color: #A7F3D0 !important;
+        }
+
+        .btn-answer-box.wrong-answer {
+            background-color: var(--danger-light) !important;
+            border-color: var(--danger-color) !important;
+            color: #FCA5A5 !important;
+        }
+
+    .sentence-assembly-zone {
+        border: 1px dashed #475569;
+        background: rgba(15, 23, 42, 0.4);
+        min-height: 54px;
+        border-radius: 10px;
+        padding: 10px 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+    }
+
+        .sentence-assembly-zone.correct-zone {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.02);
+        }
+
+        .sentence-assembly-zone.wrong-zone {
+            border-color: var(--danger-color);
+            background: rgba(239, 68, 68, 0.02);
+        }
+
+    .badge-word-item {
+        background-color: #1E293B !important;
+        color: #E2E8F0 !important;
+        padding: 8px 14px !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        border: 1px solid var(--border-color) !important;
+        cursor: pointer;
+        display: inline-block;
+        user-select: none;
+    }
+
+        .badge-word-item.disabled-pool-word {
+            opacity: 0.15;
+            cursor: not-allowed;
+            border-style: dashed !important;
+            background-color: transparent !important;
+        }
+
+    .btn-change-mode {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #60A5FA !important;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 8px 18px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none !important;
+    }
+
+        .btn-change-mode:hover {
+            background: var(--primary-light);
+            border-color: rgba(59, 130, 246, 0.4);
+            color: #FFFFFF !important;
+        }
+
+    .btn-audio-speaker {
+        background: rgba(59, 130, 246, 0.15);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #60A5FA;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="custom-breadcrumb">
+        <a asp-page="/Features/Grammar/Index" class="breadcrumb-step"><i class="fas fa-home mr-1"></i> Trang chủ</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <a asp-page="/Features/Grammar/Lessons" asp-route-levelId="@Model.LevelId" class="breadcrumb-step">🎯 @Model.CurrentLevel.Name</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <a asp-page="/Features/Grammar/GrammarList" asp-route-levelId="@Model.LevelId" asp-route-lessonId="@Model.LessonId" class="breadcrumb-step">📖 Bài @Model.CurrentLesson.Order</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <span class="breadcrumb-step active-step text-truncate" style="max-width: 250px;">📢 @Model.CurrentGrammar.Structure</span>
+    </div>
+
+    <div class="knowledge-premium-box animate__animated animate__fadeIn">
+        <div class="knowledge-banner"><i class="fas fa-graduation-cap"></i> KIẾN THỨC CỐT LÕI CỦA BÀI HỌC</div>
+        <div class="knowledge-body">
+            <div class="grammar-main-title">@Model.CurrentGrammar.Structure</div>
+            <div class="explanation-inner-card">
+                <h6 class="font-weight-bold text-primary mb-2" style="font-size: 13px;"><i class="fas fa-info-circle mr-1"></i> Ý nghĩa & Giải thích cấu trúc:</h6>
+                <p class="mb-0" style="white-space: pre-line; font-size: 15px; line-height: 1.6; color: #E2E8F0;">@Model.CurrentGrammar.Explanation</p>
+            </div>
+        </div>
+    </div>
+
+    @if (!Model.QuestionType.HasValue)
+    {
+        <div class="animate__animated animate__fadeInUp animate__fast">
+            <div class="text-center my-3"><h5 class="font-weight-bold" style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">Vui lòng lựa chọn chế độ luyện tập phía dưới</h5></div>
+            <div class="mode-selection-container">
+                <a asp-page="/Features/Grammar/Exercise" asp-route-levelId="@Model.LevelId" asp-route-lessonId="@Model.LessonId" asp-route-selectedGrammarId="@Model.SelectedGrammarId" asp-route-questionType="1" class="mode-card mode-quiz">
+                    <div class="mode-icon"><i class="fas fa-list-ul"></i></div>
+                    <div class="mode-title">Bài Tập Trắc Nghiệm</div>
+                    <div class="mode-desc">Luyện tập chọn đáp án đúng để điền vào chỗ trống trong câu.</div>
+                </a>
+                <a asp-page="/Features/Grammar/Exercise" asp-route-levelId="@Model.LevelId" asp-route-lessonId="@Model.LessonId" asp-route-selectedGrammarId="@Model.SelectedGrammarId" asp-route-questionType="2" class="mode-card mode-arrange">
+                    <div class="mode-icon"><i class="fas fa-random"></i></div>
+                    <div class="mode-title">Bài Tập Sắp Xếp</div>
+                    <div class="mode-desc">Xếp các thẻ từ xáo trộn thành một câu ngữ pháp hoàn chỉnh đúng nghĩa.</div>
+                </a>
+                <a asp-page="/Features/Grammar/Exercise" asp-route-levelId="@Model.LevelId" asp-route-lessonId="@Model.LessonId" asp-route-selectedGrammarId="@Model.SelectedGrammarId" asp-route-questionType="0" class="mode-card mode-all">
+                    <div class="mode-icon"><i class="fas fa-layer-group"></i></div>
+                    <div class="mode-title">Bài Tập Tổng Hợp</div>
+                    <div class="mode-desc">Bao gồm toàn bộ tất cả câu hỏi cả trắc nghiệm và sắp xếp câu.</div>
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card custom-card animate__animated animate__fadeInUp">
+            <div class="card-header d-flex justify-content-between align-items-center py-3">
+                <h6 class="m-0 font-weight-bold" style="color: var(--text-muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="fas fa-pencil-alt text-warning mr-2"></i> Khay bài tập thực hành
+                </h6>
+                <a asp-page="/Features/Grammar/Exercise" asp-route-levelId="@Model.LevelId" asp-route-lessonId="@Model.LessonId" asp-route-selectedGrammarId="@Model.SelectedGrammarId" class="btn-change-mode">
+                    <i class="fas fa-exchange-alt"></i> Đổi chế độ
+                </a>
+            </div>
+            <div class="card-body p-0" style="background-color: rgba(15, 23, 42, 0.2);">
+                @if (Model.Questions != null && Model.Questions.Any())
+                {
+                    var index = 1;
+                    @foreach (var q in Model.Questions)
+                    {
+                        <div class="exercise-clean-row quiz-question-wrapper mx-4" data-question-content="@q.Content">
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="text-primary font-weight-bold mr-2" style="font-size: 15px;">Câu @index.</span>
+                                <h6 class="text-white font-weight-bold m-0" style="line-height: 1.5; font-size: 16px; letter-spacing: 0.1px;">@q.Content</h6>
+                            </div>
+
+                            @if (q.QuestionType == 1)
+                            {
+                                <div class="row mx-n2 mt-2">
+                                    @foreach (var a in q.Answers)
+                                    {
+                                        <div class="col-md-6 px-2 mb-2">
+                                            <button class="btn btn-answer-box evaluate-answer" data-correct="@a.IsCorrect.ToString().ToLower()" data-answer-text="@a.Text">
+                                                <span class="indicator-dot" style="width: 6px; height: 8px; background-color: rgba(255,255,255,0.25); border-radius: 50%; display: inline-block;"></span>
+                                                <span>@a.Text</span>
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="quiz-feedback-audio-zone mt-2"></div>
+                            }
+                            else if (q.QuestionType == 2)
+                            {
+                                <div class="arrange-question-block mt-2" data-correct-sentence="@string.Join(" ", q.Answers.OrderBy(x => x.DisplayOrder).Select(x => x.Text))">
+                                    <div class="sentence-assembly-zone mb-2"></div>
+                                    <div class="mb-2 text-muted small" style="font-size: 12px;"><i class="far fa-lightbulb text-warning mr-1"></i> Bấm để xếp câu theo thứ tự:</div>
+                                    <div class="d-flex flex-wrap p-2 rounded align-items-center word-pool-container" style="border: 1px solid var(--border-color); gap: 6px; background: rgba(0,0,0,0.15); min-height: 46px;">
+                                        @foreach (var a in q.Answers.OrderBy(x => Guid.NewGuid()))
+                                        {
+                                            <span class="badge-word-item source-word" data-word-text="@a.Text" onclick="handleWordClick(this)">@a.Text</span>
+                                        }
+                                    </div>
+                                    <div class="feedback-zone-wrapper mt-2"></div>
+                                    <div class="d-flex justify-content-end gap-2 mt-2">
+                                        <button class="btn btn-link btn-sm text-muted mr-2" onclick="resetArrangeQuestion(this)" style="font-size: 12px; text-decoration: none;"><i class="fas fa-redo"></i> Xếp lại</button>
+                                        <button class="btn btn-sm btn-primary btn-check-arrange px-4" onclick="checkArrangeAnswer(this)">Kiểm tra</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        index++;
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
+
+
+<script>
+    var speakJapanese = function(text) {
+        if ('speechSynthesis' in window) {
+            const cleanText = text.replace(/\[\s*\]/g, '').replace(/_+/g, '');
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'ja-JP';
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
+        }
+    };
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const answerButtons = document.querySelectorAll('.evaluate-answer');
+        answerButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const parentRow = this.closest('.row');
+                const questionWrapper = this.closest('.quiz-question-wrapper');
+                const audioFeedbackZone = questionWrapper.querySelector('.quiz-feedback-audio-zone');
+                const allButtonsInQuestion = parentRow.querySelectorAll('.evaluate-answer');
+
+                allButtonsInQuestion.forEach(btn => btn.setAttribute('disabled', 'true'));
+
+                const isCorrect = this.getAttribute('data-correct') === 'true';
+                const originalQuestion = questionWrapper.getAttribute('data-question-content');
+                const currentAnswerText = this.getAttribute('data-answer-text');
+
+                let correctBtnText = "";
+                allButtonsInQuestion.forEach(btn => {
+                    if (btn.getAttribute('data-correct') === 'true') {
+                        correctBtnText = btn.getAttribute('data-answer-text');
+                    }
+                });
+
+                const filledUserSentence = originalQuestion.replace(/\[\s*\]/g, currentAnswerText).replace(/_+/g, currentAnswerText);
+                const filledCorrectSentence = originalQuestion.replace(/\[\s*\]/g, correctBtnText).replace(/_+/g, correctBtnText);
+
+                if (isCorrect) {
+                    this.classList.add('correct-answer');
+                    this.querySelector('.indicator-dot').style.backgroundColor = 'var(--success-color)';
+
+                    audioFeedbackZone.innerHTML = `
+                        <div class="animate__animated animate__fadeIn mt-1">
+                            <button class="btn-audio-speaker" onclick="speakJapanese('${filledUserSentence}')">
+                                <i class="fas fa-volume-up mr-1"></i> Kết quả đúng! Nghe toàn bộ câu 🔊
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    this.classList.add('wrong-answer');
+                    this.querySelector('.indicator-dot').style.backgroundColor = 'var(--danger-color)';
+
+                    allButtonsInQuestion.forEach(btn => {
+                        if(btn.getAttribute('data-correct') === 'true') {
+                            btn.classList.add('correct-answer');
+                            btn.querySelector('.indicator-dot').style.backgroundColor = 'var(--success-color)';
+                        }
+                    });
+
+                    audioFeedbackZone.innerHTML = `
+                        <div class="p-2 rounded d-flex justify-content-between align-items-center mt-2 animate__animated animate__fadeIn" style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.2);">
+                            <div>
+                                <span class="text-success font-weight-bold" style="font-size:14px;">${filledCorrectSentence}</span>
+                            </div>
+                            <button class="btn-audio-speaker" onclick="speakJapanese('${filledCorrectSentence}')">
+                                <i class="fas fa-volume-up"></i> Nghe đáp án chuẩn
+                            </button>
+                        </div>
+                    `;
+                }
+            });
+        });
+    });
+
+    var handleWordClick = function(element) {
+        const questionBlock = element.closest('.arrange-question-block');
+        const assemblyZone = questionBlock.querySelector('.sentence-assembly-zone');
+        if (questionBlock.querySelector('.btn-check-arrange').hasAttribute('disabled')) return;
+
+        if (element.classList.contains('source-word')) {
+            if (element.classList.contains('disabled-pool-word')) return;
+            element.classList.add('disabled-pool-word');
+
+            const newWord = document.createElement('span');
+            newWord.className = 'badge-word-item assembled-word';
+            newWord.innerText = element.getAttribute('data-word-text');
+            newWord.sourceElement = element;
+
+            newWord.onclick = function() {
+                this.sourceElement.classList.remove('disabled-pool-word');
+                this.remove();
+            };
+            assemblyZone.appendChild(newWord);
+        }
+    };
+
+    var checkArrangeAnswer = function(button) {
+        const questionBlock = button.closest('.arrange-question-block');
+        const assemblyZone = questionBlock.querySelector('.sentence-assembly-zone');
+        const feedbackZone = questionBlock.querySelector('.feedback-zone-wrapper');
+        const correctSentence = questionBlock.getAttribute('data-correct-sentence').trim();
+
+        const assembledWords = questionBlock.querySelectorAll('.assembled-word');
+        let userSentence = Array.from(assembledWords).map(w => w.innerText).join(" ").trim();
+
+        button.setAttribute('disabled', 'true');
+
+        if (userSentence === correctSentence) {
+            assemblyZone.classList.add('correct-zone');
+            feedbackZone.innerHTML = `
+                <div class="animate__animated animate__fadeIn mt-1">
+                    <button class="btn-audio-speaker" onclick="speakJapanese('${correctSentence}')">
+                        <i class="fas fa-volume-up mr-1"></i> Chính xác! Nghe phát âm 🔊
+                    </button>
+                </div>
+            `;
+        } else {
+            assemblyZone.classList.add('wrong-zone');
+            feedbackZone.innerHTML = `
+                <div class="p-2 rounded d-flex justify-content-between align-items-center mt-2 animate__animated animate__fadeIn" style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.2);">
+                    <div>
+                        <span class="text-success font-weight-bold" style="font-size:14px;">${correctSentence}</span>
+                    </div>
+                    <button class="btn-audio-speaker" onclick="speakJapanese('${correctSentence}')">
+                        <i class="fas fa-volume-up"></i> Nghe đáp án chuẩn
+                    </button>
+                </div>
+            `;
+        }
+    };
+
+    var resetArrangeQuestion = function(button) {
+        const questionBlock = button.closest('.arrange-question-block');
+        const assemblyZone = questionBlock.querySelector('.sentence-assembly-zone');
+        const feedbackZone = questionBlock.querySelector('.feedback-zone-wrapper');
+
+        assemblyZone.innerHTML = '';
+        assemblyZone.className = 'sentence-assembly-zone mb-2';
+        feedbackZone.innerHTML = '';
+
+        const poolWords = questionBlock.querySelectorAll('.source-word');
+        poolWords.forEach(w => w.classList.remove('disabled-pool-word'));
+
+        const checkBtn = questionBlock.querySelector('.btn-check-arrange');
+        checkBtn.removeAttribute('disabled');
+    };
+</script>

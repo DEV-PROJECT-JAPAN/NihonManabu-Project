@@ -16,6 +16,6 @@ namespace BackendAPI.Models
         public string Description { get; set; }
         //virtual ở đây không dùng để kế thừa cho lớp con mà là kĩ thuật
         //Lazy Loading giúp tiện lợi trong việc lấy dữ liệu
-        public virtual ICollection<Lesson> Lessons { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; } = new List<Lesson>();
     }
 }

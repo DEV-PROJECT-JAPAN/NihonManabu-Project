@@ -1,5 +1,7 @@
-﻿using BackendAPI.Interfaces;
+﻿using BackendAPI.DTOs;
+using BackendAPI.Interfaces;
 using BackendAPI.Models.Data;
+using BackendAPI.Models;
 using BackendAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// Thêm gói cấu hình giúp JSON tự động bỏ qua các mối quan hệ lặp vòng
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true; // Giúp format JSON đẹp dễ nhìn hơn
+    });
 
 // Chấp cánh cho Service đọc được thông tin Request từ Client gửi lên
 builder.Services.AddHttpContextAccessor();
@@ -35,9 +44,19 @@ builder.Services.AddDbContext<JapaneseDbContext>(options =>
 // =========================================================================
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ILevelService, LevelService>();
 builder.Services.AddScoped<IVocabularyService, VocabularyService>();
-builder.Services.AddScoped<IGrammarService, GrammarService>();
+builder.Services.AddScoped<ILessonService, LessonService>();
 
+
+////DTO
+builder.Services.AddScoped<IGrammarService<GrammarDTO>, GrammarService<GrammarDTO>>();
+
+
+
+// Đăng ký Service dành cho Admin model gốc, để phục vụ cho các tác vụ quản trị (CRUD) mà không cần phải qua lớp DTO trung gian
+builder.Services.AddScoped<IGrammarService<Grammar>, GrammarService<Grammar>>();
+builder.Services.AddScoped(typeof(IQuestionAdminService<>), typeof(QuestionAdminService<>));
 // =========================================================================
 // 4. XÂY DỰNG VÀ CẤU HÌNH PIPELINE XỬ LÝ REQUEST (MIDDLEWARES)
 // =========================================================================

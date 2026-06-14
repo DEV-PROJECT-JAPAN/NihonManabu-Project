@@ -7,7 +7,7 @@ namespace BackendAPI.Models
     {
         public int? GrammarId { get; set; }
         [ForeignKey("GrammarId")]
-        public virtual Grammar Grammar { get; set; }
+        public virtual Grammar? Grammar { get; set; }
         public string Content { get; set; } // Nội dung câu hỏi
 
         public int QuestionType { get; set; } // Loại câu hỏi: 1 - Trắc nghiệm, 2 - Điền vào chỗ trống, 3 - Tự luận

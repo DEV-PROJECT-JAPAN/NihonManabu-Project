@@ -1,0 +1,214 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Admin.GrammarAdmin.CreateModel
+@{
+    ViewData["Title"] = "Thêm Ngữ Pháp";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="mb-3">
+                <a asp-page="./Index" asp-route-levelId="@Model.SelectedLevelId" asp-route-lessonId="@Model.Grammar.LessonId" class="text-decoration-none text-muted small hover-dark">
+                    <i class="bi bi-arrow-left me-1"></i> Trở về danh sách ngữ pháp
+                </a>
+            </div>
+
+            <div class="card shadow border-0 rounded-4 overflow-hidden bg-white">
+                <div class="card-header bg-white p-4 border-bottom border-light">
+                    <h5 class="card-title mb-0 fw-bold d-flex align-items-center text-dark">
+                        <span class="p-2 bg-success-subtle rounded-3 text-success me-3 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-journal-plus fs-5"></i>
+                        </span>
+                        Thêm Mẫu Ngữ Pháp Mới
+                    </h5>
+                    <p class="text-muted small mb-0 mt-2 ms-5">Cấu trúc dữ liệu ngữ pháp gốc cho hệ thống bài học</p>
+                </div>
+
+                <div class="card-body p-4">
+                    <form method="post" id="createForm" autocomplete="off">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label">Chọn Cấp Độ</label>
+                            <div class="input-group custom-input-group">
+                                <span class="input-group-text"><i class="bi bi-layer-forward text-muted"></i></span>
+                                <select id="levelSelect" asp-for="SelectedLevelId" class="form-select border-0 ps-1" style="box-shadow: none;">
+                                    <option value="">-- Chọn Cấp Độ --</option>
+                                    @foreach (var lvl in Model.Levels)
+                                    {
+                                        <option value="@lvl.Id">@lvl.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Grammar.LessonId" class="form-label">Chọn Bài Học</label>
+                            <div class="input-group custom-input-group">
+                                <span class="input-group-text"><i class="bi bi-book text-muted"></i></span>
+                                <select id="lessonSelect" asp-for="Grammar.LessonId" class="form-select border-0 ps-1" style="box-shadow: none;" required>
+                                    <option value="">-- Chọn Bài Học --</option>
+                                    @foreach (var les in Model.Lessons)
+                                    {
+                                        <option value="@les.Id">Bài @les.Order: @les.Title</option>
+                                    }
+                                </select>
+                            </div>
+                            <span asp-validation-for="Grammar.LessonId" class="text-danger small d-block mt-1"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Grammar.Structure" class="form-label">Cấu Trúc Ngữ Pháp</label>
+                            <div class="input-group custom-input-group">
+                                <span class="input-group-text"><i class="bi bi-spellcheck text-muted"></i></span>
+                                <input asp-for="Grammar.Structure" class="form-control" placeholder="Ví dụ: ~ Vると / ~ Vてみる" required />
+                            </div>
+                            <span asp-validation-for="Grammar.Structure" class="text-danger small d-block mt-1"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Grammar.Explanation" class="form-label">Giải Thích Ý Nghĩa & Ngữ Cảnh</label>
+                            <textarea asp-for="Grammar.Explanation" class="form-control custom-textarea" rows="5" placeholder="Giải thích chi tiết cách dùng, ngữ cảnh bản xứ và lưu ý nếu có..." required></textarea>
+                            <span asp-validation-for="Grammar.Explanation" class="text-danger small d-block mt-1"></span>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end border-top border-light pt-4 mt-4">
+                            <a asp-page="./Index" asp-route-levelId="@Model.SelectedLevelId" asp-route-lessonId="@Model.Grammar.LessonId" class="btn btn-muted-custom px-4">
+                                Hủy bỏ
+                            </a>
+                            <button type="submit" class="btn btn-success-custom px-4 shadow-sm">
+                                <i class="bi bi-cloud-arrow-up-fill me-1"></i> Lưu Vào Database
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("levelSelect").addEventListener("change", function() {
+        var currentForm = document.getElementById("createForm");
+        // Đổi phương thức tạm thời thành GET để nạp lại danh sách Lessons theo LevelId
+        var originalAction = currentForm.action;
+        currentForm.method = "get";
+        currentForm.submit();
+    });
+</script>
+
+<style>
+    body {
+        background-color: #f4f6f9 !important;
+    }
+
+    .min-vh-100 {
+        min-height: calc(100vh - 40px) !important;
+    }
+
+    .rounded-4 {
+        border-radius: 1rem !important;
+    }
+
+    .rounded-3 {
+        border-radius: 0.6rem !important;
+    }
+
+    .form-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.3px;
+    }
+
+    .custom-input-group {
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        transition: all 0.2s ease-in-out;
+        background-color: #ffffff;
+    }
+
+        .custom-input-group .input-group-text {
+            background-color: transparent;
+            border: none;
+            padding-left: 1rem;
+            padding-right: 0.5rem;
+        }
+
+        .custom-input-group .form-control {
+            border: none;
+            padding: 0.65rem 1rem 0.65rem 0.5rem;
+            font-size: 0.95rem;
+        }
+
+            .custom-input-group .form-control:focus {
+                box-shadow: none;
+                background-color: #ffffff;
+            }
+
+        .custom-input-group:focus-within {
+            border-color: #198754;
+            box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.12);
+        }
+
+    .custom-textarea {
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        transition: all 0.2s ease-in-out;
+        resize: vertical;
+    }
+
+        .custom-textarea:focus {
+            border-color: #198754;
+            box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.12);
+        }
+
+    .btn-success-custom {
+        background-color: #198754;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.2s;
+    }
+
+        .btn-success-custom:hover {
+            background-color: #146c43;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+    .btn-muted-custom {
+        background-color: #e9ecef;
+        color: #495057;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.2s;
+    }
+
+        .btn-muted-custom:hover {
+            background-color: #dee2e6;
+            color: #212529;
+        }
+
+    .hover-dark:hover {
+        color: #212529 !important;
+    }
+
+    .bg-success-subtle {
+        background-color: rgba(25, 135, 84, 0.1) !important;
+    }
+</style>

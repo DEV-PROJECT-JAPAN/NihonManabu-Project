@@ -1,0 +1,198 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Admin.QuestionAdmin.IndexModel
+@{
+    ViewData["Title"] = "Quản lý Câu Hỏi";
+    Layout = "_LayoutAdmin";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-dark m-0">QUẢN LÝ CÂU HỎI LUYỆN TẬP</h2>
+        <a href="/Features/Admin/QuestionAdmin/Create?levelId=@(Model.SelectedLevelId ?? 0)&lessonId=@(Model.SelectedLessonId ?? 0)"
+           class="btn btn-primary shadow-sm"
+           style="background-color: #ff9f43; border-color: #ff9f43; font-weight: 600;">
+            ➕ Thêm Câu Hỏi Mới
+        </a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert">
+            @Model.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0 mb-4 bg-light" style="border-radius: 8px;">
+        <div class="card-body py-3">
+            <form method="get" action="" autocomplete="off" class="row align-items-center g-3">
+
+                <div class="col-md-3">
+                    <label class="fw-semibold text-secondary small d-block mb-1">
+                        <i class="bi bi-filter me-1"></i> Bước 1: Chọn Cấp Độ
+                    </label>
+                    <select asp-for="SelectedLevelId" class="form-select border-2" onchange="window.location.href='?SelectedLevelId=' + this.value" style="border-radius: 8px; font-size: 0.9rem;">
+                        <option value="">-- Chọn Cấp Độ --</option>
+                        @foreach (var lvl in Model.Levels)
+                        {
+                            <option value="@lvl.Id">@lvl.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="fw-semibold text-secondary small d-block mb-1">
+                        <i class="bi bi-book-open me-1"></i> Bước 2: Chọn Bài Học
+                    </label>
+                    <select asp-for="SelectedLessonId" class="form-select border-2" onchange="window.location.href='?SelectedLevelId=@Model.SelectedLevelId&SelectedLessonId=' + this.value" style="border-radius: 8px; font-size: 0.9rem;" disabled="@(Model.SelectedLevelId == null || !Model.Lessons.Any())">
+                        <option value="">-- Chọn Bài Học --</option>
+                        @foreach (var les in Model.Lessons)
+                        {
+                            <option value="@les.Id">Bài @les.Order: @les.Title</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-5">
+                    <label class="fw-semibold text-secondary small d-block mb-1">
+                        <i class="bi bi-hash me-1"></i> Bước 3: Lọc Theo Ngữ Pháp (Tùy chọn)
+                    </label>
+                    <select asp-for="SelectedGrammarId" class="form-select border-2" onchange="this.form.submit()" style="border-radius: 8px; font-size: 0.9rem;" disabled="@(Model.SelectedLessonId == null || !Model.Grammars.Any())">
+                        <option value="">-- Xem tất cả ngữ pháp trong bài --</option>
+                        @foreach (var grm in Model.Grammars)
+                        {
+                            <option value="@grm.Id">#@grm.Id: @grm.Structure</option>
+                        }
+                    </select>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+        <table class="table table-hover table-striped mb-0 align-middle bg-white">
+            <thead class="table-dark text-uppercase fs-7">
+                <tr>
+                    <th style="width: 7%">ID</th>
+                    <th style="width: 43%">Nội Dung Câu Hỏi</th>
+                    <th style="width: 30%">Thứ tự & Phương Án Hiển Thị</th>
+                    <th style="width: 10%" class="text-center">Thể Thức</th>
+                    <th style="width: 10%" class="text-center">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.SelectedLessonId == null || Model.SelectedLessonId == 0)
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-5">
+                            <i class="bi bi-hand-index-thumb text-warning fs-2 d-block mb-2 opacity-75"></i>
+                            Vui lòng chọn cụ thể một <b>Cấp độ</b> và <b>Bài học</b> ở trên để xem danh sách câu hỏi luyện tập.
+                        </td>
+                    </tr>
+                }
+                else if (!Model.Questions.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-5">
+                            <i class="bi bi-folder-open fs-2 d-block mb-2 text-secondary opacity-50"></i>
+                            Không có câu hỏi nào khớp với điều kiện lọc hiện tại. Hãy bấm nút thêm mới nhé!
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var question in Model.Questions)
+                    {
+                        <tr>
+                            <td><code>#@question.Id</code></td>
+                            <td>
+                                <div class="text-dark fw-bold font-monospace mb-1" style="font-size: 0.92rem; white-space: pre-line;">
+                                    @question.Content
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column gap-1">
+                                    @if (question.Answers != null && question.Answers.Any())
+                                    {
+                                        @foreach (var ans in question.Answers.OrderBy(a => a.DisplayOrder))
+                                        {
+                                            <span class="small @(ans.IsCorrect ? "text-success fw-semibold" : "text-secondary")">
+                                                @if (question.QuestionType == 2)
+                                                {
+                                                    <i class="bi bi-arrow-right-short text-warning"></i>
+                                                }
+                                                else if (ans.IsCorrect)
+                                                {
+                                                    <i class="bi bi-check-circle-fill me-1"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-circle me-1" style="font-size: 0.75rem;"></i>
+                                                }
+                                                <strong>@ans.DisplayOrder.</strong> @ans.Text
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger small italic"><i class="bi bi-exclamation-triangle-fill"></i> Chưa có đáp án!</span>
+                                    }
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                @if (question.QuestionType == 1)
+                                {
+                                    <span class="badge bg-info text-dark fw-bold px-2 py-1" style="font-size: 0.75rem;">Trắc nghiệm</span>
+                                }
+                                else if (question.QuestionType == 2)
+                                {
+                                    <span class="badge bg-warning text-dark fw-bold px-2 py-1" style="font-size: 0.75rem;">Sắp xếp câu</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary fw-bold px-2 py-1" style="font-size: 0.75rem;">Loại @question.QuestionType</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <a asp-page="./Edit"
+                                       asp-route-id="@question.Id"
+                                       asp-route-levelId="@Model.SelectedLevelId"
+                                       asp-route-lessonId="@Model.SelectedLessonId"
+                                       class="btn btn-warning btn-sm fw-semibold text-white px-2"
+                                       style="border-radius: 6px;">Sửa</a>
+
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@question.Id" onsubmit="return confirm('Khôi có chắc chắn muốn xóa câu hỏi này không?');">
+                                        <input type="hidden" name="SelectedLevelId" value="@Model.SelectedLevelId" />
+                                        <input type="hidden" name="SelectedLessonId" value="@Model.SelectedLessonId" />
+                                        <input type="hidden" name="SelectedGrammarId" value="@Model.SelectedGrammarId" />
+                                        <button type="submit" class="btn btn-danger btn-sm fw-semibold px-2" style="border-radius: 6px;">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f4f6f9 !important;
+    }
+
+    .fs-7 {
+        font-size: 0.8rem !important;
+    }
+
+    tbody td {
+        padding: 0.85rem 0.75rem !important;
+        font-size: 0.9rem;
+    }
+</style>
