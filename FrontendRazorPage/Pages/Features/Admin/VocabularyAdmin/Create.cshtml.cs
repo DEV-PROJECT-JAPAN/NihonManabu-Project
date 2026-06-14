@@ -58,7 +58,8 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
             }
 
             VocabularyInput.LessonId = SelectedLessonId;
-      
+           
+
             var success = await _vocabClientService.CreateVocabularyAsync(VocabularyInput);
             if (success)
             {

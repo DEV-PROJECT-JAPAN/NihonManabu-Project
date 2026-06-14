@@ -27,7 +27,7 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
         [TempData]
         public string Message { get; set; } = string.Empty;
 
-      
+
         public string ErrorMessage { get; set; } = string.Empty;
 
         /// <summary>
