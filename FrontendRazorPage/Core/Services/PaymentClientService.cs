@@ -39,5 +39,30 @@ namespace FrontendRazorPage.Services
             public bool Success { get; set; }
             public string QrUrl { get; set; }
         }
+        // Thêm hàm gọi API check-status
+        public async Task<bool> CheckVipStatusAsync(string token)
+        {
+            try
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _httpClient.GetAsync($"{_apiBase}/check-status");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<StatusResponseResult>();
+                    return result != null && result.IsVip;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private class StatusResponseResult
+        {
+            public bool IsVip { get; set; }
+        }
     }
 }

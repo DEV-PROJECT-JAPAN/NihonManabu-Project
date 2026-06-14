@@ -24,6 +24,8 @@ builder.Services.AddScoped<IGrammarService, GrammarService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ReminderBackgroundService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentWebhookService, PaymentWebhookService>();
+builder.Services.AddHostedService<VipExpirationBackgroundService>();
 
 builder.Services.AddDbContext<JapaneseDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

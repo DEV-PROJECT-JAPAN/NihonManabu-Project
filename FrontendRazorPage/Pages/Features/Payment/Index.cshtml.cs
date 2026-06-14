@@ -37,5 +37,20 @@ namespace FrontendRazorPage.Pages.Features.Payment
 
             return new JsonResult(new { success = false, message = "LỖI BE: Máy chủ từ chối cấp mã QR (Có thể do Token sai hoặc lỗi Database)." });
         }
+        public async Task<JsonResult> OnGetCheckStatusAsync()
+        {
+            var authHeader = Request.Headers["Authorization"].ToString();
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+            {
+                return new JsonResult(new { isVip = false });
+            }
+
+            string token = authHeader.Substring("Bearer ".Length).Trim();
+
+            // Nhờ Service đi hỏi Backend
+            bool isVip = await _paymentService.CheckVipStatusAsync(token);
+
+            return new JsonResult(new { isVip = isVip });
+        }
     }
 }

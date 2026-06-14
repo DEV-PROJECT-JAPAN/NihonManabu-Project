@@ -239,4 +239,80 @@
         document.querySelector('.btn-upgrade').style.display = 'inline-block';
         document.getElementById('loading-indicator').style.display = 'none';
     }
+    let checkInterval; // Biến giữ vòng lặp để lúc sau còn tắt đi
+
+    async function requestVipQr() {
+        document.querySelector('.btn-upgrade').style.display = 'none';
+        document.getElementById('loading-indicator').style.display = 'block';
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Bạn phải đăng nhập lại để thực hiện chức năng này!');
+            resetUi();
+            return;
+        }
+
+        try {
+            const response = await fetch('?handler=GenerateQr', {
+                method: 'GET',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById('loading-indicator').style.display = 'none';
+                document.getElementById('qr-image').src = data.qrUrl;
+                document.getElementById('qr-section').style.display = 'block';
+
+                // 🚀 BẮT ĐẦU VÒNG LẶP HỎI THĂM
+                startCheckingVipStatus(token);
+            } else {
+                alert(data.message);
+                resetUi();
+            }
+        } catch (error) {
+            alert('Lỗi kết nối máy chủ.');
+            resetUi();
+        }
+    }
+
+    function startCheckingVipStatus(token) {
+        // Cứ mỗi 3 giây (3000ms) sẽ chạy đoạn code bên trong 1 lần
+        checkInterval = setInterval(async () => {
+            try {
+                // Gọi lên Trạm trung chuyển PageModel
+                const response = await fetch('?handler=CheckStatus', {
+                    method: 'GET',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Nếu Backend trả về isVip = true
+                    if (data.isVip === true) {
+                        clearInterval(checkInterval); // Tắt vòng lặp ngay lập tức
+
+                        alert("🎉 Ting ting! Đã nhận được thanh toán. Chào mừng VIP Member!");
+
+                        // Tự động tải lại trang để áp dụng các quyền lợi VIP (ẩn nút, hiện huy hiệu)
+                        window.location.reload();
+                    }
+                }
+            } catch (error) {
+                console.log("Đang chờ thanh toán...");
+            }
+        }, 3000);
+
+        // Đặt đồng hồ đếm ngược: Sau 10 phút (600.000ms) nếu không thanh toán thì tự tắt vòng lặp cho đỡ nặng máy
+        setTimeout(() => {
+            clearInterval(checkInterval);
+            console.log("Đã hết thời gian chờ thanh toán.");
+        }, 600000);
+    }
+
+    function resetUi() {
+        document.querySelector('.btn-upgrade').style.display = 'inline-block';
+        document.getElementById('loading-indicator').style.display = 'none';
+    }
 </script>

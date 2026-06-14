@@ -47,5 +47,10 @@ namespace BackendAPI.Services
 
             return $"https://img.vietqr.io/image/{bankId}-{accountNo}-{template}.png?amount={vipPrice}&addInfo={addInfo}&accountName={accountName}";
         }
+        public async Task<bool> CheckIsVipAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            return user != null && user.Role == "VIP";
+        }
     }
 }
