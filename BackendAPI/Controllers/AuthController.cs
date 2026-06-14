@@ -119,7 +119,8 @@ namespace BackendAPI.Controllers
             {
                 Success = true,
                 Message = "Đăng nhập thành công!",
-                Token = _tokenService.GenerateJwtToken(user)
+                Token = _tokenService.GenerateJwtToken(user),
+                Role = user.Role
             });
         }
 

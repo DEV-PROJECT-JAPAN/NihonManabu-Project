@@ -4,21 +4,16 @@ using System.Net.Http.Headers;
 
 namespace FrontendRazorPage.Core.Services
 {
-    public class AuthService
+    public class AuthService : BaseApiServices
     {
-        private readonly HttpClient _http;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public AuthService(HttpClient http, IHttpContextAccessor httpContextAccessor)
+        public AuthService(HttpClient http, IHttpContextAccessor httpContextAccessor) : base(http, httpContextAccessor)
         {
-            _http = http;
-            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<string> SendOtpAsync(string email)
         {
             // Gửi dưới dạng Object để khớp với EmailRequest DTO ở Backend
             var data = new { Email = email };
-            var response = await _http.PostAsJsonAsync("api/auth/send-otp", data);
+            var response = await _httpClient.PostAsJsonAsync("api/auth/send-otp", data);
 
             if (response.IsSuccessStatusCode)
             {
@@ -34,7 +29,7 @@ namespace FrontendRazorPage.Core.Services
         public async Task<AuthApiResponse?> VerifyAndRegisterAsync(RegisterViewModel data)
         {
             var response =
-                await _http.PostAsJsonAsync(
+                await _httpClient.PostAsJsonAsync(
                     "api/auth/verify-and-register",
                     data);
 
@@ -45,7 +40,7 @@ namespace FrontendRazorPage.Core.Services
         {
             try
             {
-                var response = await _http.PostAsJsonAsync("api/auth/login", data);
+                var response = await _httpClient.PostAsJsonAsync("api/auth/login", data);
 
                 // 1. Nếu thành công (200-299)
                 if (response.IsSuccessStatusCode)
@@ -85,9 +80,9 @@ namespace FrontendRazorPage.Core.Services
             var token = _httpContextAccessor.HttpContext?.Request.Cookies["JWToken"];
             if (string.IsNullOrEmpty(token)) return null;
 
-            _http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _http.GetAsync("api/auth/profile");
+            var response = await _httpClient.GetAsync("api/auth/profile");
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<AuthApiResponse>();

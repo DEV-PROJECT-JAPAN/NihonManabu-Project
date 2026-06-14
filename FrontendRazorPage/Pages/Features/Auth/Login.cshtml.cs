@@ -1,20 +1,24 @@
-    using FrontendRazorPage.Core.Services;
-    using FrontendRazorPage.Models;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authentication.Cookies;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
-    using System.Security.Claims;
+using FrontendRazorPage.Core.Services;
+using FrontendRazorPage.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace FrontendRazorPage.Pages.Features.Auth
 {
     public class LoginModel : PageModel
     {
         private readonly AuthService _authService;
+        private readonly IWebHostEnvironment _environment;
 
-        public LoginModel(AuthService authService)
+        public LoginModel(AuthService authService, IWebHostEnvironment environment)
         {
             _authService = authService;
+            _environment = environment;
         }
 
         [BindProperty]
@@ -40,7 +44,7 @@ namespace FrontendRazorPage.Pages.Features.Auth
             }
 
             var result = await _authService.LoginAsync(Input);
-
+            
             if (result == null)
             {
                 Message = "Không nhận được phản hồi từ máy chủ.";
@@ -58,12 +62,12 @@ namespace FrontendRazorPage.Pages.Features.Auth
                     new CookieOptions
                     {
                         HttpOnly = true,
-                        Secure = false,
+                        Secure = _environment.IsDevelopment() ? false : true,
                         SameSite = SameSiteMode.Lax,
                         Expires = DateTimeOffset.UtcNow.AddMinutes(30)
                     });
 
-                
+
                 var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, Input.Email),
@@ -77,13 +81,12 @@ namespace FrontendRazorPage.Pages.Features.Auth
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
-                Console.WriteLine("ROLE FROM SERVER: " + result.Role);
                 if (string.Equals(result.Role, "Admin", StringComparison.OrdinalIgnoreCase))
                 {
                     return RedirectToPage("/Features/Admin/AdminDashboard");
-                }   
+                }
 
-                    return RedirectToPage("/Index");
+                return RedirectToPage("/Index");
             }
 
             return Page();

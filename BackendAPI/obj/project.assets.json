@@ -4412,11 +4412,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DELL\\source\\repos\\NihonManabu-Project\\BackendAPI\\BackendAPI.csproj",
+      "projectUniqueName": "C:\\Users\\DELL\\Documents\\GitHub\\NihonManabu-Project\\BackendAPI\\BackendAPI.csproj",
       "projectName": "BackendAPI",
-      "projectPath": "C:\\Users\\DELL\\source\\repos\\NihonManabu-Project\\BackendAPI\\BackendAPI.csproj",
+      "projectPath": "C:\\Users\\DELL\\Documents\\GitHub\\NihonManabu-Project\\BackendAPI\\BackendAPI.csproj",
       "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DELL\\source\\repos\\NihonManabu-Project\\BackendAPI\\obj\\",
+      "outputPath": "C:\\Users\\DELL\\Documents\\GitHub\\NihonManabu-Project\\BackendAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

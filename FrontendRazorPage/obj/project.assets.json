@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DELL\\source\\repos\\NihonManabu-Project\\FrontendRazorPage\\FrontendRazorPage.csproj",
+      "projectUniqueName": "C:\\Users\\DELL\\Documents\\GitHub\\NihonManabu-Project\\FrontendRazorPage\\FrontendRazorPage.csproj",
       "projectName": "FrontendRazorPage",
-      "projectPath": "C:\\Users\\DELL\\source\\repos\\NihonManabu-Project\\FrontendRazorPage\\FrontendRazorPage.csproj",
+      "projectPath": "C:\\Users\\DELL\\Documents\\GitHub\\NihonManabu-Project\\FrontendRazorPage\\FrontendRazorPage.csproj",
       "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DELL\\source\\repos\\NihonManabu-Project\\FrontendRazorPage\\obj\\",
+      "outputPath": "C:\\Users\\DELL\\Documents\\GitHub\\NihonManabu-Project\\FrontendRazorPage\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

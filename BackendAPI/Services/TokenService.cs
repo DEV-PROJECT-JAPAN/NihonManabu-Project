@@ -6,6 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+
+
 namespace BackendAPI.Services
 {
     public class TokenService : ITokenService
@@ -73,7 +75,7 @@ namespace BackendAPI.Services
             {
                 Subject = new ClaimsIdentity(claims),
 
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddMinutes(30),
 
                 Issuer = jwtSettings["Issuer"],
 

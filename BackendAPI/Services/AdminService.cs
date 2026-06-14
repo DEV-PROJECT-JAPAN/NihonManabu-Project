@@ -30,7 +30,7 @@ namespace BackendAPI.Services
             if (user == null) return false;
 
             user.Role = role;
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();  
 
             return true;
         }

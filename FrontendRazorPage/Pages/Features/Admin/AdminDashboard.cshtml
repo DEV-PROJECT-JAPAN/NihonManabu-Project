@@ -2,6 +2,7 @@
 @model FrontendRazorPage.Pages.Features.Admin.AdminDashboardModel
 @{
     ViewData["Title"] = "Admin Dashboard";
+   
 }
 
 <div class="dashboard-container">
@@ -26,13 +27,15 @@
                 <p>Tổng số học viên</p>
             </div>
         </div>
+
+    </div> <!-- dashboard-cards -->
     <!-- QUICK ACTIONS -->
     <div class="dashboard-section">
 
         <h3>⚡ Thao tác nhanh</h3>
 
         <div class="action-buttons">
-            <a asp-page="/Features/Admin/Users" class="btn-action">
+            <a asp-page="/Features/Admin/UserManagement" class="btn-action">
                 👥 Quản lý người dùng
             </a>
 
@@ -47,4 +50,4 @@
 
     </div>
 
-</div>
+</div> <!-- dashboard-container -->

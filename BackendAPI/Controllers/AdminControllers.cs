@@ -1,9 +1,10 @@
 ﻿using BackendAPI.DTOs;
 using BackendAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authorization;
 namespace BackendAPI.Controllers
 {
+    [Authorize(Roles = "Admin")] // Bắt buộc phải có để chặn request không hợp lệ
     [ApiController]
     [Route("api/admin")]
     public class AdminController : ControllerBase
@@ -25,7 +26,7 @@ namespace BackendAPI.Controllers
 
             return Ok(new
             {
-                totalUsers
+                TotalUsers = totalUsers
             });
         }
 
