@@ -1,0 +1,37 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Auth.ProfileModel
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+}
+
+<div class="profile-container mt-5">
+    <div class="profile-card text-center p-4">
+        <div class="avatar-wrapper mb-3">
+            <i class="fa-solid fa-circle-user" style="font-size: 80px; color: #cbd5e1;"></i>
+        </div>
+        <h2 class="fw-bold">@Model.UserInfo.FullName</h2>
+        <p class="text-muted">@Model.UserInfo.Email</p>
+    </div>
+
+    <div class="stats-grid mt-4">
+        <div class="stat-tile shadow-sm">
+            <div class="icon-box bg-light-warning">
+                <i class="fa-solid fa-star fa-lg"></i>
+            </div>
+            <div>
+                <div class="h3 mb-0">@Model.UserInfo.TotalExp</div>
+                <div class="text-muted small">Tổng XP</div>
+            </div>
+        </div>
+
+        <div class="stat-tile shadow-sm">
+            <div class="icon-box bg-light-danger">
+                <i class="fa-solid fa-fire fa-lg"></i>
+            </div>
+            <div>
+                <div class="h3 mb-0">@Model.UserInfo.CurrentStreak</div>
+                <div class="text-muted small">Ngày Streak</div>
+            </div>
+        </div>
+    </div>
+</div>

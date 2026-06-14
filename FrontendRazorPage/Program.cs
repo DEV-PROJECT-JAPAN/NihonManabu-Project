@@ -1,47 +1,38 @@
 ﻿using FrontendRazorPage.Core.Services;
 using FrontendRazorPage.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// HTTP + Services
+builder.Services.AddHttpContextAccessor();
 
-// 1. KÍCH HOẠT HẠ TẦNG HTTPCLIENT FACTORY (DÒNG CHÍ MẠNG BỊ THIẾU TẠI ĐÂY)
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<AuthService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7104/");
+});
 
-// 2. Cấu hình HTTP Client đặt tên riêng để gọi sang Backend API
-//builder.Services.AddHttpClient("BackendAPI", client =>
-//{
-//    // Đội trưởng nhớ check chuẩn số cổng Port của Backend nhé
-//    client.BaseAddress = new Uri("https://localhost:7193/");
-//});
+builder.Services.AddHttpClient<DashboardService>();
 
-// 3. Đăng ký Client Service của phân hệ Từ vựng
-builder.Services.AddScoped<VocabularyClientService>();
+// AUTH
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Features/Auth/Login";
+        options.AccessDeniedPath = "/Features/Auth/AccessDenied";
+    });
 
-builder.Services.AddScoped<GrammarClientService>();
-
-
+builder.Services.AddAuthorization();
 builder.Services.AddRazorPages();
-
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-// Thay cổng Port 7193 bằng Port thực tế của dự án Backend API của bạn
-//builder.Services.AddHttpClient("BackendAPI", client =>
-//{
-//    client.BaseAddress = new Uri("https://localhost:7193/");
-//});
-
-app.UseHttpsRedirection();
+// PIPELINE (QUAN TRỌNG)
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();   // PHẢI TRƯỚC Authorization
 app.UseAuthorization();
 
 app.MapRazorPages();

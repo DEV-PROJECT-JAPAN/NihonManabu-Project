@@ -16,16 +16,15 @@ namespace BackendAPI.Services
         public int GetCurrentUserId()
         {
             var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext == null) return 1;
-
-            // =========================================================================
-            // LÀM MẸO BÂY GIỜ (CHƯA CÓ LOGIN)
-            // Nếu bạn làm Đăng nhập chưa xong, hệ thống chưa có Token xác thực hợp lệ.
-            // Hàm này tự động trả về ID = 1 để các thành viên khác thoải mái test database.
-            // =========================================================================
-            if (httpContext.User.Identity?.IsAuthenticated != true)
+            if (httpContext?.User?.Identity?.IsAuthenticated != true)
             {
-                return 1;
+
+                // =========================================================================
+                // LÀM MẸO BÂY GIỜ (CHƯA CÓ LOGIN)
+                // Nếu bạn làm Đăng nhập chưa xong, hệ thống chưa có Token xác thực hợp lệ.
+                // Hàm này tự động trả về ID = 1 để các thành viên khác thoải mái test database.
+                // =========================================================================
+                throw new UnauthorizedAccessException("Người dùng chưa đăng nhập.");
             }
 
             // =========================================================================
@@ -34,6 +33,10 @@ namespace BackendAPI.Services
             // Các thành viên khác hoàn toàn KHÔNG BỊ ẢNH HƯỞNG hay phải sửa lại code.
             // =========================================================================
             var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                throw new Exception("Token không chứa thông tin User ID.");
+            }
             return int.TryParse(userIdClaim, out int realUserId) ? realUserId : 1;
         }
     }

@@ -1,0 +1,77 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Auth.RegisterModel
+@{
+    ViewData["Title"] = "Đăng ký - NihonManabu";
+}
+
+<div class="auth-page-container">
+    <div class="auth-card">
+        <h2 class="auth-title text-center mb-4">Đăng Ký Tài Khoản</h2>
+
+        @if (!string.IsNullOrEmpty(Model.Message) && Model.Step != 3)
+        {
+            <div class="alert @(Model.Message.Contains("thành công") ? "alert-success" : "alert-danger")">
+                @Model.Message
+            </div>
+        }
+
+        @if (Model.Step == 1)
+        {
+            <form asp-page-handler="SendOtp" method="post" class="auth-form">
+                <input type="hidden" asp-for="Step" value="1" />
+
+                <div class="mb-3">
+                    <label asp-for="Input.FullName" class="form-label"></label>
+                    <input asp-for="Input.FullName" class="form-control" placeholder="Nhập họ và tên" />
+                    <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <input asp-for="Input.Email" class="form-control" placeholder="name@example.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label"></label>
+                    <input asp-for="Input.Password" type="password" class="form-control" placeholder="••••••••" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Input.ConfirmPassword" class="form-label"></label>
+                    <input asp-for="Input.ConfirmPassword" type="password" class="form-control" placeholder="••••••••" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-auth-accent w-100">Nhận mã OTP</button>
+            </form>
+        }
+
+        @if (Model.Step == 2)
+        {
+            <form asp-page-handler="Register" method="post" class="auth-form">
+                <input type="hidden" asp-for="Step" value="2" />
+                <input type="hidden" asp-for="Input.FullName" />
+                <input type="hidden" asp-for="Input.Email" />
+                <input type="hidden" asp-for="Input.Password" />
+                <input type="hidden" asp-for="Input.ConfirmPassword" />
+
+                <div class="mb-4">
+                    <label class="form-label text-center d-block">Nhập mã OTP</label>
+                    <input asp-for="OtpInput" class="form-control auth-otp-field" maxlength="6" placeholder="000000" />
+                </div>
+                <button type="submit" class="btn btn-auth-primary w-100 mb-3">Xác nhận Đăng ký</button>
+                <a asp-page="./Register" class="auth-link d-block text-center">Quay lại</a>
+            </form>
+        }
+
+        @if (Model.Step == 3)
+        {
+            <div class="text-center">
+                <h3 class="auth-title text-success mb-3">Đăng ký thành công!</h3>
+                <a asp-page="/Features/Auth/Login" class="btn btn-auth-primary w-100">Đăng nhập ngay</a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

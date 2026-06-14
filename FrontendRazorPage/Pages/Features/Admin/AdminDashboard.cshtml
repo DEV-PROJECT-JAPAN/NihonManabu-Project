@@ -1,0 +1,50 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Admin.AdminDashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="dashboard-container">
+
+    <!-- TITLE -->
+    <div class="dashboard-title">
+        <h2>📊 Tổng quan hệ thống</h2>
+        <p>Thống kê nhanh hoạt động của hệ thống</p>
+    </div>
+
+    <!-- CARDS -->
+    <div class="dashboard-cards">
+
+        <!-- USERS -->
+        <div class="card stat-card">
+            <div class="card-icon users">
+                <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div class="card-info">
+                <h3>@Model.Dashboard.TotalUsers</h3>
+                <p>Tổng số học viên</p>
+            </div>
+        </div>
+    <!-- QUICK ACTIONS -->
+    <div class="dashboard-section">
+
+        <h3>⚡ Thao tác nhanh</h3>
+
+        <div class="action-buttons">
+            <a asp-page="/Features/Admin/Users" class="btn-action">
+                👥 Quản lý người dùng
+            </a>
+
+            <a asp-page="/Features/Admin/Reports" class="btn-action">
+                📈 Báo cáo hệ thống
+            </a>
+
+            <a asp-page="/Index" class="btn-action danger">
+                🏠 Về trang chủ
+            </a>
+        </div>
+
+    </div>
+
+</div>

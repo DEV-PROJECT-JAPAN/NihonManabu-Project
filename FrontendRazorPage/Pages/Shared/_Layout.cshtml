@@ -1,82 +1,93 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Nhai Kanji</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-</head>
-<body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="menu-items">
-                <a class="menu-item active" asp-page="/Kanji/Index">
-                    <i class="fa-solid fa-chess-rook"></i>
-                    <span>Hán tự</span>
-                </a>
-                <a class="menu-item" asp-page="Features/Vocabulary/Index">
-                    <i class="fa-solid fa-crown"></i>
-                    <span>Từ vựng</span>
-                </a>
-                <a class="menu-item" asp-page="/Features/Grammar/Index">
-                    <i class="fa-solid fa-pen-nib"></i>
-                    <span>Ngữ pháp</span>
-                </a>
-                <a class="menu-item" asp-page="/Roadmap/Index">
-                    <i class="fa-solid fa-route"></i>
-                    <span>Lộ trình</span>
-                </a>
-                <a class="menu-item" asp-page="/Memorize/Index">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <span>Ghi nhớ</span>
-                </a>
-                <div class="menu-divider"></div>
-                <a class="menu-item" asp-page="/Active/Index">
-                    <i class="fa-solid fa-brain"></i>
-                    <span>Chủ động</span>
-                </a>
-                <a class="menu-item" asp-page="/Shadowing/Index">
-                    <i class="fa-solid fa-headset"></i>
-                    <span>Shadowing</span>
-                </a>
-                <a class="menu-item upgrade" asp-page="/Upgrade/Index">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span>Nâng cấp</span>
-                </a>
-            </div>
-
-            <div class="menu-footer">
-                <a class="menu-item" asp-page="/Settings/Index">
-                    <i class="fa-solid fa-gear"></i>
-                </a>
-            </div>
-        </aside>
-
-        <div class="main-wrapper">
-            <header class="top-header">
-                <div class="header-left d-flex align-items-center">
-                    <a asp-page="/Index" class="d-flex align-items-center text-decoration-none gap-3">
-                        <img src="~/images/logo.png" alt="Nhai Kanji Logo" class="d-block img-fluid" style="height: 130px; width: auto; object-fit: contain; margin-top: 10px;" />
+﻿    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - Nhai Kanji</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="/css/site.css">
+    </head>
+    <body>
+        <div class="app-container">
+            <aside class="sidebar">
+                <div class="menu-items">
+                    <a class="menu-item active" asp-page="/Kanji/Index">
+                        <i class="fa-solid fa-chess-rook"></i>
+                        <span>Hán tự</span>
+                    </a>
+                    <a class="menu-item" asp-page="Features/Vocabulary/Index">
+                        <i class="fa-solid fa-crown"></i>
+                        <span>Từ vựng</span>
+                    </a>
+                    <a class="menu-item" asp-page="/Features/Grammar/Index">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span>Ngữ pháp</span>
+                    </a>
+                    <a class="menu-item" asp-page="/Roadmap/Index">
+                        <i class="fa-solid fa-route"></i>
+                        <span>Lộ trình</span>
+                    </a>
+                    <a class="menu-item" asp-page="/Memorize/Index">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Ghi nhớ</span>
+                    </a>
+                    <div class="menu-divider"></div>
+                    <a class="menu-item" asp-page="/Active/Index">
+                        <i class="fa-solid fa-brain"></i>
+                        <span>Chủ động</span>
+                    </a>
+                    <a class="menu-item" asp-page="/Shadowing/Index">
+                        <i class="fa-solid fa-headset"></i>
+                        <span>Shadowing</span>
+                    </a>
+                    <a class="menu-item upgrade" asp-page="/Upgrade/Index">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Nâng cấp</span>
                     </a>
                 </div>
-                <div class="header-right">
-                    <button class="icon-btn"><i class="fa-solid fa-trophy"></i></button>
-                    <button class="icon-btn"><i class="fa-solid fa-bell"></i></button>
-                    <div class="user-section">
-                        <a asp-page="/Account/Login" class="login-btn">
-                            <i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+
+                <div class="menu-footer">
+                    <a class="menu-item" asp-page="/Settings/Index">
+                        <i class="fa-solid fa-gear"></i>
+                    </a>
+                </div>
+            </aside>
+
+            <div class="main-wrapper">
+                <header class="top-header">
+                    <div class="header-left d-flex align-items-center">
+                        <a asp-page="/Index" class="d-flex align-items-center text-decoration-none gap-3">
+                            <img src="~/images/logo.png" alt="Nhai Kanji Logo" class="d-block img-fluid" style="height: 130px; width: auto; object-fit: contain; margin-top: 10px;" />
                         </a>
                     </div>
-                </div>
-            </header>
+                    <div class="header-right">
+                        <button class="icon-btn"><i class="fa-solid fa-trophy"></i></button>
+                        <button class="icon-btn"><i class="fa-solid fa-bell"></i></button>
+                        <div class="user-section">
+                            @if (User.Identity != null && User.Identity.IsAuthenticated)
+                            {
+                                <div class="dropdown">
+                                    <button class="profile-toggle">@User.Identity.Name <i class="fa-solid fa-caret-down"></i></button>
+                                    <div class="dropdown-menu">
+                                        <a asp-page="/Features/Auth/Profile">Hồ sơ cá nhân</a>
+                                        <a asp-page="/Features/Auth/Logout">Đăng xuất</a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <a asp-page="/Features/Auth/Login" class="login-btn">Đăng nhập</a>
+                            }
+                        </div>
+                    </div>
+                </header>
 
-            <main class="content-body">
-                @RenderBody()
-            </main>
+                <main class="content-body">
+                    @RenderBody()
+                </main>
+            </div>
         </div>
-    </div>
 
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+    </html>

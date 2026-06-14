@@ -1,0 +1,49 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Auth.LoginModel
+@{
+    ViewData["Title"] = "Đăng nhập - NihonManabu";
+   
+}
+
+<div class="auth-page-container">
+    <div class="auth-card card">
+        <div class="text-center mb-4">
+            <h2 class="auth-title">Đăng Nhập</h2>
+            <p class="text-muted small">Chào mừng ní quay trở lại học tập cùng NihonManabu!</p>
+        </div>
+
+        <form method="post" class="auth-form">
+            <!-- Ô nhập Email -->
+            <div class="mb-3">
+                <label asp-for="Input.Email" class="form-label">Email học viên</label>
+                <input asp-for="Input.Email" class="form-control" placeholder="name@example.com" />
+                <span asp-validation-for="Input.Email" class="text-danger small"></span>
+            </div>
+
+            <!-- Ô nhập Mật khẩu -->
+            <div class="mb-3">
+                <label asp-for="Input.Password" class="form-label">Mật khẩu</label>
+                <input asp-for="Input.Password" type="password" class="form-control" placeholder="••••••••" />
+                <span asp-validation-for="Input.Password" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn-auth-primary w-100 shadow-sm">Đăng nhập ngay</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <p class="small text-muted">Chưa có tài khoản? <a asp-page="/Features/Auth/Register" class="auth-link">Đăng ký tại đây</a></p>
+        </div>
+
+        <!-- Thông báo lỗi từ Server -->
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert mt-3 text-center @(Model.Message.ToLower().Contains("thành công") ? "alert-success" : "alert-danger")" role="alert">
+                @Model.Message
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FrontendAngular")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9743249acbffe28d1cced6934b423f06e1578b32")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec04ec34270a81d70b888075013934f7bb0ee339")]
 [assembly: System.Reflection.AssemblyProductAttribute("FrontendAngular")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FrontendAngular")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
