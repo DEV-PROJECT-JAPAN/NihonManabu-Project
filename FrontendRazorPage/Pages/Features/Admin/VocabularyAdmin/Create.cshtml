@@ -25,12 +25,12 @@
 
     <div class="row g-4">
         <div class="col-lg-7">
-            <div class="card shadow-sm border-0 p-4" style="border-radius: 12px;">
+            <div class="card shadow-sm border-0 p-4 h-100" style="border-radius: 12px;">
                 <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-keyboard text-primary me-2"></i>Nhập Thủ Công</h5>
                 <hr class="text-muted opacity-25 mt-0 mb-4">
 
-                <form method="post">
-                    <input type="hidden" asp-for="VocabularyInput.LessonId" />
+                <form method="post" class="d-flex flex-column h-100">
+                    <input type="hidden" asp-for="VocabularyInput.LessonId" value="@Model.SelectedLessonId" />
 
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -58,13 +58,13 @@
                         </div>
 
                         <div class="col-12">
-                            <label asp-for="VocabularyInput.ExampleSentence" class="form-label fw-semibold text-secondary">Câu Ví Dụ (Nếu có)</label>
+                            <label asp-for="VocabularyInput.ExampleSentence" class="form-label fw-semibold text-secondary">Câu Ví Dụ </label>
                             <textarea asp-for="VocabularyInput.ExampleSentence" class="form-control border-2" rows="3" placeholder="Nhập câu ví dụ ứng dụng từ vựng này..." style="border-radius: 8px;"></textarea>
                         </div>
                     </div>
 
-                    <div class="mt-4 pt-2">
-                        <button type="submit" class="btn btn-primary fw-bold px-4 py-2 text-uppercase" style="border-radius: 8px;">
+                    <div class="mt-auto pt-4">
+                        <button type="submit" class="btn btn-primary fw-bold w-100 py-2 text-uppercase" style="border-radius: 8px;">
                             <i class="fa-solid fa-floppy-disk me-2"></i>Lưu Từ Vựng
                         </button>
                     </div>
@@ -73,30 +73,36 @@
         </div>
 
         <div class="col-lg-5">
-            <div class="card shadow-sm border-0 p-4 bg-light" style="border-radius: 12px; border: 2px dashed #dee2e6 !important;">
-                <h5 class="fw-bold text-dark mb-2"><i class="fa-solid fa-file-excel text-success me-2"></i>Import File Hàng Loạt</h5>
-                <p class="text-muted small">Dành cho Tester hoặc Admin muốn nạp hàng trăm từ vựng vào bài học một lúc nhanh chóng mà không cần gõ tay.</p>
-                <hr class="text-muted opacity-25 my-3">
+            <div class="card shadow-sm border-0 p-4 h-100" style="border-radius: 12px;">
+                <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-file-csv text-success me-2"></i>Import File </h5>
+                <hr class="text-muted opacity-25 mt-0 mb-4">
 
-                <form method="post" asp-page-handler="Import" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label for="fileUpload" class="form-label fw-semibold text-secondary">Chọn File Dữ Liệu (.csv, .txt)</label>
-                        <input asp-for="FileUpload" type="file" class="form-control border-2" accept=".csv, .txt" style="border-radius: 8px;" />
-                        <div class="form-text text-muted small mt-2">
-                            <i class="fa-solid fa-circle-info me-1"></i> File cấu trúc chuẩn: <br>
-                            <code>Kanji, Hiragana, Meaning, Romaji, ExampleSentence</code>
+                <form method="post" asp-page-handler="Import" enctype="multipart/form-data" class="d-flex flex-column h-100">
+                    <input type="hidden" name="lessonId" value="@Model.SelectedLessonId" />
+
+                    <div class="upload-area p-4 text-center mb-4 flex-grow-1 d-flex flex-column justify-content-center align-items-center position-relative"
+                         style="border: 2px dashed #28a745; border-radius: 12px; background-color: #f4fbf6; transition: 0.3s;">
+
+                        <i class="fa-solid fa-cloud-arrow-up fa-4x text-success mb-3 opacity-75"></i>
+                        <h6 class="fw-bold text-dark mb-1">Chọn file dữ liệu từ máy tính</h6>
+                        <p class="text-muted small mb-3">Chỉ chấp nhận định dạng .csv hoặc .txt</p>
+
+                        <input asp-for="FileUpload" type="file" class="form-control border-success shadow-sm mb-4" accept=".csv, .txt" style="border-radius: 8px; max-width: 280px;" required />
+
+                        <div class="text-start bg-white p-3 rounded shadow-sm w-100 border border-success border-opacity-25">
+                            <p class="text-dark small mb-2 fw-bold">
+                                <i class="fa-solid fa-circle-info text-primary me-1"></i> Cấu trúc các cột chuẩn:
+                            </p>
+                            <code class="d-block bg-light p-2 rounded text-dark border font-monospace small" style="word-break: break-all;">
+                                Kanji, Hiragana, Romaji, Meaning, ExampleSentence
+                            </code>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-success fw-bold w-100 py-2 text-uppercase" style="border-radius: 8px;">
-                        <i class="fa-solid fa-cloud-arrow-up me-2"></i>Bắt Đầu Import
+                    <button type="submit" class="btn btn-success fw-bold w-100 py-2 text-uppercase shadow-sm mt-auto" style="border-radius: 8px;">
+                        <i class="fa-solid fa-file-import me-2"></i>Tiến Hành Import
                     </button>
                 </form>
-
-                <div class="mt-4 p-3 bg-white rounded-3 border border-1">
-                    <span class="fw-bold text-dark small d-block mb-1">💡 Mẹo nhỏ cho Tester:</span>
-                    <span class="text-secondary small d-block">Bạn có thể tạo file bằng Notepad, viết các trường cách nhau bằng dấu phẩy, lưu lại dạng đuôi <b>.csv</b> rồi nạp vào đây để test tính năng import hàng loạt chạy mượt không nhé!</span>
-                </div>
             </div>
         </div>
     </div>

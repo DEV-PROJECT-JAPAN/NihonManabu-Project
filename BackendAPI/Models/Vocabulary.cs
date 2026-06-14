@@ -11,6 +11,7 @@ namespace BackendAPI.Models
         public virtual Lesson ? Lesson { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
+
         public string ? Kanji { get; set; } // Chứ Hán 
 
         [Required, Column(TypeName = "nvarchar(100)")]
@@ -18,7 +19,7 @@ namespace BackendAPI.Models
 
         [Required, Column(TypeName = "nvarchar(255)")]
         public string Meaning { get; set; } // Nghĩa tiếng Việt
-    
+        [Required]
         public string Romaji { get; set; } // Phiên âm Romaji chữ latin
         public string ?AudioUrl { get; set; } // URL đến file âm thanh phát âm từ vựng
         public string ? ExampleSentence { get; set; } // Câu ví dụ sử dụng từ vựng

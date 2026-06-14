@@ -7,7 +7,9 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="fw-bold text-dark m-0">QUẢN LÝ TỪ VỰNG TIẾNG NHẬT</h2>
-        <a asp-page="./Create" asp-route-lessonId="@Model.SelectedLessonId" class="btn btn-primary shadow-sm" style="background-color: #ff9f43; border-color: #ff9f43;">
+        <a asp-page="./Create"
+           asp-route-lessonId="@Model.SelectedLessonId"
+           class="btn btn-primary">
             ➕ Thêm Từ Vựng Mới
         </a>
     </div>
@@ -53,7 +55,7 @@
             </form>
         </div>
     </div>
-
+   
     <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
         <table class="table table-hover table-striped mb-0 align-middle">
             <thead class="table-dark text-uppercase fs-7">
@@ -100,20 +102,27 @@
                             <td class="text-dark fw-medium">@item.Meaning</td>
                             <td class="text-muted small">@item.ExampleSentence</td>
 
-                            <td class="text-muted small">
-                                @item.CreatedAt.ToString("dd/MM/yyyy HH:mm")
-                            </td>
+                             <td class="text-muted small"> 
+                                @item.CreatedAt.ToString("dd/MM/yyyy HH:mm") 
+                             </td> 
 
-                            <td class="text-secondary small fw-medium">
+                             <td class="text-secondary small fw-medium"> 
                                
-                                    @item.UpdatedAt.ToString("dd/MM/yyyy HH:mm")
+                                    @item.UpdatedAt.ToString("dd/MM/yyyy HH:mm") 
                                 
                                 
-                            </td>
+                             </td> 
+                           
 
                             <td>
                                 <div class="d-flex gap-2">
-                                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm fw-semibold text-white px-2" style="border-radius: 6px;">Sửa</a>
+                                    <a asp-page="./Edit"
+                                       asp-route-id="@item.Id"
+                                       asp-route-selectedLevelId="@Model.SelectedLevelId"
+                                       asp-route-selectedLessonId="@Model.SelectedLessonId"
+                                       class="btn btn-warning btn-sm fw-semibold text-white px-2" style="border-radius: 6px;">
+                                        Sửa
+                                    </a>
                                     <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" onsubmit="return confirm('Bạn có chắc chắn muốn xóa từ vựng này không?');">
                                         <input type="hidden" name="SelectedLevelId" value="@Model.SelectedLevelId" />
                                         <input type="hidden" name="SelectedLessonId" value="@Model.SelectedLessonId" />

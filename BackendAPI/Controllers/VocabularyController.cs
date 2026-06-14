@@ -56,7 +56,7 @@ namespace BackendAPI.Controllers
         public async Task<IActionResult> GetVocabulariesByLessonForAdmin(int lessonId)
         {
             // Gọi xuống Service bốc nguyên bản danh sách từ vựng (chứa đủ CreatedAt, UpdatedAt, Romaji, ExampleSentence, TextToSpeak)
-            var data = await _backendService.GetVocabulariesByLessonAsync(lessonId);
+            var data = await _backendService.GetVocabulariesByLessonForAdminAsync(lessonId);
             return Ok(data);
         }
 
@@ -77,44 +77,20 @@ namespace BackendAPI.Controllers
         /// Đường dẫn: POST api/vocabulary/admin
         /// </summary>
         [HttpPost("admin")]
-        public async Task<IActionResult> CreateForAdmin([FromBody] VocabularyDTO vocabDto) // 🟢 1. Hứng bằng DTO
+        public async Task<IActionResult> CreateForAdmin([FromBody] Vocabulary vocabData)
         {
-            if (vocabDto == null)
-                return BadRequest("Dữ liệu không hợp lệ.");
-
-            // 🟢 2. Map dữ liệu từ DTO sang Entity sạch sẽ
-            var vocabData = new Vocabulary
+            if (!ModelState.IsValid)
             {
-                LessonId = vocabDto.LessonId,
-                Kanji = vocabDto.Kanji,
-                Hiragana = vocabDto.Hiragana,
-                Romaji = vocabDto.Romaji,
-                Meaning = vocabDto.Meaning,
-                ExampleSentence = vocabDto.ExampleSentence,
-                AudioUrl = null // Tạm thời để null như code cũ của bạn
-                                // Không gán Id vì DB tự tăng
-            };
+                // Trả về lỗi 400 kèm theo danh sách các ô nhập liệu bị sai/thiếu cụ thể
+                return BadRequest(ModelState);
+            }
 
-            // 🟢 3. Lưu DB thông qua Service (Service đã gán CreatedAt, UpdatedAt rồi)
+
+            vocabData.AudioUrl = null;
+
             var result = await _backendService.CreateVocabularyAsync(vocabData);
-
-            // 🟢 4. Map ngược Entity trở lại DTO để TRÁNH LỖI VÒNG LẶP JSON
-            var responseDto = new VocabularyDTO
-            {
-                Id = result.Id,
-                LessonId = result.LessonId,
-                Kanji = result.Kanji,
-                Hiragana = result.Hiragana,
-                Romaji = result.Romaji,
-                Meaning = result.Meaning,
-                ExampleSentence = result.ExampleSentence,
-                AudioUrl = result.AudioUrl
-            };
-
-            // 🟢 5. Trả về DTO an toàn
-            return CreatedAtAction(nameof(GetByIdForAdmin), new { id = result.Id }, responseDto);
+            return CreatedAtAction(nameof(GetByIdForAdmin), new { id = result.Id }, result);
         }
-
         /// <summary>
         /// 4. API Cập nhật Từ vựng
         /// Đường dẫn: PUT api/vocabulary/admin/5

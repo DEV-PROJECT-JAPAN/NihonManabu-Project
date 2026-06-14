@@ -15,10 +15,8 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
             _vocabClientService = vocabClientService;
         }
 
-        // Hứng bộ lọc từ URL để khi sửa xong quay lại đúng bài học cũ
         [BindProperty(SupportsGet = true)]
         public int SelectedLevelId { get; set; }
-
         [BindProperty(SupportsGet = true)]
         public int SelectedLessonId { get; set; }
 
@@ -29,7 +27,7 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
         [TempData]
         public string Message { get; set; } = string.Empty;
 
-        [TempData]
+      
         public string ErrorMessage { get; set; } = string.Empty;
 
         /// <summary>
@@ -37,7 +35,6 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
         /// </summary>
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            // Gọi Service lấy chi tiết từ vựng theo ID từ API Backend
             var vocab = await _vocabClientService.GetVocabularyByIdAsync(id);
 
             if (vocab == null)
@@ -67,7 +64,7 @@ namespace FrontendRazorPage.Pages.Features.Admin.Vocabularies
 
             if (success)
             {
-                Message = $"Cập nhật từ vựng '{VocabularyInput.Hiragana}' thành công!";
+                Message = $"Cập nhật từ vựng  thành công!";
                 // Quay về trang danh sách và giữ nguyên bộ lọc bài học cho Admin
                 return RedirectToPage("./Index", new { SelectedLevelId = SelectedLevelId, SelectedLessonId = SelectedLessonId });
             }
