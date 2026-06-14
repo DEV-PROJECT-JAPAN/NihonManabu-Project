@@ -3,6 +3,7 @@ using BackendAPI.Interfaces;
 using BackendAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using BCrypt.Net;
 
 namespace BackendAPI.Controllers
 {
