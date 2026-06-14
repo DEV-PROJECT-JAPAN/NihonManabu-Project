@@ -133,6 +133,8 @@ namespace BackendAPI.Services
         {
             var existing = await _context.Vocabularies.FindAsync(id);
             if (existing == null || vocabData == null) return false;
+            if (!string.IsNullOrWhiteSpace(vocabData.Kanji))
+                existing.Kanji = vocabData.Kanji;
 
             // Tiến hành map đè dữ liệu mới từ Form sang bản ghi cũ trong DB
             existing.Kanji = vocabData.Kanji;
