@@ -18,6 +18,8 @@ namespace FrontendRazorPage.Core.Services
 
         public async Task<List<VocabularyModel>> GetCardsAsync(int lessonId) =>
             await _httpClient.GetFromJsonAsync<List<VocabularyModel>>($"{_apiBase}/cards?lessonId={lessonId}") ?? new();
+
+
         public async Task<List<VocabularyAdminModel>> GetVocabulariesByLessonForAdminAsync(int lessonId)
         {
             // Gọi lên đầu API Admin của Backend để bốc nguyên bản thực thể có ngày tháng

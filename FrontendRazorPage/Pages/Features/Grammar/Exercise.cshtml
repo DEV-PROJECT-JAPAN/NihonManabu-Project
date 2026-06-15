@@ -458,53 +458,85 @@
         }
     };
 
+        // Đợi cho toàn bộ giao diện HTML được tải xong hoàn toàn rồi mới chạy code bên trong
     document.addEventListener("DOMContentLoaded", function() {
-        const answerButtons = document.querySelectorAll('.evaluate-answer');
-        answerButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const parentRow = this.closest('.row');
-                const questionWrapper = this.closest('.quiz-question-wrapper');
-                const audioFeedbackZone = questionWrapper.querySelector('.quiz-feedback-audio-zone');
-                const allButtonsInQuestion = parentRow.querySelectorAll('.evaluate-answer');
 
+        // Tìm tất cả các nút bấm đáp án có class là '.evaluate-answer'
+        const answerButtons = document.querySelectorAll('.evaluate-answer');
+
+        // Duyệt qua từng nút bấm đáp án tìm được
+        answerButtons.forEach(button => {
+
+            // Cài đặt "bẫy" lắng nghe sự kiện click chuột cho từng nút
+            button.addEventListener('click', function() {
+
+                // --- 1. XÁC ĐỊNH PHẠM VI KHÔNG GIAN CỦA CÂU HỎI HIỆN TẠI ---
+                // 'this' đại diện cho chính cái nút vừa được bấm.
+                // .closest() dùng để đi ngược lên tìm thẻ cha gần nhất thỏa mãn class/thẻ yêu cầu.
+                const parentRow = this.closest('.row'); // Khung chứa 4 nút đáp án của câu hỏi này
+                const questionWrapper = this.closest('.quiz-question-wrapper'); // Khung bao bọc toàn bộ câu hỏi (gồm cả đề bài)
+                const audioFeedbackZone = questionWrapper.querySelector('.quiz-feedback-audio-zone'); // Vùng trống chờ hiện loa phát âm ở dưới
+                const allButtonsInQuestion = parentRow.querySelectorAll('.evaluate-answer'); // Danh sách tất cả nút đáp án của riêng câu này
+
+                // --- 2. KHÓA TƯƠNG TÁC CHỐNG BẤM LẠI ---
+                // Ngay khi bấm một nút, lập tức vô hiệu hóa (disabled) tất cả các nút của câu này để người dùng không bấm đổi đáp án được nữa
                 allButtonsInQuestion.forEach(btn => btn.setAttribute('disabled', 'true'));
 
+                // --- 3. ĐỌC DỮ LIỆU TỪ CÁC THUỘC TÍNH ẨN (DATA ATTRIBUTES) ---
+                // Kiểm tra xem nút vừa bấm có phải đáp án đúng không (so sánh chuỗi 'true')
                 const isCorrect = this.getAttribute('data-correct') === 'true';
+                // Lấy câu hỏi gốc còn trống (Ví dụ: "私は毎日 [ ] を食べます。")
                 const originalQuestion = questionWrapper.getAttribute('data-question-content');
-                const currentAnswerText = this.getAttribute('data-answer-text');
+                // Lấy văn bản đáp án của nút vừa chọn (Ví dụ: "りんご")
+                // const currentAnswerText = this.getAttribute('data-answer-text');
 
+                // --- 4. TÌM CHỮ CỦA ĐÁP ÁN ĐÚNG TRONG DANH SÁCH ---
                 let correctBtnText = "";
                 allButtonsInQuestion.forEach(btn => {
                     if (btn.getAttribute('data-correct') === 'true') {
-                        correctBtnText = btn.getAttribute('data-answer-text');
+                        correctBtnText = btn.getAttribute('data-answer-text'); // Lưu lại chữ của đáp án đúng để tí nữa điền vào câu
                     }
                 });
 
-                const filledUserSentence = originalQuestion.replace(/\[\s*\]/g, currentAnswerText).replace(/_+/g, currentAnswerText);
+                // --- 5. THUẬT TOÁN ĐIỀN VÀO CHỖ TRỐNG (REPLACE STRING) ---
+                // .replace(/\[\s*\]/g, ...) tìm các cặp ngoặc vuông trống dạng [ ] hoặc [] để thay bằng đáp án
+                // .replace(/_+/g, ...) tìm các hàng dấu gạch dưới _____ để thay bằng đáp án
+                // filledCorrectSentence: Câu hoàn chỉnh dựa trên đáp án ĐÚNG CHUẨN của hệ thống
                 const filledCorrectSentence = originalQuestion.replace(/\[\s*\]/g, correctBtnText).replace(/_+/g, correctBtnText);
 
+                // --- 6. XỬ LÝ GIAO DIỆN KHI NGƯỜI DÙNG CHỌN ĐÚNG ---
                 if (isCorrect) {
+                    // Thêm class 'correct-answer' để nút hóa thành màu xanh lá cây rực rỡ
                     this.classList.add('correct-answer');
+                    // Nhuộm cái chấm tròn nhỏ đầu nút bấm thành màu thành công (Success - Xanh lá)
                     this.querySelector('.indicator-dot').style.backgroundColor = 'var(--success-color)';
 
+                    // Bơm đoạn HTML tạo nút Loa phát âm câu đúng vào vùng phản hồi
                     audioFeedbackZone.innerHTML = `
                         <div class="animate__animated animate__fadeIn mt-1">
-                            <button class="btn-audio-speaker" onclick="speakJapanese('${filledUserSentence}')">
+                            <button class="btn-audio-speaker" onclick="speakJapanese('${filledCorrectSentence}')">
                                 <i class="fas fa-volume-up mr-1"></i> Kết quả đúng! Nghe toàn bộ câu 🔊
                             </button>
                         </div>
                     `;
-                } else {
+                }
+                // --- 7. XỬ LÝ GIAO DIỆN KHI NGƯỜI DÙNG CHỌN SAI ---
+                else {
+                    // Thêm class 'wrong-answer' để nút người dùng vừa bấm hóa thành màu đỏ rực
                     this.classList.add('wrong-answer');
+                    // Nhuộm cái chấm tròn nhỏ của nút vừa bấm thành màu nguy hiểm (Danger - Đỏ)
                     this.querySelector('.indicator-dot').style.backgroundColor = 'var(--danger-color)';
 
+                    // Duyệt qua các nút còn lại để tìm ra nút đúng, hiển thị nó lên cho người dùng biết họ sai ở đâu
                     allButtonsInQuestion.forEach(btn => {
                         if(btn.getAttribute('data-correct') === 'true') {
+                            // Ép nút đúng hóa xanh để làm đáp án mẫu
                             btn.classList.add('correct-answer');
                             btn.querySelector('.indicator-dot').style.backgroundColor = 'var(--success-color)';
                         }
                     });
 
+                    // Bơm đoạn HTML hiển thị câu đáp án chuẩn kèm nút loa phát âm mẫu
                     audioFeedbackZone.innerHTML = `
                         <div class="p-2 rounded d-flex justify-content-between align-items-center mt-2 animate__animated animate__fadeIn" style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.2);">
                             <div>
@@ -520,41 +552,78 @@
         });
     });
 
+        /**
+     * HÀM 1: XỬ LÝ KHI NGƯỜI DÙNG CLICK VÀO MỘT TỪ TRONG KHO TỪ VỰNG GỢI Ý
+     * @@param {HTMLElement} element - Từ cụ thể mà người dùng vừa click vào
+     */
     var handleWordClick = function(element) {
+        // Tìm khung bao bọc của câu hỏi sắp xếp hiện tại
         const questionBlock = element.closest('.arrange-question-block');
+        // Tìm "Vùng lắp ghép" - nơi các từ được xếp thành câu
         const assemblyZone = questionBlock.querySelector('.sentence-assembly-zone');
+
+        // Nếu nút "Kiểm tra" đã bị khóa (nghĩa là đã nộp bài rồi), chặn không cho click chọn từ nữa
         if (questionBlock.querySelector('.btn-check-arrange').hasAttribute('disabled')) return;
 
+        // Kiểm tra xem phần tử được click có đúng là một từ gốc trong kho từ hay không
         if (element.classList.contains('source-word')) {
+
+            // Nếu từ này đã được bấm chọn trước đó rồi (đã có màu xám/ẩn), không làm gì cả
             if (element.classList.contains('disabled-pool-word')) return;
+
+            // Đánh dấu từ gốc này là đã chọn bằng cách thêm class 'disabled-pool-word' (thường dùng để làm mờ đi)
             element.classList.add('disabled-pool-word');
 
+            // Tự đúc ra một thẻ <span> mới đại diện cho từ vừa được nhặt lên vùng lắp ghép
             const newWord = document.createElement('span');
-            newWord.className = 'badge-word-item assembled-word';
-            newWord.innerText = element.getAttribute('data-word-text');
+            newWord.className = 'badge-word-item assembled-word'; // Gán class tạo giao diện thẻ từ
+            newWord.innerText = element.getAttribute('data-word-text'); // Lấy chữ tiếng Nhật bỏ vào ruột thẻ
+
+            // --- ĐIỂM CHÚ Ý GÓC SIÊU DEV ---
+            // Gài trực tiếp địa chỉ của "Từ gốc" vào thuộc tính tự chế của "Từ mới" trong bộ nhớ RAM.
+            // Kỹ thuật này giúp hai thẻ HTML này ghi nhớ và liên kết chặt chẽ với nhau.
             newWord.sourceElement = element;
 
+            // Cài đặt sự kiện: Khi người dùng CLICK VÀO TỪ ĐÃ XẾP TRÊN VÙNG LẮP GHÉP (Muốn hủy chọn)
             newWord.onclick = function() {
+                // Tìm ngược lại từ gốc thông qua địa chỉ đã lưu và gỡ class mờ đi, giúp từ gốc sáng lại
                 this.sourceElement.classList.remove('disabled-pool-word');
+                // Xóa sổ chính cái thẻ từ đang đứng trên vùng lắp ghép này khỏi giao diện
                 this.remove();
             };
+
+            // Thả thẻ từ mới đúc vào cuối "Vùng lắp ghép" để xếp thành câu nối đuôi nhau
             assemblyZone.appendChild(newWord);
         }
     };
 
+    /**
+     * HÀM 2: XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT "KIỂM TRA" ĐÁP ÁN
+     * @@param {HTMLElement} button - Chính là cái nút "Kiểm tra" vừa được click
+     */
     var checkArrangeAnswer = function(button) {
+        // Khoanh vùng khối câu hỏi hiện tại
         const questionBlock = button.closest('.arrange-question-block');
         const assemblyZone = questionBlock.querySelector('.sentence-assembly-zone');
         const feedbackZone = questionBlock.querySelector('.feedback-zone-wrapper');
+        // Lấy ra đáp án câu chuẩn được gài sẵn ở thuộc tính ẩn của thẻ cha và cắt bỏ khoảng trắng thừa
         const correctSentence = questionBlock.getAttribute('data-correct-sentence').trim();
 
+        // Tìm tất cả các thẻ từ đang nằm trên vùng lắp ghép câu
         const assembledWords = questionBlock.querySelectorAll('.assembled-word');
+
+        // Thuật toán gộp chữ: Chuyển danh sách thẻ thành mảng -> bốc lấy chữ bên trong -> nối lại với nhau bằng dấu cách
         let userSentence = Array.from(assembledWords).map(w => w.innerText).join(" ").trim();
 
+        // Vô hiệu hóa nút "Kiểm tra" ngay lập tức để chống người dùng spam click hoặc sửa đáp án
         button.setAttribute('disabled', 'true');
 
+        // --- SO SÁNH CHẤM ĐIỂM ---
+        // TRƯỜNG HỢP 1: Người dùng xếp HOÀN TOÀN TRÙNG KHỚP với đáp án chuẩn
         if (userSentence === correctSentence) {
+            // Thêm class 'correct-zone' để đổi màu nền vùng lắp ghép thành màu xanh lá cây
             assemblyZone.classList.add('correct-zone');
+            // Bơm HTML nút Loa phát âm thanh khen ngợi kèm đọc câu chuẩn tiếng Nhật lên
             feedbackZone.innerHTML = `
                 <div class="animate__animated animate__fadeIn mt-1">
                     <button class="btn-audio-speaker" onclick="speakJapanese('${correctSentence}')">
@@ -562,8 +631,12 @@
                     </button>
                 </div>
             `;
-        } else {
+        }
+        // TRƯỜNG HỢP 2: Người dùng xếp SAI
+        else {
+            // Thêm class 'wrong-zone' để đổi màu nền vùng lắp ghép thành màu đỏ
             assemblyZone.classList.add('wrong-zone');
+            // Bơm HTML hiển thị đáp án đúng mẫu của hệ thống ra kèm nút loa để học lại câu chuẩn
             feedbackZone.innerHTML = `
                 <div class="p-2 rounded d-flex justify-content-between align-items-center mt-2 animate__animated animate__fadeIn" style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.2);">
                     <div>
@@ -577,19 +650,31 @@
         }
     };
 
+    /**
+     * HÀM 3: XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT "LÀM LẠI" (RESET)
+     * @@param {HTMLElement} button - Chính là cái nút "Làm lại" vừa được click
+     */
     var resetArrangeQuestion = function(button) {
+        // Khoanh vùng khối câu hỏi hiện tại
         const questionBlock = button.closest('.arrange-question-block');
         const assemblyZone = questionBlock.querySelector('.sentence-assembly-zone');
         const feedbackZone = questionBlock.querySelector('.feedback-zone-wrapper');
 
+        // Xóa sạch bách các từ đang được lắp ghép dở dang
         assemblyZone.innerHTML = '';
+        // Khôi phục lại class gốc của vùng lắp ghép (xóa bỏ các class viền xanh/đỏ correct-zone hay wrong-zone nếu có)
         assemblyZone.className = 'sentence-assembly-zone mb-2';
+        // Xóa trắng vùng thông báo đúng/sai và nút loa phát âm
         feedbackZone.innerHTML = '';
 
+        // Lấy lại danh sách tất cả các từ gốc trong kho từ vựng gợi ý ban đầu
         const poolWords = questionBlock.querySelectorAll('.source-word');
+        // Duyệt qua từng từ và gỡ bỏ class 'disabled-pool-word', làm tất cả các từ sáng lên để chọn lại được
         poolWords.forEach(w => w.classList.remove('disabled-pool-word'));
 
+        // Tìm lại nút "Kiểm tra" của câu này
         const checkBtn = questionBlock.querySelector('.btn-check-arrange');
+        // Mở khóa (gỡ thuộc tính disabled) để người dùng có thể bấm nộp bài chấm điểm cho lượt chơi mới
         checkBtn.removeAttribute('disabled');
     };
 </script>

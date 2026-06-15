@@ -68,7 +68,6 @@ namespace FrontendRazorPage.Pages.Features.Admin.QuestionAdmin
                 {
                     foreach (var ans in model.Answers)
                     {
-                        ans.OrderId = 0;
                        // Cắt đứt hoàn toàn lặp tham chiếu điều hướng
                         ans.CreatedAt = currentUtc;
                         ans.UpdatedAt = currentUtc;

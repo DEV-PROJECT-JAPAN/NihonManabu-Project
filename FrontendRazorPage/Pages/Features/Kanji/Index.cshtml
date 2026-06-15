@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/"
 @model FrontendRazorPage.Pages.KanjiNotebookModel
 @{
     Layout = "_Layout";
@@ -422,12 +422,18 @@
 </div>
 
 <script>
-    /* ============ KHỞI TẠO DỮ LIỆU ĐỘNG TỪ BACKEND BẢNG LESSONS & VOCABULARIES ============ */
+        /* ============ KHỞI TẠO DỮ LIỆU ĐỘNG TỪ BACKEND BẢNG LESSONS & VOCABULARIES ============ */
+
+    // Sử dụng cú pháp Razor (@@Html.Raw) để nhận danh mục bài học từ Model C# và biến thành mảng Object trong JS
     const DB_CATEGORIES = @Html.Raw(Json.Serialize(Model.CategoryList));
+
+    // Nhận danh sách các chữ Kanji kèm thông tin chi tiết từ Backend truyền xuống
     const KANJI_DATA = @Html.Raw(Json.Serialize(Model.KanjiList));
 
+    // Thêm một lựa chọn "Tất cả" vào đầu danh sách danh mục để người dùng có thể click xem toàn bộ Kanji
     const CATEGORIES = [{ key: 'all', label: 'Tất cả' }, ...DB_CATEGORIES];
 
+    // Chuỗi SVG tạo khung lưới ô vuông chuẩn (có đường kẻ phụ đứt đoạn ở chính giữa) làm nền để căn chỉnh chữ Kanji khi vẽ
     const GUIDE_SVG = `
         <svg viewBox="0 0 109 109" xmlns="http://www.w3.org/2000/svg">
         <rect x="1" y="1" width="107" height="107" fill="none" stroke="#e2d6bf" stroke-width="2"/>
@@ -436,183 +442,257 @@
         </svg>
     `;
 
+    // Biến State (trạng thái): Lưu danh mục hiện tại đang được chọn (mặc định là 'all')
     let activeCategory = 'all';
+
+    // Biến State (trạng thái): Lưu ký tự Kanji hiện tại đang được chọn để xem chi tiết
     let activeChar = null;
 
+    /**
+     * Hàm khởi chạy chính (Entry Point) khi trang web tải xong
+     */
     function init(){
+        // Hiển thị tổng số lượng chữ Kanji nhận được từ Database lên giao diện công cụ đếm
         document.getElementById('total-count').textContent = KANJI_DATA.length;
+
+        // Tiến hành vẽ các nút danh mục (Bài học) ra màn hình
         renderCategories();
+
+        // Tiến hành vẽ danh sách các ô chữ Kanji tương ứng ra màn hình
         renderGrid();
+
+        // Nếu trong Database có dữ liệu, mặc định tự động chọn và hiển thị chi tiết chữ Kanji đầu tiên
         if(KANJI_DATA.length > 0) {
             selectKanji(KANJI_DATA[0].kanji);
         }
     }
 
+    /**
+     * Hàm vẽ các nút danh mục (Bài học) lên thanh menu ngang
+     */
     function renderCategories(){
         const wrap = document.getElementById('categories');
-        wrap.innerHTML = '';
+        wrap.innerHTML = ''; // Xóa sạch các nút cũ trước khi vẽ lại
+
         CATEGORIES.forEach(cat => {
             const btn = document.createElement('button');
+
+            // Nếu nút này trùng với danh mục đang kích hoạt (activeCategory) thì thêm class 'active' để tô màu nổi bật
             btn.className = 'cat-btn' + (cat.key === activeCategory ? ' active' : '');
-            btn.textContent = cat.label;
+            btn.textContent = cat.label; // Đặt tên nút (Ví dụ: "Tất cả", "Bài 1",...)
+
+            // Sự kiện khi click vào một nút danh mục
             btn.addEventListener('click', () => {
-                activeCategory = cat.key;
-                renderCategories();
-                renderGrid();
+                activeCategory = cat.key; // Cập nhật lại danh mục đang chọn
+                renderCategories();       // Vẽ lại danh mục để cập nhật vị trí nút active
+                renderGrid();             // Lọc và vẽ lại danh sách Kanji theo danh mục mới
             });
-            wrap.appendChild(btn);
+            wrap.appendChild(btn); // Thêm nút vừa tạo vào vùng chứa trên giao diện
         });
     }
 
+    /**
+     * Hàm vẽ danh sách các ô vuông chứa chữ Kanji (Grid) dựa theo bộ lọc danh mục
+     */
     function renderGrid(){
         const grid = document.getElementById('kanji-grid');
-        grid.innerHTML = '';
+        grid.innerHTML = ''; // Xóa sạch danh sách chữ cũ trước khi lọc
 
+        // Lọc danh sách chữ: Nếu chọn 'all' thì lấy hết, nếu chọn bài cụ thể thì lọc theo đúng 'lessonId'
         const items = KANJI_DATA.filter(k => activeCategory === 'all' || k.lessonId.toString() === activeCategory);
+
+        // Cập nhật lại số lượng chữ đang hiển thị sau khi lọc trên Badge thanh tiêu đề
         document.getElementById('visible-count').textContent = items.length;
 
+        // Duyệt qua từng chữ Kanji sau khi lọc để tạo thẻ hiển thị
         items.forEach(item => {
             const card = document.createElement('div');
+
+            // Nếu ô chữ này đang được người dùng xem chi tiết thì thêm class 'active' để đổi màu nền
             card.className = 'kanji-card' + (item.kanji === activeChar ? ' active' : '');
 
+            // Dùng Regex tìm phần text nằm trong dấu ngoặc vuông góc, ví dụ: "[MỘC] Cây, gỗ" -> Bốc tách lấy chữ "MỘC"
             let matches = item.meaning.match(/\[(.*?)\]/);
-            let shortLabel = matches ? matches[1] : item.meaning;
+            let shortLabel = matches ? matches[1] : item.meaning; // Nếu không có ngoặc vuông, lấy toàn bộ chuỗi nghĩa
 
+            // Ghi nội dung HTML: Chữ Kanji to ở trên, âm Hán Việt viết tắt nằm ở dưới
             card.innerHTML = `
                 <span class="glyph">${item.kanji}</span>
                 <span class="meaning">${shortLabel}</span>
             `;
+
+            // Khi người dùng click vào ô chữ này, gọi hàm selectKanji để nạp vùng chi tiết bên phải
             card.addEventListener('click', () => selectKanji(item.kanji));
-            grid.appendChild(card);
+            grid.appendChild(card); // Thêm ô chữ vào lưới hiển thị
         });
     }
 
+    /**
+     * Hàm xử lý hiển thị vùng chi tiết (Panel bên phải) khi click chọn một chữ Kanji
+     * @@param {string} char - Ký tự Kanji được chọn (Ví dụ: '木')
+     */
     async function selectKanji(char){
-        activeChar = char;
-        renderGrid();
+        activeChar = char; // Đánh dấu ký tự này đang được chọn
+        renderGrid();      // Cập nhật lại lưới chữ để ô vừa click chuyển sang trạng thái active (đổi màu)
 
+        // Tìm kiếm Object thông tin đầy đủ của chữ này trong mảng dữ liệu gốc KANJI_DATA
         const item = KANJI_DATA.find(k => k.kanji === char);
         const panel = document.getElementById('detail-panel');
 
+        // Dùng Regex bóc tách chuỗi nghĩa, Ví dụ: "[MỘC] Cây, gỗ"
+        // matches[1] sẽ là "MỘC" (Âm Hán Việt)
+        // matches[2] sẽ là "Cây, gỗ" (Nghĩa thuần Việt)
         let matches = item.meaning.match(/\[(.*?)\]\s*(.*)/);
         let sinoViet = matches ? matches[1] : "HÁN TỰ";
         let pureMeaning = matches ? matches[2] : item.meaning;
 
+        // Ghi đè toàn bộ cấu trúc giao diện chi tiết của chữ Kanji vào panel bên phải
         panel.innerHTML = `
         <div class="detail-top">
             <div class="stroke-stage">
-            <div class="guide-svg">${GUIDE_SVG}</div>
-            <div class="kanji-svg stroke-svg-host hide-numbers" id="stroke-host">
-                <div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--font-display);font-size:2.2rem;color:var(--ink-soft);">${char}</div>
-            </div>
+                <div class="guide-svg">${GUIDE_SVG}</div>
+                <div class="kanji-svg stroke-svg-host hide-numbers" id="stroke-host">
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--font-display);font-size:2.2rem;color:var(--ink-soft);">${char}</div>
+                </div>
             </div>
             <div class="detail-info">
-            <p class="glyph-big">${char}</p>
+                <p class="glyph-big">${char}</p>
 
-            <div class="example-box">
-                <div class="example-label">Ví dụ (Âm Hán Việt)</div>
-                <div class="example-value">${sinoViet}</div>
-            </div>
+                <div class="example-box">
+                    <div class="example-label">Ví dụ (Âm Hán Việt)</div>
+                    <div class="example-value">${sinoViet}</div>
+                </div>
 
-            <div class="stat-row">
-                <span class="stat-pill">Nghĩa: ${pureMeaning}</span>
-            </div>
+                <div class="stat-row">
+                    <span class="stat-pill">Nghĩa: ${pureMeaning}</span>
+                </div>
 
-            <div class="controls">
-                <button class="hanko-btn" id="replay-btn">再生 — Vẽ lại</button>
-                <button class="audio-btn" id="speak-btn">🔊 音声 — Đọc</button>
-                <label class="toggle-label">
-                <input type="checkbox" id="toggle-numbers"> Số nét
-                </label>
-            </div>
+                <div class="controls">
+                    <button class="hanko-btn" id="replay-btn">再生 — Vẽ lại</button>
+                    <button class="audio-btn" id="speak-btn">🔊 音声 — Đọc</button>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="toggle-numbers"> Số nét
+                    </label>
+                </div>
             </div>
         </div>
 
         <div class="readings">
             <div class="reading-block">
-            <h3>かな — Cách đọc Kana</h3>
-            <div class="reading-value">${item.hiragana || 'Chưa cập nhật'}</div>
+                <h3>かな — Cách đọc Kana</h3>
+                <div class="reading-value">${item.hiragana || 'Chưa cập nhật'}</div>
             </div>
             <div class="reading-block">
-            <h3>ローマ字 — Phiên âm Romaji</h3>
-            <div class="reading-value">${item.romaji || 'Chưa cập nhật'}</div>
+                <h3>ローマ字 — Phiên âm Romaji</h3>
+                <div class="reading-value">${item.romaji || 'Chưa cập nhật'}</div>
             </div>
         </div>
         <div class="status-line" id="status-line">Đang nạp SVG nét vẽ...</div>
         `;
 
+        // Gắn sự kiện cho nút "Vẽ lại": Tìm file SVG đã tải trong host và chạy lại hiệu ứng nét vẽ
         document.getElementById('replay-btn').addEventListener('click', () => {
             const host = document.getElementById('stroke-host');
             const svg = host.querySelector('svg');
             if (svg) animateStrokes(svg);
         });
 
+        // Gắn sự kiện cho nút "Đọc": Phát âm chữ Hiragana hoặc bản thân chữ Kanji đó
         document.getElementById('speak-btn').addEventListener('click', () => {
             speakJapanese(item.hiragana || char);
         });
 
+        // Gắn sự kiện cho checkbox "Số nét": Thêm/Xóa class 'hide-numbers' để ẩn/hiển thị số thứ tự các bước vẽ trên hình
         document.getElementById('toggle-numbers').addEventListener('change', (e) => {
             const host = document.getElementById('stroke-host');
             host.classList.toggle('hide-numbers', !e.target.checked);
         });
 
+        // Gọi hàm bất đồng bộ thực hiện fetch file dữ liệu nét vẽ đồ họa (SVG) từ Internet về máy
         await loadStrokeOrder(char);
     }
 
+    /**
+     * Hàm gọi tính năng Text-to-Speech (Chuyển văn bản thành giọng nói) của trình duyệt để đọc tiếng Nhật
+     * @@param {string} text - Chuỗi chữ tiếng Nhật cần phát âm
+     */
     function speakJapanese(text) {
+        // Kiểm tra xem trình duyệt của người dùng có hỗ trợ công nghệ SpeechSynthesis (HTML5) không
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ja-JP';
-            utterance.rate = 0.85;
-            window.speechSynthesis.speak(utterance);
+            window.speechSynthesis.cancel(); // Ngắt giọng đọc cũ ngay lập tức nếu đang đọc dở
+            const utterance = new SpeechSynthesisUtterance(text); // Tạo một yêu cầu phát âm mới
+            utterance.lang = 'ja-JP'; // Ép trình duyệt sử dụng công cụ/ngôn ngữ tiếng Nhật
+            utterance.rate = 0.85;    // Tốc độ đọc (0.85 là hơi chậm một chút cho học viên dễ nghe)
+            window.speechSynthesis.speak(utterance); // Ra lệnh phát âm thanh ra loa
         } else {
             alert("Trình duyệt của bạn chưa hỗ trợ tính năng phát âm thanh SpeechSynthesis.");
         }
     }
 
+    /**
+     * Hàm tải file đồ họa vector nét vẽ Kanji từ thư viện CDN KanjiVG
+     * @@param {string} char - Ký tự Kanji cần lấy file vẽ
+     */
     async function loadStrokeOrder(char){
         const host = document.getElementById('stroke-host');
         const status = document.getElementById('status-line');
+
+        // Đổi chữ Kanji sang mã Hex Unicode và định dạng chuẩn 5 chữ số (Ví dụ: '木' -> mã hex: '06728')
         const hex = char.codePointAt(0).toString(16).padStart(5, '0');
+        // Đường dẫn API trực tiếp đến kho lưu trữ SVG của dự án mã nguồn mở KanjiVG thông qua jsDelivr CDN
         const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
 
         try{
-            const res = await fetch(url);
-            if(!res.ok) throw new Error();
-            const svgText = await res.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(svgText, 'image/svg+xml');
-            const svgEl = doc.querySelector('svg');
+            const res = await fetch(url); // Gửi yêu cầu tải file qua mạng Internet
+            if(!res.ok) throw new Error(); // Nếu lỗi mạng hoặc không tìm thấy từ, nhảy vào khối catch
 
+            const svgText = await res.text(); // Chuyển kết quả nhận được thành chuỗi văn bản XML/SVG
+            const parser = new DOMParser(); // Khởi tạo bộ phân tích cú pháp chuỗi thành DOM Object
+            const doc = parser.parseFromString(svgText, 'image/svg+xml');
+            const svgEl = doc.querySelector('svg'); // Trích xuất thẻ <svg> gốc bên trong file ra
+
+            // Xóa thuộc tính chiều rộng/cao cứng để SVG tự động co giãn full kích thước 100% của khung chứa CSS
             svgEl.removeAttribute('width');
             svgEl.removeAttribute('height');
-            host.innerHTML = '';
-            host.appendChild(svgEl);
-            animateStrokes(svgEl);
+
+            host.innerHTML = '';        // Xóa bỏ chữ dạng text tĩnh ban đầu
+            host.appendChild(svgEl);    // Bơm mã đồ họa SVG nét vẽ thật vào ô chứa
+            animateStrokes(svgEl);      // Kích hoạt hàm chạy hoạt ảnh vẽ từng nét từ từ
             status.textContent = 'Tải nét vẽ thành công.';
         }catch(err){
+            // Nếu lỗi (mất mạng, hoặc kho KanjiVG không có từ này), thông báo chuyển sang dùng font hệ thống tĩnh
             status.textContent = 'Dùng font mặc định hệ thống (Không tải được hoạt ảnh SVG nét vẽ).';
         }
     }
 
+    /**
+     * Hàm xử lý kỹ thuật giả lập hoạt ảnh vẽ tay cho từng nét chữ bằng hiệu ứng CSS Stroke Dash
+     * @@param {SVGElement} svgEl - Thẻ SVG chứa các đường dẫn <path> mô tả nét vẽ
+     */
     function animateStrokes(svgEl){
+        // Tìm toàn bộ các thẻ <path> nằm trong nhóm nét vẽ của cấu trúc SVG KanjiVG
         const paths = svgEl.querySelectorAll('g[id^="kvg:StrokePaths"] path');
+
         paths.forEach(p => {
-            const len = p.getTotalLength();
-            p.style.transition = 'none';
-            p.style.strokeDasharray = len;
-            p.style.strokeDashoffset = len;
+            const len = p.getTotalLength(); // Lấy độ dài thực tế (đơn vị pixel) của nét vẽ hiện tại
+            p.style.transition = 'none';    // Tạm thời tắt mọi hiệu ứng chuyển động mượt
+            p.style.strokeDasharray = len;  // Biến nét vẽ liền mạch thành một chuỗi đứt đoạn có khoảng trống bằng đúng chiều dài nét
+            p.style.strokeDashoffset = len; // Đẩy toàn bộ nét vẽ ra khỏi vùng hiển thị (Làm nét vẽ trở nên vô hình)
         });
+
+        // Sử dụng kỹ thuật RequestAnimationFrame đúp để ép Trình duyệt thực hiện render trạng thái ẩn trước,
+        // sau đó mới áp dụng hiệu ứng chuyển động mượt mà tránh hiện tượng giật lag hình.
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 paths.forEach((p, i) => {
-                p.style.transition = `stroke-dashoffset 0.5s ease-in-out ${i * 0.55}s`;
-                p.style.strokeDashoffset = '0';
+                    // Đặt thời gian vẽ mỗi nét là 0.5 giây. Các nét sau sẽ đợi nét trước vẽ xong mới vẽ tiếp nhờ độ trễ tăng dần: ${i * 0.55}s
+                    p.style.transition = `stroke-dashoffset 0.5s ease-in-out ${i * 0.55}s`;
+                    p.style.strokeDashoffset = '0'; // Kéo nét vẽ quay trở lại vị trí ban đầu (Tạo hiệu ứng giống như đang có cây bút vẽ từ từ ra nét chữ)
                 });
             });
         });
     }
 
+    // Gọi hàm khởi tạo khi toàn bộ mã kịch bản phía trên đã sẵn sàng nạp vào bộ nhớ trình duyệt
     init();
 </script>

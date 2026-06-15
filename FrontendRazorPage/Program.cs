@@ -6,19 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. KÍCH HOẠT HẠ TẦNG HTTPCLIENT FACTORY (DÒNG CHÍ MẠNG BỊ THIẾU TẠI ĐÂY)
 builder.Services.AddHttpClient();
 
-// 2. Cấu hình HTTP Client đặt tên riêng để gọi sang Backend API
-//builder.Services.AddHttpClient("BackendAPI", client =>
-//{
-//    // Đội trưởng nhớ check chuẩn số cổng Port của Backend nhé
-//    client.BaseAddress = new Uri("https://localhost:7193/");
-//});
-
 // 3. Đăng ký Client Service của phân hệ Từ vựng
 builder.Services.AddScoped<VocabularyClientService>();
 builder.Services.AddScoped<GrammarClientService>();
 builder.Services.AddScoped<QuestionClientService>();
 builder.Services.AddScoped<LevelClientService>();
 builder.Services.AddHttpClient<LessonClientService>();
+
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 builder.Services.AddRazorPages();

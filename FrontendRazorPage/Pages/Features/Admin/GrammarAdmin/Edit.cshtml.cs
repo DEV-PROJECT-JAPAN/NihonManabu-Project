@@ -53,13 +53,22 @@ namespace FrontendRazorPage.Pages.Features.Admin.GrammarAdmin
             }
             else
             {
-                // Nếu mới vào trang lần đầu, hệ thống tự động bốc ngược danh sách bài học dựa theo LessonId gốc của bản ghi
-                // Khôi bọc lót đoạn này để form hiển thị sẵn bài học cũ của bản ghi đó nhé
-                // Giả định nạp tạm bài học (Hoặc nếu hệ thống có API lấy Level từ LessonId thì gọi vào đây)
-                // Để an toàn, ta cứ cho load sẵn bài học nếu Admin chọn cấp độ
-            }
+                if (Grammar.LessonId > 0)
+                {
+                    // Bước A: Gọi dịch vụ bài học để lấy thông tin chi tiết của bài học cũ này
+                    var currentLesson = await _lessonClientService.GetLessonByIdForAdminAsync(Grammar.LessonId); // Bạn check lại tên hàm GetById bên LessonService của bạn nhé
 
-            return Page();
+                    if (currentLesson != null)
+                    {
+                        // Bước B: Dò ra LevelId của bài học cũ và gán vào trạng thái chọn trên giao diện
+                        SelectedLevelId = currentLesson.LevelId;
+
+                        // Bước C: Bơm đầy khay bài học tương ứng với Cấp độ đó để dropdown số 2 không bị trống rỗng
+                        Lessons = await _lessonClientService.GetLessonsByLevelAsync(SelectedLevelId.Value) ?? new();
+                    }
+                }
+            }
+                    return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int id)
