@@ -76,7 +76,8 @@ namespace FrontendRazorPage.Pages.Features.Admin.GrammarAdmin
             if (success)
             {
                 // Lưu thành công quay về đúng trang danh sách kèm bộ lọc bài học vừa thêm
-                return RedirectToPage("./Index", new { levelId = SelectedLevelId, lessonId = Grammar.LessonId });
+                return RedirectToPage("./Index");
+                //new { levelId = SelectedLevelId, lessonId = Grammar.LessonId })
             }
 
             ModelState.AddModelError(string.Empty, "Lỗi khi thêm mới dữ liệu vào hệ thống.");

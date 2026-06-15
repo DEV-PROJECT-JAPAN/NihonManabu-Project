@@ -29,7 +29,7 @@ namespace BackendAPI.Services
             return await _context.Lessons
                 .Where(l => l.LevelId == levelId)
                 .OrderBy(l => l.Order)
-                .Select(l => new LessonDTO
+                .Select(l => new LessonDTO//gasn vào đt 
                 {
                     Id = l.Id,
                     LevelId = l.LevelId,

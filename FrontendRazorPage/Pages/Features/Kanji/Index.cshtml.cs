@@ -43,6 +43,7 @@ namespace FrontendRazorPage.Pages
                 var cards = await _vocabularyService.GetCardsAsync(lessonId);
                 if (cards != null && cards.Count > 0)
                 {
+                    
                     KanjiList.AddRange(cards);
 
                     // Thêm động danh mục vào list nếu bài học đó có dữ liệu

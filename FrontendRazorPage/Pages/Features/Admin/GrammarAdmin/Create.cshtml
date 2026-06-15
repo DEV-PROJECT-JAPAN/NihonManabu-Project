@@ -35,7 +35,7 @@
                             <label class="form-label">Chọn Cấp Độ</label>
                             <div class="input-group custom-input-group">
                                 <span class="input-group-text"><i class="bi bi-layer-forward text-muted"></i></span>
-                                <select id="levelSelect" asp-for="SelectedLevelId" class="form-select border-0 ps-1" style="box-shadow: none;">
+                                <select asp-for="SelectedLevelId" onchange="window.location.href='?SelectedLevelId=' + this.value" class="form-select border-0 ps-1" style="box-shadow: none;">
                                     <option value="">-- Chọn Cấp Độ --</option>
                                     @foreach (var lvl in Model.Levels)
                                     {
@@ -49,7 +49,7 @@
                             <label asp-for="Grammar.LessonId" class="form-label">Chọn Bài Học</label>
                             <div class="input-group custom-input-group">
                                 <span class="input-group-text"><i class="bi bi-book text-muted"></i></span>
-                                <select id="lessonSelect" asp-for="Grammar.LessonId" class="form-select border-0 ps-1" style="box-shadow: none;" required>
+                                <select id="lessonSelect" asp-for="Grammar.LessonId" disabled="@(Model.SelectedLevelId == null || !Model.Lessons.Any())" class="form-select border-0 ps-1" style="box-shadow: none;" required>
                                     <option value="">-- Chọn Bài Học --</option>
                                     @foreach (var les in Model.Lessons)
                                     {
@@ -91,15 +91,6 @@
     </div>
 </div>
 
-<script>
-    document.getElementById("levelSelect").addEventListener("change", function() {
-        var currentForm = document.getElementById("createForm");
-        // Đổi phương thức tạm thời thành GET để nạp lại danh sách Lessons theo LevelId
-        var originalAction = currentForm.action;
-        currentForm.method = "get";
-        currentForm.submit();
-    });
-</script>
 
 <style>
     body {

@@ -47,7 +47,8 @@
                     <label class="fw-semibold text-secondary small d-block mb-1">
                         <i class="bi bi-book-open me-1"></i> Bước 2: Chọn Bài Học
                     </label>
-                    <select asp-for="SelectedLessonId" class="form-select border-2" onchange="window.location.href='?SelectedLevelId=@Model.SelectedLevelId&SelectedLessonId=' + this.value" style="border-radius: 8px; font-size: 0.9rem;" disabled="@(Model.SelectedLevelId == null || !Model.Lessons.Any())">
+                    <select asp-for="SelectedLessonId" class="form-select border-2" onchange="window.location.href='?SelectedLevelId=@Model.SelectedLevelId&SelectedLessonId=' + this.value" style="border-radius: 8px; font-size: 0.9rem;" 
+                    disabled="@(Model.SelectedLevelId == null || !Model.Lessons.Any())">
                         <option value="">-- Chọn Bài Học --</option>
                         @foreach (var les in Model.Lessons)
                         {
