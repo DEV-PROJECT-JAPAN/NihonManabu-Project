@@ -1,2 +1,33 @@
 .vs/
 .vs/
+# ==========================================
+# Mẫu .gitignore chuẩn cho dự án .NET & Angular
+# ==========================================
+
+# 1. Bỏ qua các file rác tự sinh khi Build/Run .NET
+[Bb]in/
+[Oo]bj/
+*.dll
+*.exe
+*.pdb
+*.user
+*.suo
+*.sln.docuser
+.vs/
+
+# 2. Bỏ qua các file rác của Angular / NodeJS
+node_modules/
+.angular/
+dist/
+.tmp/
+.sass-cache/
+connect.lock
+coverage/
+
+# 3. Bỏ qua file cấu hình môi trường bảo mật cá nhân
+.env
+.env.local
+
+# 4. Bỏ qua file hệ thống của Windows / MacOS
+Thumbs.db
+.DS_Store

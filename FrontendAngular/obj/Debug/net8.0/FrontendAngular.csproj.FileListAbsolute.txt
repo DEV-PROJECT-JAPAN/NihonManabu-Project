@@ -1,6 +1,0 @@
-D:\MY STUDY\ProjectCK\FrontendAngular\obj\Debug\net8.0\rpswa.dswa.cache.json
-D:\MY STUDY\ProjectCK\FrontendAngular\obj\Debug\net8.0\FrontendAngular.GeneratedMSBuildEditorConfig.editorconfig
-D:\MY STUDY\ProjectCK\FrontendAngular\obj\Debug\net8.0\FrontendAngular.AssemblyInfoInputs.cache
-D:\MY STUDY\ProjectCK\FrontendAngular\obj\Debug\net8.0\FrontendAngular.AssemblyInfo.cs
-D:\MY STUDY\ProjectCK\FrontendAngular\obj\Debug\net8.0\FrontendAngular.csproj.CoreCompileInputs.cache
-D:\MY STUDY\ProjectCK\FrontendAngular\obj\Debug\net8.0\FrontendAngular.MvcApplicationPartsAssemblyInfo.cache
