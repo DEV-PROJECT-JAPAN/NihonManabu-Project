@@ -1,0 +1,492 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Vocabulary.ListVocabularyModel
+@{
+    ViewData["Title"] = "Học Từ Vựng Premium - Nhai Kanji";
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+
+<div class="container py-5">
+    <div class="d-flex align-items-center mb-4">
+        <a asp-page="./Lesson" asp-route-levelId="@Model.LevelId" class="btn btn-light rounded-circle me-3 shadow-sm p-2 text-dark">
+            <i class="fa-solid fa-arrow-left fs-5"></i>
+        </a>
+        <h2 class="fw-black text-dark m-0">Luyện tập từ vựng: @Model.LessonTitle</h2>
+    </div>
+
+    @if (Model.Cards.Any())
+    {
+        <div id="antiforgery-token-container" style="display:none;">
+            @Html.AntiForgeryToken()
+        </div>
+
+        <div class="pro-vocab-wrapper mx-auto mb-5">
+            <div class="position-relative flashcard-main-zone mb-4">
+                <button class="btn-nav-side prev rounded-circle shadow-sm" onclick="prevCard()" title="Từ trước">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <div class="flashcard-box mx-auto" id="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner shadow-lg">
+                        <div class="flashcard-front bg-white d-flex flex-column justify-content-center align-items-center border">
+                            <span class="badge bg-light text-muted border mb-4 rounded-pill px-3 py-1 text-uppercase fs-8 tracking-wider">Mặt trước</span>
+                            <h1 class="display-1 fw-black text-dark m-0 mb-3" id="card-kanji">@Model.Cards[0].Kanji</h1>
+                            <div class="text-center bg-light px-4 py-2 rounded-pill border border-light shadow-sm">
+                                <span class="text-primary fw-black fs-3 me-2" id="card-hiragana">@Model.Cards[0].Hiragana</span>
+                                <span class="text-muted fst-italic fs-6" id="card-romaji">(@Model.Cards[0].Romaji)</span>
+                            </div>
+                            <button class="btn-flash-corner corner-speaker" onclick="event.stopPropagation(); speakText(cards[currentIndex].textToSpeak)" title="Nghe phát âm">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                        </div>
+
+                        <div class="flashcard-back d-flex flex-column justify-content-center align-items-center p-4">
+                            <span class="badge bg-secondary-subtle text-dark mb-4 rounded-pill px-3 py-1 text-uppercase fs-8 tracking-wider">Ý nghĩa</span>
+                            <h2 class="fw-black text-warning m-0 display-5 text-center" id="card-meaning">@Model.Cards[0].Meaning</h2>
+                            <p class="fst-italic text-center mt-4 opacity-75 border-top border-secondary border-opacity-50 pt-3 w-100 px-3 fs-6" id="card-example">@Model.Cards[0].ExampleSentence</p>
+                            <button class="btn-flash-corner corner-speaker text-white" onclick="event.stopPropagation(); speakText(cards[currentIndex].textToSpeak)" title="Nghe phát âm">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-nav-side next rounded-circle shadow-sm" onclick="nextCard()" title="Từ tiếp theo">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="pro-status-bar d-flex justify-content-between align-items-center rounded-4 p-3 shadow">
+                <div class="d-flex gap-2">
+                    <button id="btn-auto-play" class="btn btn-status-icon rounded-pill px-3" onclick="toggleAutoPlay()" title="Bật/Tắt tự động đọc khi chuyển trang">
+                        <i class="fa-solid fa-volume-high me-1"></i> Auto: OFF
+                    </button>
+                    <button class="btn btn-status-icon rounded-pill px-3" onclick="shuffleCards()" title="Trộn ngẫu nhiên danh sách">
+                        <i class="fa-solid fa-shuffle me-1"></i> Trộn từ
+                    </button>
+                    <button class="btn btn-status-icon rounded-pill px-3" onclick="resetOrder()" title="Quay về thứ tự bài học mặc định">
+                        <i class="fa-solid fa-list-ol me-1"></i> Mặc định
+                    </button>
+                </div>
+                <div class="d-flex align-items-center gap-4">
+                    <button class="btn-state state-wrong rounded-circle shadow" onclick="toggleMastered('wrong')" title="Chưa thuộc">
+                        <i class="fa-solid fa-xmark fs-5"></i>
+                    </button>
+                    <span class="btn btn-progress-label fw-black fs-4 m-0 px-2 text-warning" id="card-counter">1 / @Model.Cards.Count</span>
+                    <button class="btn-state state-correct rounded-circle shadow" onclick="toggleMastered('correct')" title="Đã thuộc">
+                        <i class="fa-solid fa-check fs-5"></i>
+                    </button>
+                </div>
+                <div class="d-flex gap-2 align-items-center">
+                    <span class="text-white opacity-50 small fw-bold me-2 tracking-wide">JP → VI</span>
+                    <button class="btn btn-status-icon rounded-circle fs-4 px-3" id="btn-star" onclick="toggleBookmark()" title="Lưu sổ tay ôn tập">
+                        <i class="fa-regular fa-star text-light"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-black text-secondary m-0">Danh sách từ vựng chi tiết</h4>
+            <div class="d-flex gap-3 align-items-center">
+                <a asp-page-handler="ExportPdf"
+                   asp-route-lessonId="@Model.LessonId"
+                   asp-route-levelId="@Model.LevelId"
+                   target="_blank"
+                   class="btn btn-outline-danger rounded-pill px-3 shadow-sm" title="Tải xuống file PDF">
+                    <i class="fa-solid fa-file-pdf me-1"></i> Xuất file PDF
+                </a>
+                <span class="badge bg-dark rounded-pill px-3 py-2 m-0">Tổng số: @Model.Cards.Count từ</span>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+            <table class="table align-middle mb-0 bg-white">
+                <thead class="table-light border-bottom">
+                    <tr>
+                        <th class="ps-4 text-muted py-3">Từ vựng</th>
+                        <th class="text-muted py-3">Nghĩa</th>
+                        <th class="text-muted py-3 text-center">Nghe giọng</th>
+                        <th class="pe-4 text-muted py-3">Ví dụ ngữ cảnh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var v in Model.Cards)
+                    {
+                        <tr>
+                            <td class="ps-4 py-3">
+                                <div class="fw-black text-dark fs-4">@v.Kanji</div>
+                                <div class="text-primary small fw-bold">@v.Hiragana <span class="text-muted fw-normal">(@v.Romaji)</span></div>
+                            </td>
+                            <td class="fw-bold text-success fs-5">@v.Meaning</td>
+                            <td class="text-center">
+                                <button class="btn btn-outline-primary btn-sm rounded-circle p-2 shadow-sm" onclick="speakText('@v.TextToSpeak')">
+                                    <i class="fa-solid fa-volume-high px-1"></i>
+                                </button>
+                            </td>
+                            <td class="text-secondary small pe-4 fst-italic">@v.ExampleSentence</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center rounded-4 p-4">
+            Bài học này hiện chưa có từ vựng nào.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Nạp mảng dữ liệu C# sang JS thuần
+        let originalCards = @Html.Raw(Json.Serialize(Model.Cards));
+        let cards = [...originalCards];//dùng bản sao để không lamg hỏng bản gốc 
+        let currentIndex = 0;
+        let isAutoPlay = false; // Cấu hình trạng thái tự động đọc mặc định tắt
+        let starredState = {};
+        let masteredState = {};
+
+        function toggleAutoPlay() {
+            isAutoPlay = !isAutoPlay;
+            let btn = document.getElementById('btn-auto-play');
+            if (isAutoPlay) {
+                btn.innerHTML = '<i class="fa-solid fa-volume-high me-1"></i> Auto: ON';//đổi chữ và icon
+                btn.classList.add('active-play');//đổi màu nút
+                speakText(cards[currentIndex].textToSpeak); // Phát âm luôn từ hiện tại khi vừa bật lại
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark me-1"></i> Auto: OFF';
+                btn.classList.remove('active-play');
+                if ('speechSynthesis' in window) window.speechSynthesis.cancel(); // Tắt loa ngay lập tức
+            }
+        }
+
+        function updateFlashcard() {
+            if (cards.length === 0) return;
+
+            // Ép thẻ luôn quay về mặt trước trước khi nạp chữ mới
+            document.getElementById('flashcard').classList.remove('flipped');
+
+            setTimeout(() => {
+                let item = cards[currentIndex];
+                document.getElementById('card-kanji').innerText = item.kanji || '';
+                document.getElementById('card-hiragana').innerText = item.hiragana || '';
+                document.getElementById('card-romaji').innerText = `(${item.romaji || ''})`;
+                document.getElementById('card-meaning').innerText = item.meaning || '';
+                document.getElementById('card-example').innerText = item.exampleSentence || '';
+                document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${cards.length}`;
+
+                updateButtonStates(item.id);
+                //thay đổi chữ (Kanji, Romaji, Ý nghĩa...) bên trong thẻ dựa vào từ vựng hiện tại
+                // 🔊 TỰ ĐỘNG PHÁT ÂM NẾU TRẠNG THÁI AUTO ĐANG BẬT
+                if (isAutoPlay) {
+                    speakText(item.textToSpeak);
+                }
+            }, 150);
+        }
+
+        function nextCard() { if (currentIndex < cards.length - 1) { currentIndex++; updateFlashcard(); } }
+        function prevCard() { if (currentIndex > 0) { currentIndex--; updateFlashcard(); } }
+
+        function shuffleCards() {
+            cards.sort(() => Math.random() - 0.5);
+            currentIndex = 0;
+            updateFlashcard();
+        }
+
+        function resetOrder() {
+            cards = [...originalCards]; // Khôi phục mảng về thứ tự bài học gốc từ DB
+            currentIndex = 0;
+            updateFlashcard();
+        }
+
+        function toggleBookmark() {
+            let itemId = cards[currentIndex].id;
+            starredState[itemId] = !starredState[itemId];
+            updateButtonStates(itemId);
+        }
+
+        // check thuộc từ vựng
+        function toggleMastered(type) {
+            let itemId = cards[currentIndex].id;
+            let isMaster = (type === 'correct');
+            masteredState[itemId] = isMaster;
+
+            // 1. Sửa lại ID tìm kiếm cho khớp chuẩn đét với thẻ HTML ở trên
+            let tokenContainer = document.getElementById('antiforgery-token-container');
+            let token = tokenContainer ? tokenContainer.querySelector('input[name="__RequestVerificationToken"]').value : '';
+
+            // 2. Thêm tham số đường dẫn rõ ràng để chuyển xún  hàm OnPostUpdateProgressAsync
+            let url = window.location.pathname + '?handler=UpdateProgress';
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': token // Ném token vào đây để vượt qua chốt kiểm tra 400
+                },
+                body: JSON.stringify({ vocabularyId: itemId, isMastered: isMaster })
+            })
+            .then(response => {
+                // Mẹo debug: Nếu vẫn lỗi, in ra trạng thái để kiểm tra
+                if (!response.ok) {
+                    console.error("Server trả về mã lỗi: " + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(data && data.success) {
+                    console.log("Frontend đã đồng bộ tiến độ qua Service thành công!");
+                }
+            })
+            .catch(error => { console.error("Lỗi mạng:", error); });
+
+            nextCard();
+        }
+
+        function updateButtonStates(itemId) {
+            let btnStar = document.getElementById('btn-star');//cái thẻ HTML nào có mã ID là btn-star
+            if (starredState[itemId]) {
+                btnStar.innerHTML = '<i class="fa-solid fa-star text-warning"></i>';//thay thế bằng icon khác 
+            } else {
+                btnStar.innerHTML = '<i class="fa-regular fa-star text-light"></i>';
+            }
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {//trình duyeẹt có hỗ trợ tính năng phát giọng nói kh
+                window.speechSynthesis.cancel(); // Triệt tiêu tiếng cũ ngay lập tức
+                var msg = new SpeechSynthesisUtterance(text);// đưa nd từ vào để chuẩn bị phát 
+                msg.lang = 'ja-JP'; // Ép giọng đọc Nhật chuẩn bản xứ
+                msg.rate = 0.9;//điều chỉnh tốc độ 
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        // Tự động phát âm từ đầu tiên ngay khi nạp trang web thành công
+        document.addEventListener("DOMContentLoaded", () => {
+            if (cards.length > 0) {
+                updateButtonStates(cards[0].id);
+                // Trì hoãn nhẹ 0.5s để trình duyệt sẵn sàng phát âm từ đầu tiên
+                setTimeout(() => {
+                    if (isAutoPlay) speakText(cards[0].textToSpeak);
+                }, 500);
+            }
+        });
+    </script>
+}
+
+
+<style>
+    .fw-black {
+        font-weight: 900 !important;
+    }
+
+    .text-indigo {
+        color: #4f46e5 !important;
+    }
+
+    .bg-indigo-subtle {
+        background-color: #e0e7ff !important;
+        color: #4f46e5 !important;
+    }
+
+    .leading-relaxed {
+        line-height: 1.6;
+    }
+
+    .fs-8 {
+        font-size: 0.72rem !important;
+    }
+
+    /* CARD CHỌN LỘ TRÌNH JLPT TẦNG 1 & 2 */
+    .hover-card-jlpt {
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+        cursor: pointer;
+        border: 1px solid #f1f5f9 !important;
+    }
+
+        .hover-card-jlpt:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.05) !important;
+            background-color: #fafafa !important;
+        }
+
+    /* BỐ CỤC KHU VỰC LUYỆN TẬP PREMIUM TẦNG 3 */
+    .pro-vocab-wrapper {
+        max-width: 800px;
+    }
+
+    .flashcard-main-zone {
+        max-width: 580px;
+        margin: 0 auto;
+        perspective: 1500px;
+    }
+
+    /* ĐỊNH HÌNH THẺ FLASHCARD XOAY 3D CHUẨN MẪU */
+    .flashcard-box {
+        width: 100%;
+        height: 350px;
+        cursor: pointer;
+    }
+
+    .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+        border-radius: 28px;
+    }
+
+    .flashcard-box.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flashcard-front, .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 28px;
+        padding: 30px;
+    }
+
+    .flashcard-front {
+        background: #ffffff;
+        border: 2px solid #e2e8f0;
+    }
+
+    .flashcard-back {
+        background: #1e293b;
+        color: #ffffff;
+        transform: rotateY(180deg);
+    }
+
+    /* NÚT ĐIỀU HƯỚNG GĂM CHẶT VÀO LỀ RÌA THẺ (-60PX) */
+    .btn-nav-side {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 46px;
+        height: 46px;
+        background: #ffffff;
+        color: #1a202c;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s;
+        z-index: 10;
+        font-size: 1.1rem;
+    }
+
+        .btn-nav-side:hover {
+            background: #f8fafc;
+            transform: translateY(-50%) scale(1.1);
+            color: #4f46e5;
+        }
+
+        .btn-nav-side.prev {
+            left: -60px;
+        }
+
+        .btn-nav-side.next {
+            right: -60px;
+        }
+
+    /* NÚT LOA Ở GÓC TRÊN CỦA THẺ (TỰ LẬT THEO MẶT THẺ CHUẨN ĐÉT) */
+    .btn-flash-corner {
+        position: absolute;
+        top: 22px;
+        background: none;
+        border: none;
+        font-size: 1.4rem;
+        transition: 0.2s;
+        z-index: 10;
+    }
+
+        .btn-flash-corner:hover {
+            transform: scale(1.15);
+        }
+
+    .corner-speaker {
+        left: 24px;
+        color: #a0aec0;
+    }
+
+    /* THANH TRẠNG THÁI SẪM MÀU ĐÁY APP Y HỆT MẪU ĐỘI TRƯỞNG GỬI */
+    .pro-status-bar {
+        background-color: #0f172a;
+        color: #ffffff;
+    }
+
+    .btn-progress-label {
+        color: #ffffff;
+        background: none;
+        border: none;
+        font-weight: 900;
+    }
+
+    /* NÚT CHẤM ĐIỂM TRÒN XOAY */
+    .btn-state {
+        width: 52px;
+        height: 52px;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        transition: 0.2s;
+        border-radius: 50%;
+    }
+
+        .btn-state:hover {
+            transform: scale(1.12);
+        }
+
+    .state-wrong {
+        background-color: #be185d;
+    }
+    /* Đỏ tím sẫm */
+    .state-correct {
+        background-color: #065f46;
+    }
+    /* Xanh cổ vịt đậm */
+
+    /* STYLE CHO CÁC NÚT ĐIỀU CHỈNH AUDIO/TRỘN TỪ */
+    .btn-status-icon {
+        color: white;
+        background: none;
+        border: none;
+        font-size: 0.9rem;
+        transition: 0.2s;
+        padding: 8px 16px;
+        font-weight: 700;
+        border: 1px solid rgba(255,255,255,0.15);
+    }
+
+        .btn-status-icon:hover {
+            background-color: rgba(255,255,255,0.1);
+            transform: scale(1.05);
+        }
+
+    .active-play {
+        background-color: #2563eb !important;
+        border-color: #2563eb !important;
+    }
+    /* Nút Auto ON sáng đèn xanh khi bật */
+
+    #btn-star {
+        border: none !important;
+    }
+
+        #btn-star:hover {
+            background: none !important;
+        }
+</style>

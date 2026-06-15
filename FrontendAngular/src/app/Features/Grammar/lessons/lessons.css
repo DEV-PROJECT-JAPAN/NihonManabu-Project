@@ -1,0 +1,45 @@
+/* lessons.css */
+.lesson-modern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+    gap: 14px;
+    padding: 10px 0;
+}
+
+.lesson-modern-item {
+    background: #1E293B;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px 10px;
+    text-align: center;
+    text-decoration: none !important;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.lesson-modern-item .number {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.lesson-modern-item .sub-text {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    text-transform: uppercase;
+}
+
+.lesson-modern-item:hover {
+    border-color: var(--success-color);
+    background: rgba(16, 185, 129, 0.15);
+    transform: scale(1.03);
+}
+
+.lesson-modern-item:hover .number {
+    color: var(--success-color);
+}

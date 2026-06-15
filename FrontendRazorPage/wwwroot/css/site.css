@@ -1,0 +1,136 @@
+:root {
+    --sidebar-bg: #121212;
+    --item-gray: #a1a1a1;
+    --active-color: #ffffff;
+    --accent-orange: #ff9f43;
+    --header-height: 60px;
+    --sidebar-width: 90px;
+}
+
+body {
+    margin: 0;
+    background-color: #f8fafc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* SIDEBAR STYLING */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-right: 1px solid #333;
+}
+
+.menu-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.menu-item {
+    text-decoration: none;
+    color: var(--item-gray);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+    .menu-item i {
+        font-size: 22px;
+    }
+
+    .menu-item:hover, .menu-item.active {
+        color: var(--active-color);
+    }
+
+    .menu-item.upgrade {
+        color: var(--accent-orange);
+        font-weight: bold;
+    }
+
+.menu-divider {
+    width: 40px;
+    height: 1px;
+    background: #333;
+    margin: 5px 0;
+}
+
+/* MAIN CONTENT WRAPPER */
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER STYLING */
+.top-header {
+    height: var(--header-height);
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-img {
+    height: 35px;
+}
+
+.brand-text {
+    font-size: 20px;
+    font-weight: 800;
+    color: #333;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.login-btn {
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #cbd5e1;
+    padding: 6px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.content-body {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+}

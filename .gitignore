@@ -1,0 +1,14 @@
+.vs/
+.vs/
+# Chặn vĩnh viễn tất cả các thư mục bin, obj, dist trong toàn bộ solution
+**/bin/
+**/obj/
+**/dist/
+**/.angular/
+# Chặn rác hệ thống .NET cho Backend và RazorPage
+**/bin/
+**/obj/
+
+# Chặn rác hệ thống Angular 
+**/dist/
+**/.angular/

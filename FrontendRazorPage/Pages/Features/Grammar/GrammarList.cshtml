@@ -1,0 +1,116 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Grammar.GrammarListModel
+@{
+    ViewData["Title"] = "Chọn Cấu Trúc Ngữ Pháp";
+}
+
+<style>
+    :root {
+        --border-color: #334155;
+        --text-main: #F1F5F9;
+        --text-muted: #94A3B8;
+        --danger-color: #EF4444;
+        --danger-light: rgba(239, 68, 68, 0.15);
+    }
+
+    body {
+        background-color: #0F172A !important;
+        color: var(--text-main) !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    .custom-card {
+        border: 1px solid var(--border-color) !important;
+        border-radius: 20px !important;
+        background: linear-gradient(145deg, #1E293B, #131C2E) !important;
+        overflow: hidden;
+    }
+
+        .custom-card .card-header {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            padding: 20px 26px;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-main) !important;
+        }
+
+    .custom-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #172033;
+        border: 1px solid var(--border-color);
+        padding: 14px 24px;
+        border-radius: 14px;
+        margin-bottom: 28px;
+    }
+
+    .breadcrumb-step {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-decoration: none !important;
+    }
+
+    .breadcrumb-separator {
+        color: var(--border-color);
+        font-size: 12px;
+    }
+
+    .grammar-modern-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .grammar-modern-row {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 14px !important;
+        padding: 18px 24px;
+        color: var(--text-main) !important;
+        font-weight: 600;
+        font-size: 15px;
+        text-decoration: none !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.25s ease;
+    }
+
+        .grammar-modern-row:hover {
+            border-color: var(--danger-color) !important;
+            background: var(--danger-light) !important;
+            transform: translateX(6px);
+            color: #FFFFFF !important;
+        }
+</style>
+
+<div class="container py-4">
+    <div class="custom-breadcrumb">
+        <a asp-page="/Features/Grammar/Index" class="breadcrumb-step"><i class="fas fa-home mr-1"></i> Trang chủ</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <a asp-page="/Features/Grammar/Lessons" asp-route-levelId="@Model.LevelId" class="breadcrumb-step">🎯 @Model.CurrentLevel.Name</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <span class="breadcrumb-step text-white font-weight-bold">📖 Bài @Model.CurrentLesson.Order</span>
+    </div>
+
+    <div class="card custom-card animate__animated animate__fadeIn">
+        <div class="card-header"><i class="fas fa-bookmark text-danger mr-2"></i> Bước 3: Chọn cấu trúc Ngữ Pháp cần luyện tập</div>
+        <div class="card-body p-4">
+            @if (Model.Grammars != null && Model.Grammars.Any())
+            {
+                <div class="grammar-modern-list">
+                    @foreach (var g in Model.Grammars)
+                    {
+                        <a asp-page="./Exercise" asp-route-levelId="@Model.LevelId" asp-route-lessonId="@Model.LessonId" asp-route-selectedGrammarId="@g.Id" class="grammar-modern-row">
+                            <span>📢 @g.Structure</span>
+                            <i class="fas fa-arrow-right opacity-40"></i>
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿@page
+@model FrontendRazorPage.Pages.Vocabulary.IndexModel
+@{
+    ViewData["Title"] = "Học Từ Vựng Premium - Nhai Kanji";
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container py-5">
+
+    @if (!Model.LevelId.HasValue)
+    {
+        <div class="mb-5 text-center text-md-start">
+            <h2 class="fw-black text-dark display-6 mb-2">
+                <i class="fa-solid fa-graduation-cap text-primary me-2"></i>Chọn cấp độ JLPT
+            </h2>
+            <p class="text-muted fs-5">Hãy chọn cấp độ phù hợp để bắt đầu lộ trình học từ vựng hiệu quả.</p>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var lvl in Model.Levels)
+            {
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a asp-page="./Lesson" asp-route-levelId="@lvl.Id" class="text-decoration-none">
+                        <div class="card h-100 border-0 shadow-sm p-4 hover-card-jlpt position-relative overflow-hidden" style="border-radius: 20px; background: #ffffff;">
+                            <div class="position-absolute top-0 start-0 h-100" style="width: 6px; background-color: #4f46e5;"></div>
+
+                            <div class="ps-2">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <h1 class="fw-black m-0 text-indigo display-5">@lvl.Name</h1>
+                                    <span class="badge bg-indigo-subtle text-indigo rounded-pill px-3 py-2 fw-bold">Học ngay</span>
+                                </div>
+                                <p class="text-secondary fw-medium m-0 fs-6 leading-relaxed">
+                                    @lvl.Description
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+
+  
+
+
+<style>
+        .fw-black {
+            font-weight: 900 !important;
+        }
+
+        .text-indigo {
+            color: #4f46e5 !important;
+        }
+
+        .bg-indigo-subtle {
+            background-color: #e0e7ff !important;
+            color: #4f46e5 !important;
+        }
+
+        .leading-relaxed {
+            line-height: 1.6;
+        }
+
+        .fs-8 {
+            font-size: 0.72rem !important;
+        }
+</style>

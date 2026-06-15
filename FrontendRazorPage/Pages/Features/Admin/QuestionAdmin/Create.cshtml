@@ -1,0 +1,444 @@
+﻿@page "{handler?}"
+@model FrontendRazorPage.Pages.Features.Admin.QuestionAdmin.CreateModel
+@{
+    ViewData["Title"] = "Thêm Mới Câu Hỏi";
+}
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container-fluid py-4 px-4">
+    <div class="mb-3">
+        <a asp-page="./Index" asp-route-SelectedLevelId="@Model.SelectedLevelId" asp-route-SelectedLessonId="@Model.SelectedLessonId" class="text-decoration-none text-muted small hover-dark">
+            <i class="bi bi-arrow-left me-1"></i> Quay về ngân hàng câu hỏi bài học
+        </a>
+    </div>
+
+    <div id="jsErrorAlert" class="alert alert-danger shadow-sm border-0 mb-4 rounded-3 d-none">
+        <i class="bi bi-exclamation-octagon-fill me-2"></i> <strong>Lỗi hệ thống:</strong> <span id="errorText"></span>
+    </div>
+
+    <form id="questionForm" autocomplete="off" onsubmit="handleFormSubmitViaJson(event); return false;">
+        @Html.AntiForgeryToken()
+
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="card shadow-sm border-0 p-4 bg-white" style="border-radius: 12px;">
+                    <h5 class="fw-bold text-dark mb-0 d-flex align-items-center">
+                        <span class="p-2 bg-primary-subtle rounded-3 text-primary me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                            <i class="bi bi-question-circle-fill fs-5"></i>
+                        </span>
+                        Nội Dung Câu Hỏi
+                    </h5>
+                    <hr class="opacity-25 my-4">
+
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-bold text-secondary small mb-2">Phân loại thể thức</label>
+                        <select id="questionTypeSelect" class="form-select custom-control" onchange="handleQuestionTypeChange(this.value)">
+                            <option value="1">Trắc nghiệm chọn đáp án đúng</option>
+                            <option value="2">Sắp xếp các từ thành câu hoàn chỉnh</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-bold text-secondary small mb-2">Liên kết cấu trúc ngữ pháp mẫu</label>
+                        <select id="grammarSelect" class="form-select custom-control" required>
+                            <option value="">-- Chọn Mẫu Ngữ Pháp Đối Chiếu --</option>
+                            @foreach (var g in Model.Grammars)
+                            {
+                                <option value="@g.Id">#@g.Id: @g.Structure</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label class="form-label fw-bold text-secondary small mb-2">Đề bài / Nội dung văn bản câu hỏi</label>
+                        <textarea id="contentTextArea" class="form-control custom-textarea" rows="6" placeholder="Nhập đề bài tại đây..." required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="card shadow-sm border-0 p-4 bg-white" style="border-radius: 12px; min-height: 100%;">
+                    <div class="d-flex justify-content-between align-items-center mb-0">
+                        <h5 class="fw-bold text-dark m-0 d-flex align-items-center">
+                            <span class="p-2 bg-success-subtle rounded-3 text-success me-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                                <i class="bi bi-list-check fs-5"></i>
+                            </span>
+                            Thiết Lập Khung Đáp Án
+                        </h5>
+                        <button type="button" class="btn btn-sm btn-success-custom fw-bold px-3" onclick="addAnswerRow()">
+                            ➕ Thêm Dòng
+                        </button>
+                    </div>
+                    <hr class="opacity-25 my-4">
+
+                    <div id="typeHint" class="alert alert-info py-2.5 px-3 small border-0 mb-4" style="border-radius: 8px;"></div>
+
+                    <div id="answersContainer">
+                        @for (int i = 0; i < Model.Question.Answers.Count; i++)
+                        {
+                            <div class="row g-2 align-items-center mb-3 answer-row">
+                                <div class="col-auto">
+                                    <span class="badge bg-secondary px-2.5 py-2.5 row-label font-monospace" style="min-width: 38px; font-size: 0.85rem;">@(i + 1)</span>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control custom-control input-text" placeholder="Nhập văn bản lựa chọn..." required />
+                                </div>
+                                <div class="col-auto text-center switch-container">
+                                    <div class="form-check form-switch pt-1">
+                                        <input type="hidden" class="input-iscorrect" value="false" />
+                                        <input type="checkbox" class="form-check-input check-iscorrect" style="transform: scale(1.2); cursor: pointer;" onclick="handleSwitchToggle(this)" />
+                                        <label class="form-check-label small text-muted ms-2 label-status">Sai</label>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-outline-danger border-0 btn-sm p-2" onclick="removeAnswerRow(this)">
+                                        <i class="bi bi-trash3-fill fs-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mt-5 pt-3 border-top border-light d-flex justify-content-end gap-2">
+                        <a asp-page="./Index" asp-route-SelectedLevelId="@Model.SelectedLevelId" asp-route-SelectedLessonId="@Model.SelectedLessonId" class="btn btn-muted-custom fw-semibold px-4">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-primary-custom fw-bold px-4 text-uppercase">
+                            <i class="bi bi-cloud-arrow-up-fill me-2"></i> Lưu Cụm Câu Hỏi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    /**
+     * HÀM 1: ĐỒNG BỘ LẠI CHỈ MỤC (STT) VÀ TỰ ĐỘNG HÓA CHO DẠNG SẮP XẾP CÂU
+     * Hàm này chạy mỗi khi thêm dòng, xóa dòng hoặc thay đổi thể loại câu hỏi.
+     */
+    function reIndexAnswers() {
+        // Lấy tất cả các hàng đáp án đang hiển thị trong khay chứa
+        const rows = document.querySelectorAll("#answersContainer .answer-row");
+        // Kiểm tra xem hiện tại Admin đang chọn loại câu hỏi nào (1: Trắc nghiệm, 2: Sắp xếp)
+        const qType = document.getElementById("questionTypeSelect").value;
+
+        // Duyệt qua từng dòng đáp án để cập nhật lại trạng thái
+        rows.forEach((row, index) => {
+            // Cập nhật lại số thứ tự hiển thị ở ô Badge màu xám (index chạy từ 0 nên phải + 1)
+            row.querySelector(".row-label").innerText = index + 1;
+
+            // NẾU LÀ LOẠI 2 (SẮP XẾP CÂU): Hệ thống tự động cấu hình mặc định tất cả đều là đáp án Đúng
+            if (qType === "2") {
+                // Ép giá trị của thẻ hidden input thành "true" để gửi về Backend
+                row.querySelector(".input-iscorrect").value = "true";
+
+                // Tự động tích chọn (check) vào cái công tắc gạt ngoài giao diện
+                const chk = row.querySelector(".check-iscorrect");
+                if (chk) chk.checked = true;
+
+                // Đổi chữ hiển thị cạnh công tắc từ "Sai" thành "Đúng"
+                const label = row.querySelector(".label-status");
+                if (label) label.innerText = "Đúng";
+            }
+        });
+    }
+
+    /**
+     * HÀM 2: THAY ĐỔI TRẠNG THÁI GIAO DIỆN THEO PHÂN LOẠI CÂU HỎI
+     * Hàm này kích hoạt khi Admin thay đổi lựa chọn ở Dropdown "Phân loại thể thức".
+     */
+    function handleQuestionTypeChange(typeValue) {
+        const hint = document.getElementById("typeHint");
+        const switchContainers = document.querySelectorAll(".switch-container");
+
+        // TRƯỜNG HỢP: Chọn dạng "Sắp xếp câu" (Mã là "2")
+        if (typeValue === "2") {
+            // Biến hộp thông báo thành màu vàng (alert-warning) của Bootstrap
+            hint.className = "alert alert-warning py-2.5 px-3 small border-0 mb-4";
+            // Ghi nội dung hướng dẫn nhập liệu theo thứ tự cho Admin biết
+            hint.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-1"></i> Đối với <b>Sắp xếp câu</b>: Nhập các từ rời rạc theo đúng thứ tự từ trên xuống dưới.`;
+
+            // KHÓA CÔNG TẮC: Không cho phép Admin bấm gạt Đúng/Sai thủ công nữa, đồng thời làm mờ đi 50%
+            switchContainers.forEach(c => {
+                c.style.pointerEvents = "none"; // Khóa click chuột
+                c.style.opacity = "0.5";         // Làm mờ giao diện
+            });
+        }
+        // TRƯỜNG HỢP: Chọn dạng "Trắc nghiệm chọn đáp án đúng" (Mã là "1")
+        else {
+            // Biến hộp thông báo thành màu xanh dương (alert-info)
+            hint.className = "alert alert-info py-2.5 px-3 small border-0 mb-4";
+            // Ghi nội dung nhắc nhở chỉ được chọn duy nhất 1 đáp án đúng
+            hint.innerHTML = `<i class="bi bi-info-circle-fill me-1"></i> Đối với <b>Trắc nghiệm</b>: Gạt bật duy nhất 1 công tắc thành Đúng làm đáp án chuẩn.`;
+
+            // MỞ KHÓA CÔNG TẮC: Cho phép Admin tự do click chọn đáp án đúng theo ý muốn
+            switchContainers.forEach(c => {
+                c.style.pointerEvents = "auto"; // Mở lại click chuột
+                c.style.opacity = "1";          // Hiện sáng rõ ràng
+            });
+        }
+
+        // Gọi lại Hàm 1 để cập nhật đồng bộ lại toàn bộ trạng thái các dòng dữ liệu
+        reIndexAnswers();
+    }
+
+    /**
+     * HÀM 3: TỰ ĐỘNG CHÈN (APPEND) MỘT DÒNG ĐÁP ÁN MỚI VÀO GIAO DIỆN
+     * Hàm này kích hoạt khi Admin bấm nút "➕ Thêm Dòng".
+     */
+    function addAnswerRow() {
+        const container = document.getElementById("answersContainer");
+        // Tạo ra một thẻ <div> mới tinh nằm trên bộ nhớ RAM
+        const newRow = document.createElement("div");
+        newRow.className = "row g-2 align-items-center mb-3 answer-row";
+
+        // Bơm đoạn mã HTML khung nhập liệu, công tắc và nút xóa vào thẻ div vừa tạo
+        newRow.innerHTML = `
+            <div class="col-auto"><span class="badge bg-secondary px-2.5 py-2.5 row-label font-monospace" style="min-width: 38px; font-size: 0.85rem;">1</span></div>
+            <div class="col"><input type="text" class="form-control custom-control input-text" placeholder="Nhập phương án..." required /></div>
+            <div class="col-auto text-center switch-container">
+                <div class="form-check form-switch pt-1">
+                    <input type="hidden" class="input-iscorrect" value="false" />
+                    <input type="checkbox" class="form-check-input check-iscorrect" style="transform: scale(1.2); cursor: pointer;" onclick="handleSwitchToggle(this)" />
+                    <label class="form-check-label small text-muted ms-2 label-status">Sai</label>
+                </div>
+            </div>
+            <div class="col-auto"><button type="button" class="btn btn-outline-danger border-0 btn-sm p-2" onclick="removeAnswerRow(this)"><i class="bi bi-trash3-fill fs-5"></i></button></div>
+        `;
+        // Đính kèm (bắn) thẻ div hoàn chỉnh này vào dưới cùng của khay chứa trên màn hình
+        container.appendChild(newRow);
+
+        // Kiểm tra phòng hờ: Nếu đang ở chế độ Sắp xếp câu mà thêm dòng mới, dòng mới này cũng phải bị khóa công tắc
+        if (document.getElementById("questionTypeSelect").value === "2") {
+            const sc = newRow.querySelector(".switch-container");
+            sc.style.pointerEvents = "none";
+            sc.style.opacity = "0.5";
+        }
+
+        // Reset lại số thứ tự từ trên xuống dưới cho chuẩn chỉnh
+        reIndexAnswers();
+    }
+
+    /**
+     * HÀM 4: LOẠI BỎ MỘT DÒNG ĐÁP ÁN KHỎI MÀN HÌNH
+     * Kích hoạt khi Admin bấm vào biểu tượng Thùng rác ở cuối mỗi dòng.
+     */
+    function removeAnswerRow(btn) {
+        const container = document.getElementById("answersContainer");
+
+        // RÀNG BUỘC: Đếm xem nếu tổng số dòng đáp án nhỏ hơn hoặc bằng 1 thì không cho xóa nữa
+        if (container.querySelectorAll(".answer-row").length <= 1) {
+            alert("Phải có tối thiểu 1 dòng đáp án.");
+            return;
+        }
+
+        // Tìm ngược lên trên từ cái nút bấm để tóm lấy thẻ có class ".answer-row" gần nhất và xóa nó đi
+        btn.closest(".answer-row").remove();
+
+        // Đánh lại số thứ tự (STT) cho các dòng còn lại
+        reIndexAnswers();
+    }
+
+    /**
+     * HÀM 5: QUẢN LÝ CƠ CHẾ BẬT TẮT ĐỘC QUYỀN (SINGLE CHOICE) CHO TRẮC NGHIỆM
+     * Đảm bảo tại một thời điểm chỉ có DUY NHẤT một công tắc được mang giá trị là Đúng.
+     */
+    function handleSwitchToggle(chk) {
+        // Chỉ áp dụng cơ chế chọn một khi đang ở dạng câu hỏi Trắc nghiệm (Mã "1")
+        if (document.getElementById("questionTypeSelect").value === "1") {
+            const rows = document.querySelectorAll("#answersContainer .answer-row");
+
+            // Duyệt qua từng dòng đáp án có trên màn hình
+            rows.forEach(row => {
+                const rowChk = row.querySelector(".check-iscorrect");
+                const rowHidden = row.querySelector(".input-iscorrect");
+                const rowLabel = row.querySelector(".label-status");
+
+                // NẾU KHÔNG PHẢI LÀ CÁI CÔNG TẮC VỪA ĐƯỢC ADMIN BẤM: Ép tất cả về trạng thái Sai
+                if (rowChk !== chk) {
+                    rowChk.checked = false;      // Tắt tích chọn giao diện
+                    rowHidden.value = "false";   // Gán giá trị ẩn thành false
+                    if (rowLabel) rowLabel.innerText = "Sai"; // Đổi nhãn chữ thành "Sai"
+                }
+                // ĐỐI VỚI CHÍNH CÁI CÔNG TẮC VỪA BẤM: Cập nhật giá trị thật theo hành động gạt bật/tắt
+                else {
+                    rowHidden.value = chk.checked ? "true" : "false";
+                    if (rowLabel) rowLabel.innerText = chk.checked ? "Đúng" : "Sai";
+                }
+            });
+        }
+    }
+
+    /**
+     * HÀM 6: GOM DỮ LIỆU SẠCH VÀ BẮN AJAX JSON POST LÊN BACKEND C#
+     * Kích hoạt khi Admin bấm nút "LƯU CỤM CÂU HỎI".
+     */
+    function handleFormSubmitViaJson(event) {
+        // Chặn đứng hành vi nộp form tải lại trang mặc định của trình duyệt
+        if (event) event.preventDefault();
+
+        const qType = document.getElementById("questionTypeSelect").value;
+        const errorAlert = document.getElementById("jsErrorAlert");
+        // Ẩn bảng thông báo lỗi đỏ đi (nếu có phát sinh lỗi từ lần bấm trước)
+        errorAlert.classList.add("d-none");
+
+        // BƯỚC 1: KIỂM TRA ĐIỀU KIỆN (VALIDATION) RIÊNG CHO DẠNG TRẮC NGHIỆM
+        if (qType === "1") {
+            const hiddenInputs = document.querySelectorAll(".input-iscorrect");
+            let hasTrue = false;
+            // Duyệt qua mảng ẩn xem có dòng nào được gạt thành "true" chưa
+            hiddenInputs.forEach(input => { if (input.value === "true") hasTrue = true; });
+
+            // Nếu chưa gạt chọn dòng nào làm đáp án đúng thì chặn lại cảnh báo ngay lập tức
+            if (!hasTrue) {
+                alert("Vui lòng gạt chọn duy nhất 1 đáp án thành [Đúng]!");
+                return false;
+            }
+        }
+
+        // BƯỚC 2: KHỞI TẠO CẤU TRÚC ĐỐI TƯỢNG JSON Y HỆT LỚP MODEL BÊN C#
+        const finalJsonData = {
+            id: 0, // 0 biểu thị cho hành động tạo mới (INSERT)
+            grammarId: parseInt(document.getElementById("grammarSelect").value) || 0, // Mã ngữ pháp liên kết
+            content: document.getElementById("contentTextArea").value || "",          // Đề bài câu hỏi
+            questionType: parseInt(qType) || 1,                                       // Thể loại câu hỏi
+            answers: [] // Mảng trống dùng để chứa danh sách các đáp án con dưới đây
+        };
+
+        // BƯỚC 3: QUÉT TOÀN BỘ CÁC DÒNG ĐÁP ÁN NGOÀI GIAO DIỆN ĐỂ BỐC CHỮ ĐẨY VÀO MẢNG JSON
+        const rows = document.querySelectorAll("#answersContainer .answer-row");
+        rows.forEach((row, index) => {
+            finalJsonData.answers.push({
+                text: row.querySelector(".input-text").value || "",            // Nội dung đáp án gõ vào
+                isCorrect: row.querySelector(".input-iscorrect").value === "true", // Trạng thái Đúng/Sai (Boolean)
+                displayOrder: (index + 1).toString()                           // Thứ tự hiển thị dạng chuỗi
+            });
+        });
+
+
+        // BƯỚC 4: SỬ DỤNG FETCH API GỬI ĐỐNG DỮ LIỆU JSON CHUẨN BỊ ĐƯỢC LÊN SERVER
+        // ?handler=SaveQuestion định vị chính xác tên hàm OnPostSaveQuestionAsync ở file C#
+        fetch("?handler=SaveQuestion", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json", // Khai báo gửi dữ liệu cấu trúc JSON
+                // Đính kèm mã token chống tấn công giả mạo CSRF (Bắt buộc phải có trong ASP.NET Core)
+                "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]')?.value || "@tokens.RequestToken"
+            },
+            body: JSON.stringify(finalJsonData) // Chuyển đổi đối tượng JavaScript thành chuỗi JSON thuần túy
+        })
+        .then(async response => {
+            // Nhận phản hồi dạng văn bản thô từ Server trả về
+            const responseText = await response.text();
+
+            // TRƯỜNG HỢP A: Server trả về mã thành công (Mã HTTP 200 OK)
+            if (response.ok) {
+                // Ép trình duyệt chuyển hướng ngay về trang danh sách câu hỏi kèm bộ lọc giữ nguyên vị trí cũ
+                window.location.href = `./Index?SelectedLevelId=@Model.SelectedLevelId&SelectedLessonId=@Model.SelectedLessonId`;
+            }
+            // TRƯỜNG HỢP B: Server trả về mã thất bại (Mã lỗi HTTP 400 BadRequest...)
+            else {
+                try {
+                    // Cố gắng phân tích (Parse) xem Server có gửi kèm chuỗi JSON báo lỗi nghiệp vụ cụ thể không
+                    const errJson = JSON.parse(responseText);
+                    throw new Error(errJson.message || "Lỗi cấu trúc dữ liệu gửi đến API.");
+                } catch (e) {
+                    // Nếu phản hồi thô không phải JSON, lấy luôn đoạn text lỗi hệ thống đó ra hiển thị
+                    throw new Error(responseText || "Lỗi hệ thống không xác định.");
+                }
+            }
+        })
+        // KHỐI BẮT LỖI: Hiển thị lỗi lên bảng thông báo màu đỏ ở đầu trang khi quá trình fetch thất bại
+        .catch(error => {
+            document.getElementById("errorText").innerText = error.message; // Bơm câu lỗi vào thẻ span
+            errorAlert.classList.remove("d-none"); // Gỡ bỏ class ẩn để hiện bảng lỗi lên màn hình
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Tự động cuộn mượt mà lên đỉnh trang cho Admin thấy lỗi
+        });
+
+        return false;
+    }
+
+    /**
+     * SỰ KIỆN KHỞI CHẠY (MỞ TRANG):
+     * Đợi trang web nạp xong cấu trúc DOM, lập tức chạy hàm kiểm tra cấu hình mặc định cho loại câu hỏi đầu tiên.
+     */
+    document.addEventListener("DOMContentLoaded", function() {
+        handleQuestionTypeChange(document.getElementById("questionTypeSelect").value);
+    });
+</script>
+
+<style>
+    body {
+        background-color: #f4f6f9 !important;
+    }
+
+    .hover-dark:hover {
+        color: #212529 !important;
+    }
+
+    .bg-primary-subtle {
+        background-color: rgba(78, 115, 223, 0.1) !important;
+    }
+
+    .bg-success-subtle {
+        background-color: rgba(25, 135, 84, 0.1) !important;
+    }
+
+    .custom-control, .custom-textarea {
+        border: 1px solid #dee2e6 !important;
+        border-radius: 0.5rem !important;
+        padding: 0.6rem 0.75rem !important;
+        font-size: 0.9rem !important;
+        color: #334155 !important;
+    }
+
+        .custom-control:focus, .custom-textarea:focus {
+            border-color: #4e73df !important;
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.15) !important;
+            outline: none;
+        }
+
+    .btn-success-custom {
+        background-color: #198754;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.8rem;
+        border: none;
+        border-radius: 6px;
+        padding: 0.45rem 1rem;
+        transition: all 0.2s;
+    }
+
+    .btn-primary-custom {
+        background-color: #4e73df;
+        border: none;
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border-radius: 0.5rem;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.2s;
+    }
+
+        .btn-primary-custom:hover {
+            background-color: #2e59d9;
+            transform: translateY(-1px);
+        }
+
+    .btn-muted-custom {
+        background-color: #e9ecef;
+        border: none;
+        color: #495057;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border-radius: 0.5rem;
+        padding: 0.6rem 1.5rem;
+        transition: all 0.2s;
+    }
+</style>

@@ -1,0 +1,86 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Admin.Lessons.IndexModel
+@{
+    ViewData["Title"] = "Quản lý bài học";
+}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>QUẢN LÝ BÀI HỌC TIẾNG NHẬT</h2>
+        <a asp-page="./Create" class="btn btn-primary">➕ Thêm Bài Học Mới</a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @Model.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <div class="card shadow-sm border-0 mb-4 bg-light">
+        <div class="card-body py-3">
+            <form method="get" class="row align-items-center g-3">
+                <div class="col-auto">
+                    <label class="fw-semibold text-secondary m-0">
+                        <i class="fa-solid fa-filter me-1"></i> Lọc theo cấp độ:
+                    </label>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <select asp-for="SelectedLevelId" class="form-select border-2" onchange="this.form.submit()" style="border-radius: 8px;">
+                        <option value="">-- Tất cả bài học --</option>
+                        @foreach (var lvl in Model.Levels)
+                        {
+                            <option value="@lvl.Id">@lvl.Name</option>
+                        }
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card shadow-sm">
+        <table class="table table-hover table-striped mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 8%">ID</th>
+                    <th style="width: 10%">Cấp độ ID</th>
+                    <th style="width: 35%">Tiêu Đề Bài Học</th>
+                    <th style="width: 10%" class="text-center">Thứ Tự</th>
+                    <th style="width: 22%">Ngày Tạo</th>
+                    <th style="width: 14%">Ngày Cập Nhật</th>
+                    <th style="width: 15%" class="text-center">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Lessons == null || !Model.Lessons.Any())
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">Chưa có bài học nào được tạo.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Lessons)
+                    {
+                        <tr>
+                            <td><code>#@item.Id</code></td>
+                            <td><span class="badge bg-secondary fs-6">@item.LevelId</span></td>
+                            <td class="fw-semibold text-dark">@item.Title</td>
+                            <td class="text-center"><span class="badge bg-info text-dark">@item.Order</span></td>
+                            <td class="text-muted">@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+
+                            <td class="text-muted" style="font-size: 0.9rem;">@item.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a asp-page="./Edit" asp-route-id="@item.Id" asp-route-selectedLevelId="@Model.SelectedLevelId" class="btn btn-warning btn-sm">Sửa</a>
+
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bài học này?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

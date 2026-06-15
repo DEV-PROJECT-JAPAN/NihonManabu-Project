@@ -1,0 +1,46 @@
+<div class="app-layout-wrapper">
+
+  <aside class="app-sidebar">
+    <div class="sidebar-brand">
+      <!-- <img src="assets/logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'"> -->
+      <span class="brand-name">NihonManabu</span>
+    </div>
+
+    <nav class="sidebar-menu">
+      <a href="javascript:void(0)" class="menu-item"><i class="fas fa-chess-knight"></i> <span>Hiển thị</span></a>
+      <a routerLink="/vocabulary/levels" routerLinkActive="active"><i class="fas fa-book"></i> <span>Từ vựng</span></a>
+      <a href="javascript:void(0)" class="menu-item active"><i class="fas fa-bullhorn"></i> <span>Ngữ pháp</span></a>
+      <a href="javascript:void(0)" class="menu-item"><i class="fas fa-route"></i> <span>Lộ trình</span></a>
+      <a href="javascript:void(0)" class="menu-item"><i class="fas fa-chart-line"></i> <span>Ghi nhớ</span></a>
+      <a href="javascript:void(0)" class="menu-item"><i class="fas fa-user-friends"></i> <span>Chủ động</span></a>
+      <a href="javascript:void(0)" class="menu-item"><i class="fas fa-headphones"></i> <span>Shadowing</span></a>
+      <a href="javascript:void(0)" class="menu-item premium-link"><i class="fas fa-bolt"></i> <span>Nâng cấp</span></a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="javascript:void(0)" class="menu-item setting-btn"><i class="fas fa-cog"></i> <span>Cài đặt</span></a>
+    </div>
+  </aside>
+
+  <main class="app-main-content">
+    <header class="app-top-navbar d-flex justify-content-end align-items-center px-4 py-3">
+      <div class="navbar-actions d-flex align-items-center gap-3">
+        <button class="nav-icon-btn"><i class="fas fa-trophy"></i></button>
+        <button class="nav-icon-btn"><i class="fas fa-bell"></i></button>
+        <button class="btn btn-sm btn-outline-light px-3 login-btn"><i class="fas fa-sign-in-alt mr-1"></i> Đăng
+          nhập</button>
+      </div>
+    </header>
+
+    <section class="content-body">
+      <!-- <app-grammar-practice></app-grammar-practice> -->
+      <router-outlet></router-outlet>
+      <!-- <app-grammar-level></app-grammar-level> -->
+      <!-- <app-grammar-lesson></app-grammar-lesson>
+      <app-grammar-list></app-grammar-list>
+      <app-grammar-questions></app-grammar-questions> -->
+    </section>
+
+  </main>
+
+</div>

@@ -1,0 +1,217 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Grammar.IndexModel
+@{
+    ViewData["Title"] = "Luyện Tập Ngữ Pháp Tiếng Nhật";
+}
+
+<style>
+    :root {
+        --primary-color: #3B82F6;
+        --primary-light: rgba(59, 130, 246, 0.12);
+        --text-main: #F1F5F9;
+        --text-muted: #94A3B8;
+        --border-color: #334155;
+    }
+
+    body {
+        background-color: #0F172A !important;
+        color: var(--text-main) !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    .custom-card {
+        border: 1px solid var(--border-color) !important;
+        border-radius: 20px !important;
+        background: linear-gradient(145deg, #1E293B, #131C2E) !important;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+        .custom-card .card-header {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            padding: 20px 26px;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            color: var(--text-main) !important;
+        }
+
+    .custom-breadcrumb {
+        display: flex;
+        align-items: center;
+        background: #172033;
+        border: 1px solid var(--border-color);
+        padding: 14px 24px;
+        border-radius: 14px;
+        margin-bottom: 28px;
+    }
+
+    .breadcrumb-step {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-decoration: none !important;
+    }
+
+        .breadcrumb-step.active-step {
+            color: #FFFFFF;
+            background: var(--primary-light);
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+
+    .level-layout-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 20px;
+        padding: 10px 0;
+    }
+
+    .level-modern-btn {
+        background: linear-gradient(135deg, #243149, #1A2436) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 16px;
+        padding: 26px 20px;
+        text-align: center;
+        color: var(--text-main) !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .level-modern-btn .lvl-badge {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60A5FA, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .level-modern-btn .lvl-status {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .level-modern-btn:hover {
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
+            transform: translateY(-4px);
+            background: linear-gradient(135deg, #2B3B59, #1E293F) !important;
+        }
+
+    @@media (max-width: 992px) {
+        .welcome-dashboard-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
+    .welcome-dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 28px;
+    }
+
+    .stat-mini-card {
+        background: rgba(30, 41, 59, 0.6) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 16px;
+        padding: 20px 24px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .stat-icon-wrapper {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .stat-info .num {
+        font-size: 22px;
+        font-weight: 800;
+        color: #FFFFFF;
+        line-height: 1.2;
+    }
+
+    .stat-info .lbl {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-top: 2px;
+    }
+
+    .tip-premium-box {
+        background: linear-gradient(145deg, #1E293B, #0F172A) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 16px;
+        padding: 24px;
+        margin-top: 24px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="mb-4 text-center text-md-left">
+        <h3 class="font-weight-bold mb-1" style="color: var(--text-main); letter-spacing: -0.5px;">
+            🇯🇵 HỆ THỐNG LUYỆN TẬP NIHONMANABU
+        </h3>
+        <p class="text-muted mb-0" style="font-size: 13px;">Học và thực hành cấu trúc ngữ pháp Tiếng Nhật</p>
+    </div>
+
+    <div class="custom-breadcrumb">
+        <span class="breadcrumb-step active-step"><i class="fas fa-home mr-1"></i> Trang chủ</span>
+    </div>
+
+    <div class="card custom-card animate__animated animate__fadeIn">
+        <div class="card-header"><i class="fas fa-layer-group text-primary mr-2"></i> Bước 1: Vui lòng chọn Trình độ học tập</div>
+        <div class="card-body p-4">
+            <div class="level-layout-grid">
+                @foreach (var lvl in Model.Levels)
+                {
+                    <a asp-page="./LessonsGrammar" asp-route-levelId="@lvl.Id" class="level-modern-btn">
+                        <div class="lvl-badge">@lvl.Name</div>
+                        <div class="lvl-status">Bấm để mở rộng</div>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="welcome-dashboard-grid animate__animated animate__fadeInUp animate__delay-1s">
+        <div class="stat-mini-card">
+            <div class="stat-icon-wrapper" style="background: rgba(59, 130, 246, 0.15); color: #3B82F6;"><i class="fas fa-graduation-cap"></i></div>
+            <div class="stat-info"><div class="num">150+</div><div class="lbl">Mẫu cấu trúc ngữ pháp</div></div>
+        </div>
+        <div class="stat-mini-card">
+            <div class="stat-icon-wrapper" style="background: rgba(16, 185, 129, 0.15); color: #10B981;"><i class="fas fa-check-double"></i></div>
+            <div class="stat-info"><div class="num">2,400+</div><div class="lbl">Câu hỏi thực hành live</div></div>
+        </div>
+        <div class="stat-mini-card">
+            <div class="stat-icon-wrapper" style="background: rgba(245, 158, 11, 0.15); color: #F59E0B;"><i class="fas fa-fire"></i></div>
+            <div class="stat-info"><div class="num">Hàng ngày</div><div class="lbl">Cập nhật kho đề mới</div></div>
+        </div>
+    </div>
+
+    <div class="tip-premium-box animate__animated animate__fadeInUp animate__delay-1s">
+        <div class="stat-icon-wrapper" style="background: rgba(139, 92, 246, 0.15); color: #8B5CF6; font-size: 18px; padding: 16px; width: 44px; height: 44px;"><i class="fas fa-lightbulb"></i></div>
+        <div>
+            <h6 class="font-weight-bold mb-1" style="color: #FFFFFF; font-size: 14px;">Gợi ý lộ trình học hiệu quả:</h6>
+            <p class="text-muted mb-0 small" style="line-height: 1.5;">
+                Hệ thống khuyến nghị bạn nên bắt đầu luyện tập theo thứ tự từ các trình độ cơ bản <strong>N5 -> N4</strong> trước khi thử sức với các bài tập sắp xếp chuỗi từ phức tạp ở trình độ cao cấp. Việc làm đi làm lại một cấu trúc ngữ pháp sẽ tạo phản xạ giao tiếp tự nhiên cực tốt. Chúc bạn có một buổi học đầy năng suất.
+            </p>
+        </div>
+    </div>
+</div>

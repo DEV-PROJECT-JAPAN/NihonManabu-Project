@@ -1,0 +1,7 @@
+.vs/
+.vs/
+# Chặn vĩnh viễn tất cả các thư mục bin, obj, dist trong toàn bộ solution
+**/bin/
+**/obj/
+**/dist/
+**/.angular/
