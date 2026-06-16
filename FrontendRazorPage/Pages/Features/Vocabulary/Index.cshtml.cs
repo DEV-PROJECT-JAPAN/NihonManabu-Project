@@ -30,9 +30,9 @@ namespace FrontendRazorPage.Pages.Vocabulary
         // ngOnInit của Angular
         public async Task OnGetAsync()
         {
-          
-                Levels = await _levelClientService.GetLevelsAsync();
-            
+
+            Levels = await _levelClientService.GetLevelsAsync();
+
         }
         //Nhiệm vụ chính của nó là nhận dữ liệu tiến độ học từ vựng
         public async Task<JsonResult> OnPostUpdateProgressAsync([FromBody] UpdateLearningProgresByUserModel input)
