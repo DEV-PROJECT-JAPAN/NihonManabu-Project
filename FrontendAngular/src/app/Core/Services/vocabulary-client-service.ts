@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { VocabularyModel } from '../../Models/vocabulary-model';
-
 import { VocabularyAdminModel } from '../../Models/AdminModel/vocabulary-admin-model';
 @Injectable({
     providedIn: 'root'
@@ -12,7 +11,6 @@ export class VocabularyClientService {
     private readonly _apiBase = 'https://localhost:7104/api/vocabulary';
 
     constructor(private _http: HttpClient) { }
-
 
 
     /**

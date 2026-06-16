@@ -51,7 +51,7 @@ namespace BackendAPI.Controllers
         // ==================== KHU VỰC XỬ LÝ DÀNH CHO ADMIN ====================
         // ===================================================================
 
-        
+
         [HttpGet("admin/by-lesson/{lessonId:int}")]
         public async Task<IActionResult> GetVocabulariesByLessonForAdmin(int lessonId)
         {
@@ -132,7 +132,7 @@ namespace BackendAPI.Controllers
             }
 
             // Trả file về cho bên phía Angular đón nhận
-            return File(pdfBytes, "application/pdf", $"DanhSachTuVung_Bai{lessonId}.pdf");
+            return File(pdfBytes, "application/pdf");
         }
 
     }

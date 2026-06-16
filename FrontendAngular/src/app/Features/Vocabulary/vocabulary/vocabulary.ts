@@ -1,10 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { LessonClientService } from '../../../Core/Services/lesson-client-service';
+
 import { VocabularyClientService } from '../../../Core/Services/vocabulary-client-service';
 import { VocabularyModel } from '../../../Models/vocabulary-model';
-import { LevelClientService } from '../../../Core/Services/level-client-service';
 
 // import { UpdateLearningProgresByUserModel } from '../../../Models/update-learning-progress.model';
 
@@ -21,7 +20,6 @@ export class VocabularyComponent implements OnInit {
   public lessonId: number = 0;
   public levelId: number = 0;
   public lessonTitle: string = "Danh sách từ vựng";
-  public cards: VocabularyModel[] = [];
   public originalCards: VocabularyModel[] = []; // Giữ bản gốc để Reset
   public displayCards: VocabularyModel[] = [];  // Mảng đang hiển thị (có thể bị xáo trộn)
 
@@ -35,8 +33,6 @@ export class VocabularyComponent implements OnInit {
   }
   constructor(
     private _vocabService: VocabularyClientService,
-    private _lessonService: LessonClientService,
-    private _levelClientService: LevelClientService,
     private _route: ActivatedRoute,
     private _cdr: ChangeDetectorRef
   ) { }
@@ -58,7 +54,8 @@ export class VocabularyComponent implements OnInit {
   private fetchCards(): void {
     this._vocabService.getCardsAsync(this.lessonId).subscribe({
       next: (data: VocabularyModel[]) => {
-        this.cards = data;
+        this.originalCards = data;
+        this.displayCards = [...data];
         this._cdr.markForCheck(); // Ép giao diện vẽ lại
         setTimeout(() => {
           if (this.isAutoPlay && this.currentCard?.textToSpeak) {
@@ -94,20 +91,21 @@ export class VocabularyComponent implements OnInit {
   public exportPdf(): void {
     if (this.lessonId <= 0) return;
 
-    // Gọi hàm download file từ Service (Bạn xem hướng dẫn thêm hàm này ở phần dưới)
     this._vocabService.downloadPdfAsync(this.lessonId).subscribe({
       next: (blob: Blob) => {
-        // Tạo một đường link ảo để ép trình duyệt tải file Blob về máy
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `DanhSachTuVung_Bai${this.lessonId}.pdf`; // Tên file khi tải về
-        document.body.appendChild(a);
-        a.click();
+        // 1. Khai báo rõ kiểu dữ liệu là PDF
+        const file = new Blob([blob], { type: 'application/pdf' });
 
-        // Dọn dẹp bộ nhớ
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
+        // 2. Tạo một đường link ảo từ file Blob
+        const url = window.URL.createObjectURL(file);
+
+        // 3. Mở đường link ảo này ở một Tab mới ('_blank')
+        window.open(url, '_blank');
+
+        // LƯU Ý QUAN TRỌNG: 
+        // Đừng gọi window.URL.revokeObjectURL(url) ngay lập tức ở đây.
+        // Trình duyệt cần một chút thời gian để render PDF ở tab mới. 
+        // Nếu bạn thu hồi link ảo ngay, tab mới sẽ bị lỗi trắng trang!
       },
       error: (err) => console.error('Lỗi khi xuất PDF:', err)
     });
