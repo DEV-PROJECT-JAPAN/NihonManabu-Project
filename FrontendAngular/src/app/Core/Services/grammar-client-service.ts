@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { GrammarModel } from '../../Models/grammar-model';
 import { QuestionModel } from '../../Models/question-model';
+import { BaseService } from './BaseService';
 
 
 
@@ -11,10 +12,13 @@ import { QuestionModel } from '../../Models/question-model';
 @Injectable({
     providedIn: 'root'
 })
-export class GrammarClientService {
-    private readonly _apiBase = 'https://localhost:7104/api/grammar';
+export class GrammarClientService extends BaseService {
+    private readonly _apiBase = `${this._apiBaseUrl}/grammar`;
 
-    constructor(private _http: HttpClient) { }
+    // Vì lớp cha không có constructor, lớp con gọi HttpClient như bình thường, không cần super()
+    constructor(private _http: HttpClient) {
+        super(); // ◄ Bắt buộc phải gọi super() khi kế thừa trong TypeScript
+    }
 
     /**
      * Bắn lệnh GET tương ứng: await _http.GetFromJsonAsync<GrammarModel>($"{_apiBase}/{grammarId}")

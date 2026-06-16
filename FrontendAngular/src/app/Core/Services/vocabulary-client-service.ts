@@ -4,14 +4,17 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LevelModel } from '../../Models/level-model';
 import { LessonModel } from '../../Models/lesson-model';
+import { BaseService } from './BaseService';
 
 @Injectable({
     providedIn: 'root'
 })
-export class VocabularyClientService {
-    private readonly _apiBase = 'https://localhost:7104/api/vocabulary';
+export class VocabularyClientService extends BaseService {
+    private readonly _apiBase = `${this._apiBaseUrl}/vocabulary`;
 
-    constructor(private _http: HttpClient) { }
+    constructor(private _http: HttpClient) {
+        super();
+    }
 
     /**
      * Bắn lệnh GET tương ứng: await _http.GetFromJsonAsync<List<LevelModel>>($"{_apiBase}/levels")

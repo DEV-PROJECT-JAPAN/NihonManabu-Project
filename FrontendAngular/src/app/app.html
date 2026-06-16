@@ -2,14 +2,23 @@
 
   <aside class="app-sidebar">
     <div class="sidebar-brand">
-      <!-- <img src="assets/logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'"> -->
+      <!--       <img src="assets/logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'"> -->
       <span class="brand-name">NihonManabu</span>
     </div>
 
     <nav class="sidebar-menu">
-      <a href="javascript:void(0)" class="menu-item"><i class="fas fa-chess-knight"></i> <span>Hiển thị</span></a>
-      <a routerLink="/vocabulary/levels" routerLinkActive="active"><i class="fas fa-book"></i> <span>Từ vựng</span></a>
-      <a href="javascript:void(0)" class="menu-item active"><i class="fas fa-bullhorn"></i> <span>Ngữ pháp</span></a>
+      <a routerLink="/dashboard" routerLinkActive="active" class="menu-item">
+        <i class="fas fa-chess-knight"></i> <span>Hiển thị</span>
+      </a>
+
+      <a routerLink="/vocabulary/levels" routerLinkActive="active" class="menu-item">
+        <i class="fas fa-book"></i> <span>Từ vựng</span>
+      </a>
+
+      <a routerLink="/grammar/levels" routerLinkActive="active" class="menu-item">
+        <i class="fas fa-bullhorn"></i> <span>Ngữ pháp</span>
+      </a>
+
       <a href="javascript:void(0)" class="menu-item"><i class="fas fa-route"></i> <span>Lộ trình</span></a>
       <a href="javascript:void(0)" class="menu-item"><i class="fas fa-chart-line"></i> <span>Ghi nhớ</span></a>
       <a href="javascript:void(0)" class="menu-item"><i class="fas fa-user-friends"></i> <span>Chủ động</span></a>

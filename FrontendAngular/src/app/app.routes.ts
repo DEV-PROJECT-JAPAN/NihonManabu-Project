@@ -4,30 +4,39 @@ import { GrammarList } from './Features/Grammar/grammar/grammar';
 import { Levels } from './Features/Grammar/levels/levels';
 import { LessonComponent } from './Features/Grammar/lessons/lessons';
 import { LevelsComponent as VocabLevels } from './Features/Vocabulary/levels/levels';
+
+
 export const routes: Routes = [
-    // 1. Mặc định vào thẳng trang chọn Level
-    { path: 'grammar', component: Levels },
+    // Mặc định chạy vào web nếu trống thì đá qua grammar
+    // { path: '', redirectTo: 'grammar', pathMatch: 'full' },
 
-    // 2. Bấm vào Level -> Ra danh sách Lesson của Level đó
-    { path: 'grammar/level/:levelId', component: LessonComponent },
-
-    // 3. Bấm vào Lesson -> Ra danh sách cấu trúc Ngữ pháp
-    { path: 'grammar/level/:levelId/lesson/:lessonId', component: GrammarList },
-
-    // 4. Bấm vào Ngữ pháp -> Ra trang khay làm bài tập thực hành
-    { path: 'grammar/level/:levelId/lesson/:lessonId/practice/:grammarId', component: Questions },
-
-    // Điều hướng mặc định nếu gõ sai url
-    { path: 'grammar/**', redirectTo: 'grammar' },
     // ==========================================
-    //  ROUTES CHO TỪ VỰNG (VOCABULARY)
+    // ⛩️ ROUTES NGỮ PHÁP (GRAMMAR)
     // ==========================================
-    // 1. Mặc định vào trang chọn Level Từ vựng
-    { path: 'vocabulary/levels', component: VocabLevels },
+    {
+        path: 'grammar',
+        children: [
+            { path: 'levels', component: Levels }, // /grammar -> Trang chọn Level (N5, N4...)
+            { path: 'level/:levelId', component: LessonComponent }, // /grammar/level/:levelId -> Chọn bài học
+            { path: 'level/:levelId/lesson/:lessonId', component: GrammarList }, // /grammar/level/.../lesson/... -> List cấu trúc
+            { path: 'level/:levelId/lesson/:lessonId/practice/:grammarId', component: Questions } // Làm bài tập
+        ]
+    },
 
-    // 2. Bấm vào Level -> Ra danh sách Lesson Từ vựng
-    //{ path: 'vocabulary/lessons/:levelId', component: VocabLessons },
+    // ==========================================
+    // 📑 ROUTES TỪ VỰNG (VOCABULARY)
+    // ==========================================
+    {
+        path: 'vocabulary',
+        children: [
+            { path: 'levels', component: VocabLevels }, // /vocabulary/levels -> Chọn Level từ vựng
+            // Sau này bạn thêm bài học từ vựng thì cứ nhét vào đây:
+            // { path: 'level/:levelId', component: VocabLessonComponent }
+        ]
+    },
 
-    // 3. Bấm vào Lesson -> Ra danh sách Từ vựng chi tiết để học
-    //{ path: 'vocabulary/details/:lessonId', component: VocabDetails },
+    // ==========================================
+    // 🚨 CẢNH SÁT GIAO THÔNG (Xử lý URL bậy bạ)
+    // ==========================================
+    { path: '**', redirectTo: 'grammar' }
 ];
