@@ -45,6 +45,13 @@ export class LevelsComponent implements OnInit {
     });
   }
   public selectLevel(id: number): void {
+    console.log('ID cấp độ nhận được là:', id); // ◄ Thêm dòng này để kiểm tra ở tab Console (F12)
+
+    if (!id) {
+      console.error('Lỗi: ID bị undefined hoặc bằng 0, không thể chuyển trang!');
+      return;
+    }
+
     this._router.navigate(['/vocabulary/lessons', id]);
   }
 

@@ -28,25 +28,23 @@ export const routes: Routes = [
         path: '',
         component: UserLayoutComponent, // ◄ Bọc toàn bộ giao diện học viên cũ của bạn
         children: [
-            // ⛩️ ROUTES NGỮ PHÁP (GRAMMAR)
-            {
-                path: 'grammar',
-                children: [
-                    { path: 'levels', component: levelsGrammar },                                         // /grammar/levels
-                    { path: 'level/:levelId', component: lessonsGrammar },                        // /grammar/level/:levelId
-                    { path: 'level/:levelId/lesson/:lessonId', component: GrammarList },           // /grammar/level/.../lesson/...
-                    { path: 'level/:levelId/lesson/:lessonId/grammar/:grammarId', component: Questions } // /grammar/level/.../grammar/:grammarId
-                ]
-            },
-
-            // 📑 ROUTES TỪ VỰNG (VOCABULARY)
             {
                 path: 'vocabulary',
                 children: [
-                    { path: 'levels', component: VocabLevels }, // /vocabulary/levels
-                    { path: 'vocabulary/lessons/:id', component: LessonsComponent },
-                    // 3. Bấm vào Lesson -> Ra danh sách Từ vựng chi tiết để học
-                    { path: 'vocabulary/list/:levelId/:lessonId', component: VocabularyComponent }
+                    { path: 'levels', component: VocabLevels },                           // /vocabulary/levels
+                    { path: 'lessons/:id', component: LessonsComponent },                 // /vocabulary/lessons/:id
+                    { path: 'list/:levelId/:lessonId', component: VocabularyComponent }   // /vocabulary/list/:levelId/:lessonId
+                ]
+            },
+
+            // ⛩️ ROUTES NGỮ PHÁP (GRAMMAR) ĐỂ XUỐNG DƯỚI
+            {
+                path: 'grammar',
+                children: [
+                    { path: 'levels', component: levelsGrammar },
+                    { path: 'level/:levelId', component: lessonsGrammar },
+                    { path: 'level/:levelId/lesson/:lessonId', component: GrammarList },
+                    { path: 'level/:levelId/lesson/:lessonId/grammar/:grammarId', component: Questions }
                 ]
             }
         ]
@@ -69,7 +67,7 @@ export const routes: Routes = [
                 path: 'grammarAdmin',
                 children: [
                     // TẦNG 2: Các trang con bên trong Grammar Admin
-                    { path: '', component: GrammarListAdmin },                 // URL: /admin/grammar (Trang danh sách)
+                    { path: 'grammarIndex', component: GrammarListAdmin },                 // URL: /admin/grammar (Trang danh sách)
                     // URL: /admin/grammar/edit/5 (Trang sửa)
                 ]
             },
