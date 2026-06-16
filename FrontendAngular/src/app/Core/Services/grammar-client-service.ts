@@ -40,14 +40,5 @@ export class GrammarClientService extends BaseService {
         );
     }
 
-    /**
-     * Bắn URL dạng tham số query: /api/grammar/questions?grammarId=1&questionType=1
-     */
-    public getQuestionsByGrammarAsync(grammarId: number, questionType: number = 0): Observable<QuestionModel[]> {
-        if (grammarId <= 0) return of([]);
-        const url = `${this._apiBase}/questions?grammarId=${grammarId}&questionType=${questionType}`;
-        return this._http.get<QuestionModel[]>(url).pipe(
-            catchError(() => of([]))
-        );
-    }
+
 }

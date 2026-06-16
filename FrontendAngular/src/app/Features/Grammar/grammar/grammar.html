@@ -17,7 +17,8 @@
         <div class="card-body p-4">
             <div class="grammar-modern-list">
                 @for (g of grammars; track g.id) {
-                <a href="javascript:void(0)" class="grammar-modern-row" (click)="selectGrammar(g.id)">
+                <a [routerLink]="['/grammar/level', levelId, 'lesson', lessonId, 'grammar', g.id]"
+                    class="grammar-modern-row">
                     <span>📢 {{ g.structure }}</span>
                     <i class="fas fa-arrow-right opacity-40"></i>
                 </a>

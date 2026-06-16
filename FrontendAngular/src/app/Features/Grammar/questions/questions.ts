@@ -6,12 +6,13 @@ import { GrammarClientService } from '../../../Core/Services/grammar-client-serv
 import { GrammarModel } from '../../../Models/grammar-model';
 import { QuestionModel } from '../../../Models/question-model';
 import { AnswerModel } from '../../../Models/answer-model';
+import { QuestionClientService } from '../../../Core/Services/question-client-service';
 
 @Component({
   selector: 'app-grammar-questions',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  providers: [GrammarClientService],
+  providers: [GrammarClientService, QuestionClientService],
   templateUrl: './questions.html',
   styleUrls: ['./questions.css']
 })
@@ -37,6 +38,7 @@ export class Questions implements OnInit {
   constructor(
     private _route: ActivatedRoute,
     private _grammarService: GrammarClientService,
+    private _questionService: QuestionClientService,
     private _cdr: ChangeDetectorRef
   ) { }
 
@@ -57,9 +59,8 @@ export class Questions implements OnInit {
     this.questionType = type;
     if (type === -1) return;
 
-    this._grammarService.getQuestionsByGrammarAsync(this.grammarId, this.questionType).subscribe(res => {
+    this._questionService.getQuestionsByGrammarAsync(this.grammarId, this.questionType).subscribe(res => {
       let rawQuestions: QuestionModel[] = JSON.parse(JSON.stringify(res));
-
       if (this.questionType === 0) {
         rawQuestions = this.shuffleArray(rawQuestions);
       }

@@ -29,7 +29,7 @@ export class Levels implements OnInit {
     });
   }
 
-  selectLevel(id: number): void {
-    this._router.navigate(['/grammar/level', id]);
-  }
+  // selectLevel(id: number): void {
+  //   this._router.navigate(['/grammar/level', id]);
+  // }
 }

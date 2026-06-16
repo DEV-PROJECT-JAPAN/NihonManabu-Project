@@ -34,7 +34,7 @@ export class LessonComponent implements OnInit {
     });
   }
 
-  selectLesson(lessonId: number): void {
-    this._router.navigate(['/grammar/level', this.levelId, 'lesson', lessonId]);
-  }
+  // selectLesson(lessonId: number): void {
+  //   this._router.navigate(['/grammar/level', this.levelId, 'lesson', lessonId]);
+  // }
 }

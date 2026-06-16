@@ -22,7 +22,7 @@
         <div class="card-body p-4">
             <div class="level-layout-grid">
                 @for (lvl of levels; track lvl.id) {
-                <a href="javascript:void(0)" class="level-modern-btn" (click)="selectLevel(lvl.id)">
+                <a [routerLink]="['/grammar/level', lvl.id]" class="level-modern-btn">
                     <div class="lvl-badge">{{ lvl.name }}</div>
                     <div class="lvl-status">Bấm để mở rộng</div>
                 </a>
