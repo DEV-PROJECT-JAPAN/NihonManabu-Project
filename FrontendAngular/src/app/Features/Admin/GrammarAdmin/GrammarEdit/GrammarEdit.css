@@ -1,0 +1,280 @@
+/* =========================================================================
+   🎛 -- CHỈNH SỬA BIẾN MÀU NỀN SÂU ĐỒNG BỘ 100% SIDEBAR LAYOUT --
+   ========================================================================= */
+:host {
+    --panel-bg: #0e1424;
+    /* Màu nền khối hộp xanh mực sẫm dịu mát */
+    --input-fill: #141b32;
+    /* Ô input/select chìm sâu tinh tế */
+    --input-focus-border: #3b82f6;
+
+    --text-silver: #cbd5e1;
+    /* Chữ phụ màu xám bạc sang trọng */
+    --text-dark-muted: #5d6f88;
+    /* Màu chữ ghi cho nhãn phụ */
+    --border-glow-line: rgba(255, 255, 255, 0.03);
+    --transition-base: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hiệu ứng trồi trang mượt mà */
+.animate-fade-in {
+    animation: slideUpIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Nút quay lại back link */
+.back-link {
+    color: var(--text-dark-muted);
+    font-weight: 500;
+    transition: var(--transition-base);
+}
+
+.back-link:hover {
+    color: #ffffff !important;
+    transform: translateX(-2px);
+}
+
+/* =========================================================================
+   📦 PREMIUM PANEL LAYOUT
+   ========================================================================= */
+.admin-premium-card {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-glow-line);
+    border-radius: 14px;
+}
+
+.card-premium-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.card-title-main {
+    color: #ffffff;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+    font-weight: 700;
+}
+
+.card-subtitle-text {
+    color: var(--text-dark-muted);
+    font-size: 13px;
+    margin-left: 48px;
+}
+
+/* Icon sửa phát quang màu cam Neon rực rỡ */
+.icon-box-glow {
+    width: 34px;
+    height: 34px;
+    background-color: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    border-radius: 8px;
+    color: #f59e0b;
+    font-size: 14px;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.1);
+}
+
+/* 🌟 GIẢI PHÁP CHỐNG DÍNH: Khoảng cách vàng giữa các trường dữ liệu */
+.form-group-spaced {
+    margin-bottom: 28px;
+    /* Tăng từ mb-4 lên 28px để form giãn cách thở rộng rãi */
+}
+
+.premium-form-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dark-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+    /* Tăng khoảng cách nhãn với input */
+    display: block;
+}
+
+.premium-text-hint {
+    font-size: 12px;
+    color: #51637d;
+    margin-top: 8px;
+    display: block;
+    line-height: 1.4;
+}
+
+/* =========================================================================
+   🎛️ KHỐI Ô NHẬP LIỆU CAPSULE INPUTS
+   ========================================================================= */
+.premium-input-group {
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--input-fill);
+    transition: var(--transition-base);
+}
+
+.premium-input-group .input-group-text {
+    background: transparent;
+    border: none;
+    color: #3d4a6b;
+    padding-left: 14px;
+    font-size: 14px;
+}
+
+.premium-input-group .form-control,
+.premium-input-group .form-select {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    font-size: 14px;
+    padding: 11px 12px;
+    border: none !important;
+}
+
+.premium-input-group .form-select option {
+    background-color: #161d30;
+    color: white;
+}
+
+.premium-input-group:focus-within {
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+/* Vùng viết văn bản lớn (Textarea) */
+.premium-textarea {
+    background-color: var(--input-fill) !important;
+    border: 1px solid rgba(255, 255, 255, 0.03) !important;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #ffffff !important;
+    transition: var(--transition-base);
+}
+
+.premium-textarea:focus {
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12) !important;
+    outline: none;
+}
+
+/* =========================================================================
+   🕒 KHỐI TIMELINE THỜI GIAN THÔNG THOÁNG MINIMALIST
+   ========================================================================= */
+.premium-timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* Chia đôi bằng Grid thay vì bọc hộp đặc */
+    gap: 16px;
+    background-color: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    padding: 14px 16px;
+    border-radius: 8px;
+}
+
+.timeline-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon-meta {
+    font-size: 16px;
+    color: #3d4a6b;
+}
+
+.meta-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-label {
+    font-size: 11px;
+    color: var(--text-dark-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.meta-value {
+    font-size: 13px;
+    color: var(--text-silver);
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* Đường ranh giới mỏng ở giữa hai cột thời gian */
+.timeline-meta-item:last-child {
+    border-left: 1px solid rgba(255, 255, 255, 0.03);
+    padding-left: 20px;
+}
+
+/* =========================================================================
+   🚨 VALIDATION MESSAGES
+   ========================================================================= */
+.is-invalid-group {
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.text-danger-glow {
+    color: #ef4444;
+    text-shadow: 0 0 4px rgba(239, 68, 68, 0.2);
+}
+
+.text-danger-msg {
+    color: #ee5e5e;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* =========================================================================
+   ⚙️ BUTTONS CONTROL BAR
+   ========================================================================= */
+.footer-action-bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Nút Cập Nhật màu vàng hổ phách công nghệ cao */
+.btn-update-premium {
+    background: linear-gradient(135deg, #ff9f43 0%, #f59e0b 100%);
+    color: #070a13 !important;
+    /* Chữ tối đậm trên nền vàng cực kỳ nổi và dễ đọc */
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: var(--transition-base);
+}
+
+.btn-update-premium:hover:not([disabled]) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+}
+
+.btn-cancel-premium {
+    background-color: #171f38;
+    color: #a3b3cc;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: var(--transition-base);
+    text-decoration: none !important;
+}
+
+.btn-cancel-premium:hover {
+    background-color: #222c4e;
+    color: #ffffff;
+}
+
+.text-primary-blue {
+    color: var(--color-primary-blue) !important;
+}

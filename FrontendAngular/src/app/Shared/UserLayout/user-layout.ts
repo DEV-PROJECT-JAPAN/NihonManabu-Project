@@ -12,15 +12,21 @@ import { RouterOutlet, RouterModule, Router } from '@angular/router';
 export class UserLayoutComponent {
 
     constructor(private _router: Router) { }
+
     goToVocabulary(): void {
         this._router.navigate(['/vocabulary/levels']);
     }
+
     goToGrammar(): void {
-        this._router.navigate(['/Grammar/levels']);
+        this._router.navigate(['/grammar/levels']);
     }
-    // Hàm kiểm tra URL để tự động bật sáng Menu
-    checkActive(url: string): boolean {
-        // Nếu URL hiện tại của trình duyệt có chứa đoạn đường dẫn này thì trả về true (sáng đèn)
-        return this._router.url.includes(url);
+
+    /**
+     * 🌟 HÀM KIỂM TRA ACTIVE THÔNG MINH
+     * Chỉ cần URL hiện tại chứa từ khóa phân hệ (Vd: 'vocabulary' hoặc 'grammar')
+     * là menu đó sẽ luôn giữ trạng thái active sáng đèn.
+     */
+    checkActive(moduleName: string): boolean {
+        return this._router.url.includes(moduleName);
     }
 }

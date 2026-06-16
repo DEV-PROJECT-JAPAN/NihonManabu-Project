@@ -16,6 +16,11 @@ import { LessonsComponent, LessonsComponent as VocabLessions } from './Features/
 // Thêm dòng này lên nhóm import ở đầu file
 import { VocabularyComponent } from './Features/Vocabulary/vocabulary/vocabulary';
 import { GrammarListAdmin } from './Features/Admin/GrammarAdmin/GrammarListAdmin/GrammarListAdmin';
+import { GrammarCreate } from './Features/Admin/GrammarAdmin/GrammarCreate/GrammarCreate';
+import { GrammarEdit } from './Features/Admin/GrammarAdmin/GrammarEdit/GrammarEdit';
+import { QuestionList } from './Features/Admin/QuestionAdmin/QuestionList/QuestionList';
+import { QuestionCreate } from './Features/Admin/QuestionAdmin/QuestionCreate/QuestionCreate';
+import { QuestionEdit } from './Features/Admin/QuestionAdmin/QuestionEdit/QuestionEdit';
 
 export const routes: Routes = [
     // 0. Vừa vào web không gõ gì -> Tự động đá sang trang levels của học viên
@@ -64,11 +69,12 @@ export const routes: Routes = [
             // TẦNG 1: PHÂN HỆ GRAMMAR ADMIN (/admin/grammar)
             // =========================================================
             {
-                path: 'grammarAdmin',
+                path: 'grammar',
                 children: [
                     // TẦNG 2: Các trang con bên trong Grammar Admin
-                    { path: 'grammarIndex', component: GrammarListAdmin },                 // URL: /admin/grammar (Trang danh sách)
-                    // URL: /admin/grammar/edit/5 (Trang sửa)
+                    { path: 'index', component: GrammarListAdmin },                 // URL: /admin/grammar (Trang danh sách)
+                    { path: 'create', component: GrammarCreate },
+                    { path: 'edit/:id', component: GrammarEdit },
                 ]
             },
 
@@ -76,10 +82,12 @@ export const routes: Routes = [
             // TẦNG 1: PHÂN HỆ LESSON ADMIN (/admin/lesson)
             // =========================================================
             {
-                path: 'lesson',
+                path: 'question',
                 children: [
                     // TẦNG 2: Các trang con bên trong Lesson Admin
-                    // URL: /admin/lesson/edit/5 (Trang sửa)
+                    { path: 'index', component: QuestionList },
+                    { path: 'create', component: QuestionCreate },
+                    { path: 'edit/:id', component: QuestionEdit }
                 ]
             },
 

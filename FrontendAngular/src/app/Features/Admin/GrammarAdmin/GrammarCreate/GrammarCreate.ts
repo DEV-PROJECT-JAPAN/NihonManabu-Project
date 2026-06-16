@@ -92,7 +92,7 @@ export class GrammarCreate implements OnInit {
       next: (success) => {
         if (success) {
           // Lưu thành công, đá người dùng về trang list chính
-          this._router.navigate(['/admin/grammar']);
+          this._router.navigate(['/admin/grammar/index']);
         } else {
           this.errorMessage = 'Lỗi khi thêm mới dữ liệu vào hệ thống Web API.';
           this._cdr.markForCheck();

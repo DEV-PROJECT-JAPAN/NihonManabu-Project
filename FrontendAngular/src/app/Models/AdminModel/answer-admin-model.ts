@@ -3,7 +3,7 @@ export interface AnswerAdminModel {
     questionId: number;
 
     // Đổi 'Text' thành 'content' để đồng bộ khớp với cấu trúc mảng answers ở QuestionAdminModel
-    content: string;
+    text: string;
 
     isCorrect: boolean;
 

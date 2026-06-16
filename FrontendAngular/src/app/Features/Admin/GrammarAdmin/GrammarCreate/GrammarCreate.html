@@ -1,29 +1,31 @@
 <div class="container-fluid py-4 animate-fade-in">
-    <div class="mb-3">
-        <a [routerLink]="['/admin/grammar']" class="text-decoration-none text-muted-light small back-link">
-            <i class="fas fa-arrow-left mr-1"></i> Trở về danh sách ngữ pháp
+
+    <div class="mb-4">
+        <a [routerLink]="['/admin/grammar/index']"
+            class="text-decoration-none small back-link d-inline-flex align-items-center">
+            <i class="fas fa-arrow-left mr-2"></i> Trở về danh sách ngữ pháp
         </a>
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-7">
+        <div class="col-md-9 col-lg-7 col-xl-6">
 
-            <div class="admin-card shadow-lg border-0">
-                <div class="admin-card-header p-4">
-                    <h5 class="card-title mb-0 fw-bold d-flex align-items-center text-white">
-                        <span
-                            class="p-2 bg-success-subtle rounded-3 text-neon-green mr-3 d-flex align-items-center justify-content-center icon-box">
+            <div class="admin-premium-card shadow-lg">
+
+                <div class="card-premium-header p-4">
+                    <h5 class="card-title-main m-0 d-flex align-items-center">
+                        <span class="p-2 icon-box-glow mr-3 d-flex align-items-center justify-content-center">
                             <i class="fas fa-journal-whills"></i>
                         </span>
                         Thêm Mẫu Ngữ Pháp Mới
                     </h5>
-                    <p class="text-muted-light small mb-0 mt-2 ms-5">Cấu trúc dữ liệu ngữ pháp gốc cho hệ thống bài học
-                    </p>
+                    <p class="card-subtitle-text mb-0 mt-2">Cấu trúc dữ liệu ngữ pháp gốc cho hệ thống bài học</p>
                 </div>
 
-                <div class="admin-card-body p-4">
+                <div class="card-premium-body p-4 pt-2">
+
                     @if (errorMessage) {
-                    <div class="alert alert-danger-neon small mb-4" role="alert">
+                    <div class="alert alert-danger-neon small mb-4 animate-row" role="alert">
                         <i class="fas fa-exclamation-triangle mr-2"></i> {{ errorMessage }}
                     </div>
                     }
@@ -31,8 +33,8 @@
                     <form (ngSubmit)="onSubmit()" #createForm="ngForm" autocomplete="off">
 
                         <div class="form-group mb-4">
-                            <label class="admin-form-label">Chọn Cấp Độ</label>
-                            <div class="input-group admin-input-group">
+                            <label class="premium-form-label">Chọn Cấp Độ</label>
+                            <div class="input-group premium-input-group">
                                 <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
                                 <select class="form-select border-0" name="selectedLevelId"
                                     [(ngModel)]="selectedLevelId" (change)="onLevelChange()">
@@ -45,9 +47,11 @@
                         </div>
 
                         <div class="form-group mb-4">
-                            <label class="admin-form-label">Chọn Bài Học <span class="text-danger">*</span></label>
-                            <div class="input-group admin-input-group"
-                                [class.is-invalid]="lessonSelect.invalid && lessonSelect.touched">
+                            <label class="premium-form-label">Chọn Bài Học <span
+                                    class="text-danger-glow">*</span></label>
+                            <div class="input-group premium-input-group"
+                                [class.is-invalid-group]="lessonSelect.invalid && lessonSelect.touched"
+                                [class.disabled-premium-group]="!selectedLevelId || lessons.length === 0">
                                 <span class="input-group-text"><i class="fas fa-book"></i></span>
                                 <select id="lessonSelect" class="form-select border-0" name="lessonId"
                                     [(ngModel)]="grammar.lessonId" #lessonSelect="ngModel"
@@ -59,51 +63,55 @@
                                 </select>
                             </div>
                             @if (lessonSelect.invalid && lessonSelect.touched) {
-                            <span class="text-danger small d-block mt-1">Vui lòng chọn bài học cụ thể cho cấu trúc
-                                này.</span>
+                            <span class="text-danger-msg small d-block mt-1">
+                                <i class="fas fa-info-circle mr-1"></i> Vui lòng chọn bài học cụ thể cho cấu trúc này.
+                            </span>
                             }
                         </div>
 
                         <div class="form-group mb-4">
-                            <label class="admin-form-label">Cấu Trúc Ngữ Pháp <span class="text-danger">*</span></label>
-                            <div class="input-group admin-input-group"
-                                [class.is-invalid]="structureInput.invalid && structureInput.touched">
+                            <label class="premium-form-label">Cấu Trúc Ngữ Pháp <span
+                                    class="text-danger-glow">*</span></label>
+                            <div class="input-group premium-input-group"
+                                [class.is-invalid-group]="structureInput.invalid && structureInput.touched">
                                 <span class="input-group-text"><i class="fas fa-spellcheck"></i></span>
-                                <input type="text" class="form-control" name="structure" [(ngModel)]="grammar.structure"
-                                    #structureInput="ngModel" placeholder="Ví dụ: ~ Vると / ~ Vてみる" required />
+                                <input type="text" class="form-control input-text-custom" name="structure"
+                                    [(ngModel)]="grammar.structure" #structureInput="ngModel"
+                                    placeholder="Ví dụ: ~ Vると / ~ Vてみる" required />
                             </div>
                             @if (structureInput.invalid && structureInput.touched) {
-                            <span class="text-danger small d-block mt-1">Tên cấu trúc ngữ pháp không được để
-                                trống.</span>
+                            <span class="text-danger-msg small d-block mt-1">
+                                <i class="fas fa-info-circle mr-1"></i> Tên cấu trúc ngữ pháp không được để trống.
+                            </span>
                             }
                         </div>
 
                         <div class="form-group mb-4">
-                            <label class="admin-form-label">Giải Thích Ý Nghĩa & Ngữ Cảnh <span
-                                    class="text-danger">*</span></label>
-                            <textarea class="form-control admin-textarea" name="explanation"
+                            <label class="premium-form-label">Giải Thích Ý Nghĩa & Ngữ Cảnh <span
+                                    class="text-danger-glow">*</span></label>
+                            <textarea class="form-control premium-textarea" name="explanation"
                                 [(ngModel)]="grammar.explanation" #explanationInput="ngModel" rows="5"
                                 placeholder="Giải thích chi tiết cách dùng, ngữ cảnh bản xứ và lưu ý nếu có..."
                                 required></textarea>
                             @if (explanationInput.invalid && explanationInput.touched) {
-                            <span class="text-danger small d-block mt-1">Vui lòng điền giải thích ý nghĩa ngữ
-                                pháp.</span>
+                            <span class="text-danger-msg small d-block mt-1">
+                                <i class="fas fa-info-circle mr-1"></i> Vui lòng điền giải thích ý nghĩa ngữ pháp.
+                            </span>
                             }
                         </div>
 
-                        <div class="d-flex gap-2 justify-content-end border-top-admin pt-4 mt-4">
-                            <a [routerLink]="['/admin/grammar']" class="btn btn-muted-admin px-4">
+                        <div class="d-flex gap-2 justify-content-end footer-action-bar pt-4 mt-4">
+                            <a [routerLink]="['/admin/grammar/index']" class="btn btn-cancel-premium px-4">
                                 Hủy bỏ
                             </a>
-                            <button type="submit" [disabled]="createForm.invalid"
-                                class="btn btn-success-admin px-4 shadow-sm">
-                                <i class="fas fa-cloud-upload-alt mr-1"></i> Lưu Vào Database
+                            <button type="submit" [disabled]="createForm.invalid" class="btn btn-save-premium px-4">
+                                <i class="fas fa-cloud-upload-alt mr-2"></i> Lưu Vào Database
                             </button>
                         </div>
                     </form>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
 </div>
