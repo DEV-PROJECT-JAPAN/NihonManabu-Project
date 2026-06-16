@@ -37,6 +37,8 @@ builder.Services.AddDbContext<JapaneseDbContext>(options =>
         sqlOptions => sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
     ));
 
+// 💡 LƯU Ý CHO NHÓM: Đã xóa bỏ đoạn AddDbContext thứ hai bị thừa ở đây để tránh đè cấu hình!
+
 // =========================================================================
 // 3. ĐĂNG KÝ CÁC DỊCH VỤ NGHIỆP VỤ (BUSINESS SERVICES - DEPENDENCY INJECTION)
 // =========================================================================

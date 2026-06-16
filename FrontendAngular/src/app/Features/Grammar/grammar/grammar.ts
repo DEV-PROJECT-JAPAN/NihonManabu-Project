@@ -37,7 +37,7 @@ export class GrammarList implements OnInit {
     });
   }
 
-  // selectGrammar(id: number): void {
-  //   this._router.navigate(['/grammar/level', this.levelId, 'lesson', this.lessonId, 'question', id]);
-  // }
+  selectGrammar(id: number): void {
+    this._router.navigate(['/grammar/level', this.levelId, 'lesson', this.lessonId, 'grammar', id]);
+  }
 }

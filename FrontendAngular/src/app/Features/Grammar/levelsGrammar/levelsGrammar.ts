@@ -10,10 +10,10 @@ import { LevelModel } from '../../../Models/level-model';
   standalone: true,
   imports: [CommonModule, RouterModule],
   providers: [LevelClientService],
-  templateUrl: './levels.html',
-  styleUrls: ['./levels.css']
+  templateUrl: './levelsGrammar.html',
+  styleUrls: ['./levelsGrammar.css']
 })
-export class Levels implements OnInit {
+export class levelsGrammar implements OnInit {
   levels: LevelModel[] = [];
 
   constructor(
@@ -25,11 +25,12 @@ export class Levels implements OnInit {
   ngOnInit(): void {
     this._levelService.getLevelsAsync().subscribe(res => {
       this.levels = res;
+      console.log(this.levels);
       this._cdr.markForCheck();
     });
   }
 
-  // selectLevel(id: number): void {
-  //   this._router.navigate(['/grammar/level', id]);
-  // }
+  selectLevel(id: number): void {
+    this._router.navigate(['/grammar/level', id]);
+  }
 }

@@ -18,10 +18,10 @@ import { GrammarAdminModel } from '../../../../Models/AdminModel/grammar-admin-m
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   providers: [GrammarClientService, LessonClientService, LevelClientService],
-  templateUrl: './grammar-list-admin.html',
-  styleUrls: ['./grammar-list-admin.css']
+  templateUrl: './GrammarListAdmin.html',
+  styleUrls: ['./GrammarListAdmin.css']
 })
-export class index implements OnInit {
+export class GrammarListAdmin implements OnInit {
   // Trạng thái lưu bộ lọc
   selectedLevelId: number | null = null;
   selectedLessonId: number | null = null;
@@ -78,9 +78,12 @@ export class index implements OnInit {
     if (this.selectedLessonId && this.selectedLessonId > 0) {
       this._grammarService.getAllForAdminAsync().subscribe(res => {
         const allGrammars = res ?? [];
-
+        console.log(allGrammars);
         // Thực hiện lọc chính xác theo LessonId giống hệt C# Linq (.Where)
-        this.grammars = allGrammars.filter(g => (g.lessonId || (g as any).LessonId) === this.selectedLessonId);
+        // Sửa bằng cách đổi === thành ==
+        this.grammars = allGrammars.filter(g => (g.lessonId || (g as any).LessonId) == this.selectedLessonId);
+        console.log(this.grammars);
+        console.log(this.selectedLessonId);
         this._cdr.markForCheck();
       });
     } else {

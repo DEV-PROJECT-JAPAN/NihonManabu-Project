@@ -5,15 +5,17 @@ import { UserLayoutComponent } from './Shared/UserLayout/user-layout';
 import { AdminLayoutComponent } from './Shared/AdminLayout/admin-layout';
 
 // USER COMPONENTS (Học viên)
-import { Levels } from './Features/Grammar/levels/levels'; // Component Levels Ngữ pháp gốc của bạn
-import { LessonComponent } from './Features/Grammar/lessons/lessons';
+import { levelsGrammar } from './Features/Grammar/levelsGrammar/levelsGrammar'; // Component Levels Ngữ pháp gốc của bạn
+import { lessonsGrammar } from './Features/Grammar/lessonsGrammar/lessonsGrammar';
 import { GrammarList } from './Features/Grammar/grammar/grammar';
 import { Questions } from './Features/Grammar/questions/questions';
-import { LevelsComponent as VocabLevels } from './Features/Vocabulary/levels/levels';
 
-// ADMIN COMPONENTS (Bạn tự import các file admin thực tế vào đây nhé)
-// import { GrammarListAdmin } from './Features/Admin/GrammarAdmin/grammar-list-admin';
-// import { QuestionListAdmin } from './Features/Admin/QuestionAdmin/question-list-admin';
+import { LevelsComponent as VocabLevels } from './Features/Vocabulary/levels/levels';
+import { LessonsComponent, LessonsComponent as VocabLessions } from './Features/Vocabulary/lessons/lessons';
+
+// Thêm dòng này lên nhóm import ở đầu file
+import { VocabularyComponent } from './Features/Vocabulary/vocabulary/vocabulary';
+import { GrammarListAdmin } from './Features/Admin/GrammarAdmin/GrammarListAdmin/GrammarListAdmin';
 
 export const routes: Routes = [
     // 0. Vừa vào web không gõ gì -> Tự động đá sang trang levels của học viên
@@ -30,8 +32,8 @@ export const routes: Routes = [
             {
                 path: 'grammar',
                 children: [
-                    { path: 'levels', component: Levels },                                         // /grammar/levels
-                    { path: 'level/:levelId', component: LessonComponent },                        // /grammar/level/:levelId
+                    { path: 'levels', component: levelsGrammar },                                         // /grammar/levels
+                    { path: 'level/:levelId', component: lessonsGrammar },                        // /grammar/level/:levelId
                     { path: 'level/:levelId/lesson/:lessonId', component: GrammarList },           // /grammar/level/.../lesson/...
                     { path: 'level/:levelId/lesson/:lessonId/grammar/:grammarId', component: Questions } // /grammar/level/.../grammar/:grammarId
                 ]
@@ -42,7 +44,9 @@ export const routes: Routes = [
                 path: 'vocabulary',
                 children: [
                     { path: 'levels', component: VocabLevels }, // /vocabulary/levels
-                    // { path: 'level/:levelId', component: VocabLessonComponent } // Hàng chờ sau này của bạn
+                    { path: 'vocabulary/lessons/:id', component: LessonsComponent },
+                    // 3. Bấm vào Lesson -> Ra danh sách Từ vựng chi tiết để học
+                    { path: 'vocabulary/list/:levelId/:lessonId', component: VocabularyComponent }
                 ]
             }
         ]
@@ -53,19 +57,46 @@ export const routes: Routes = [
     // =========================================================================
     {
         path: 'admin',
-        component: AdminLayoutComponent, // ◄ Bọc giao diện tối tân Admin vừa làm xong
+        component: AdminLayoutComponent, // ◄ Lớp ngoài cùng: Bọc giao diện Admin tổng
         children: [
-            // Vào /admin mà để trống -> Tự động nhảy sang trang quản lý ngữ pháp
+            // Vào /admin mặc định đá sang /admin/grammar
             { path: '', redirectTo: 'grammar', pathMatch: 'full' },
 
-            // Các trang tính năng của Admin (Khi nào làm bạn mở ra và điền Component vào nhé)
-            // { path: 'grammar', component: GrammarListAdmin }, // /admin/grammar
-            // { path: 'question', component: QuestionListAdmin }, // /admin/question
+            // =========================================================
+            // TẦNG 1: PHÂN HỆ GRAMMAR ADMIN (/admin/grammar)
+            // =========================================================
+            {
+                path: 'grammarAdmin',
+                children: [
+                    // TẦNG 2: Các trang con bên trong Grammar Admin
+                    { path: '', component: GrammarListAdmin },                 // URL: /admin/grammar (Trang danh sách)
+                    // URL: /admin/grammar/edit/5 (Trang sửa)
+                ]
+            },
 
-            // Trang Dashboard mẫu (Nếu thích làm)
-            // { path: 'dashboard', component: AdminDashboardComponent }
+            // =========================================================
+            // TẦNG 1: PHÂN HỆ LESSON ADMIN (/admin/lesson)
+            // =========================================================
+            {
+                path: 'lesson',
+                children: [
+                    // TẦNG 2: Các trang con bên trong Lesson Admin
+                    // URL: /admin/lesson/edit/5 (Trang sửa)
+                ]
+            },
+
+            // =========================================================
+            // TẦNG 1: PHÂN HỆ VOCABULARY ADMIN (/admin/vocabulary)
+            // =========================================================
+            {
+                path: 'vocabulary',
+                children: [
+                    // URL: /admin/vocabulary/edit/5
+                ]
+            }
         ]
     },
+
 
     // =========================================================================
     // 🚨 CẢNH SÁT GIAO THÔNG (Xử lý URL bậy bạ)

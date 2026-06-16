@@ -22,5 +22,6 @@ namespace BackendAPI.Interfaces
 
     
         Task<bool> DeleteVocabularyAsync(int id);
+        Task<byte[]> ExportVocabularyPdfAsync(int lessonId);
     }
 }

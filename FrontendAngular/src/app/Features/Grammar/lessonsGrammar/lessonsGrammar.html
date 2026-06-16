@@ -15,7 +15,7 @@
         <div class="card-body p-4">
             <div class="lesson-modern-grid">
                 @for (les of lessons; track les.id) {
-                <a [routerLink]="['/grammar/level', levelId, 'lesson', les.id]" class="lesson-modern-item">
+                <a href="javascript:void(0)" class="lesson-modern-item" (click)="selectLesson(les.id)">
                     <span class="number">Bài {{ les.order }}</span>
                     <span class="sub-text">Lesson</span>
                 </a>

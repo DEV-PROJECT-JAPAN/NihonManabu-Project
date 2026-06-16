@@ -1,0 +1,211 @@
+.fw-black {
+    font-weight: 900 !important;
+}
+
+.text-indigo {
+    color: #4f46e5 !important;
+}
+
+.bg-indigo-subtle {
+    background-color: #e0e7ff !important;
+    color: #4f46e5 !important;
+}
+
+.leading-relaxed {
+    line-height: 1.6;
+}
+
+.fs-8 {
+    font-size: 0.72rem !important;
+}
+
+/* CARD CHỌN LỘ TRÌNH JLPT TẦNG 1 & 2 */
+.hover-card-jlpt {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+    cursor: pointer;
+    border: 1px solid #f1f5f9 !important;
+}
+
+.hover-card-jlpt:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.05) !important;
+    background-color: #fafafa !important;
+}
+
+/* BỐ CỤC KHU VỰC LUYỆN TẬP PREMIUM TẦNG 3 */
+.pro-vocab-wrapper {
+    max-width: 800px;
+}
+
+.flashcard-main-zone {
+    max-width: 580px;
+    margin: 0 auto;
+    perspective: 1500px;
+}
+
+/* ĐỊNH HÌNH THẺ FLASHCARD XOAY 3D CHUẨN MẪU */
+.flashcard-box {
+    width: 100%;
+    height: 350px;
+    cursor: pointer;
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    border-radius: 28px;
+}
+
+.flashcard-box.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.flashcard-front,
+.flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 28px;
+    padding: 30px;
+}
+
+.flashcard-front {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+}
+
+.flashcard-back {
+    background: #1e293b;
+    color: #ffffff;
+    transform: rotateY(180deg);
+}
+
+/* NÚT ĐIỀU HƯỚNG GĂM CHẶT VÀO LỀ RÌA THẺ (-60PX) */
+.btn-nav-side {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    background: #ffffff;
+    color: #1a202c;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s;
+    z-index: 10;
+    font-size: 1.1rem;
+}
+
+.btn-nav-side:hover {
+    background: #f8fafc;
+    transform: translateY(-50%) scale(1.1);
+    color: #4f46e5;
+}
+
+.btn-nav-side.prev {
+    left: -60px;
+}
+
+.btn-nav-side.next {
+    right: -60px;
+}
+
+/* NÚT LOA Ở GÓC TRÊN CỦA THẺ (TỰ LẬT THEO MẶT THẺ CHUẨN ĐÉT) */
+.btn-flash-corner {
+    position: absolute;
+    top: 22px;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    transition: 0.2s;
+    z-index: 10;
+}
+
+.btn-flash-corner:hover {
+    transform: scale(1.15);
+}
+
+.corner-speaker {
+    left: 24px;
+    color: #a0aec0;
+}
+
+/* THANH TRẠNG THÁI SẪM MÀU ĐÁY APP Y HỆT MẪU ĐỘI TRƯỞNG GỬI */
+.pro-status-bar {
+    background-color: #0f172a;
+    color: #ffffff;
+}
+
+.btn-progress-label {
+    color: #ffffff;
+    background: none;
+    border: none;
+    font-weight: 900;
+}
+
+/* NÚT CHẤM ĐIỂM TRÒN XOAY */
+.btn-state {
+    width: 52px;
+    height: 52px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    transition: 0.2s;
+    border-radius: 50%;
+}
+
+.btn-state:hover {
+    transform: scale(1.12);
+}
+
+.state-wrong {
+    background-color: #be185d;
+}
+
+/* Đỏ tím sẫm */
+.state-correct {
+    background-color: #065f46;
+}
+
+/* Xanh cổ vịt đậm */
+
+/* STYLE CHO CÁC NÚT ĐIỀU CHỈNH AUDIO/TRỘN TỪ */
+.btn-status-icon {
+    color: white;
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    transition: 0.2s;
+    padding: 8px 16px;
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-status-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+.active-play {
+    background-color: #2563eb !important;
+    border-color: #2563eb !important;
+}
+
+/* Nút Auto ON sáng đèn xanh khi bật */
+
+#btn-star {
+    border: none !important;
+}
+
+#btn-star:hover {
+    background: none !important;
+}

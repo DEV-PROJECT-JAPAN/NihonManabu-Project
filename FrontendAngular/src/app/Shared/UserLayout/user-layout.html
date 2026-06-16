@@ -11,7 +11,8 @@
                 <i class="fas fa-chess-knight"></i> <span>Hiển thị</span>
             </a>
 
-            <a routerLink="/vocabulary/levels" routerLinkActive="active" class="menu-item">
+            <a href="javascript:void(0)" class="menu-item" (click)="goToVocabulary()"
+                [class.active]="checkActive('/vocabulary/levels')">
                 <i class="fas fa-book"></i> <span>Từ vựng</span>
             </a>
 

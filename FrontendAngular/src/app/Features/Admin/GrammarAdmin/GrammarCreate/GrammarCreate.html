@@ -1,0 +1,109 @@
+<div class="container-fluid py-4 animate-fade-in">
+    <div class="mb-3">
+        <a [routerLink]="['/admin/grammar']" class="text-decoration-none text-muted-light small back-link">
+            <i class="fas fa-arrow-left mr-1"></i> Trở về danh sách ngữ pháp
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+
+            <div class="admin-card shadow-lg border-0">
+                <div class="admin-card-header p-4">
+                    <h5 class="card-title mb-0 fw-bold d-flex align-items-center text-white">
+                        <span
+                            class="p-2 bg-success-subtle rounded-3 text-neon-green mr-3 d-flex align-items-center justify-content-center icon-box">
+                            <i class="fas fa-journal-whills"></i>
+                        </span>
+                        Thêm Mẫu Ngữ Pháp Mới
+                    </h5>
+                    <p class="text-muted-light small mb-0 mt-2 ms-5">Cấu trúc dữ liệu ngữ pháp gốc cho hệ thống bài học
+                    </p>
+                </div>
+
+                <div class="admin-card-body p-4">
+                    @if (errorMessage) {
+                    <div class="alert alert-danger-neon small mb-4" role="alert">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> {{ errorMessage }}
+                    </div>
+                    }
+
+                    <form (ngSubmit)="onSubmit()" #createForm="ngForm" autocomplete="off">
+
+                        <div class="form-group mb-4">
+                            <label class="admin-form-label">Chọn Cấp Độ</label>
+                            <div class="input-group admin-input-group">
+                                <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
+                                <select class="form-select border-0" name="selectedLevelId"
+                                    [(ngModel)]="selectedLevelId" (change)="onLevelChange()">
+                                    <option [value]="null">-- Chọn Cấp Độ --</option>
+                                    @for (lvl of levels; track lvl.id) {
+                                    <option [value]="lvl.id">{{ lvl.name }}</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="admin-form-label">Chọn Bài Học <span class="text-danger">*</span></label>
+                            <div class="input-group admin-input-group"
+                                [class.is-invalid]="lessonSelect.invalid && lessonSelect.touched">
+                                <span class="input-group-text"><i class="fas fa-book"></i></span>
+                                <select id="lessonSelect" class="form-select border-0" name="lessonId"
+                                    [(ngModel)]="grammar.lessonId" #lessonSelect="ngModel"
+                                    [disabled]="!selectedLevelId || lessons.length === 0" required>
+                                    <option [value]="0">-- Chọn Bài Học --</option>
+                                    @for (les of lessons; track les.id) {
+                                    <option [value]="les.id">Bài {{ les.order }}: {{ les.title }}</option>
+                                    }
+                                </select>
+                            </div>
+                            @if (lessonSelect.invalid && lessonSelect.touched) {
+                            <span class="text-danger small d-block mt-1">Vui lòng chọn bài học cụ thể cho cấu trúc
+                                này.</span>
+                            }
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="admin-form-label">Cấu Trúc Ngữ Pháp <span class="text-danger">*</span></label>
+                            <div class="input-group admin-input-group"
+                                [class.is-invalid]="structureInput.invalid && structureInput.touched">
+                                <span class="input-group-text"><i class="fas fa-spellcheck"></i></span>
+                                <input type="text" class="form-control" name="structure" [(ngModel)]="grammar.structure"
+                                    #structureInput="ngModel" placeholder="Ví dụ: ~ Vると / ~ Vてみる" required />
+                            </div>
+                            @if (structureInput.invalid && structureInput.touched) {
+                            <span class="text-danger small d-block mt-1">Tên cấu trúc ngữ pháp không được để
+                                trống.</span>
+                            }
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="admin-form-label">Giải Thích Ý Nghĩa & Ngữ Cảnh <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control admin-textarea" name="explanation"
+                                [(ngModel)]="grammar.explanation" #explanationInput="ngModel" rows="5"
+                                placeholder="Giải thích chi tiết cách dùng, ngữ cảnh bản xứ và lưu ý nếu có..."
+                                required></textarea>
+                            @if (explanationInput.invalid && explanationInput.touched) {
+                            <span class="text-danger small d-block mt-1">Vui lòng điền giải thích ý nghĩa ngữ
+                                pháp.</span>
+                            }
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end border-top-admin pt-4 mt-4">
+                            <a [routerLink]="['/admin/grammar']" class="btn btn-muted-admin px-4">
+                                Hủy bỏ
+                            </a>
+                            <button type="submit" [disabled]="createForm.invalid"
+                                class="btn btn-success-admin px-4 shadow-sm">
+                                <i class="fas fa-cloud-upload-alt mr-1"></i> Lưu Vào Database
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

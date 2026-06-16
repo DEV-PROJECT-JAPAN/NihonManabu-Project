@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Levels } from './levels';
+import { GrammarEdit } from './GrammarEdit';
 
-describe('Levels', () => {
-  let component: Levels;
-  let fixture: ComponentFixture<Levels>;
+describe('GrammarEdit', () => {
+  let component: GrammarEdit;
+  let fixture: ComponentFixture<GrammarEdit>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Levels]
+      imports: [GrammarEdit]
     })
-    .compileComponents();
+      .compileComponents();
 
-    fixture = TestBed.createComponent(Levels);
+    fixture = TestBed.createComponent(GrammarEdit);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
