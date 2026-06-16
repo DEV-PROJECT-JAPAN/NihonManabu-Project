@@ -4,6 +4,10 @@ import { GrammarList } from './Features/Grammar/grammar/grammar';
 import { Levels } from './Features/Grammar/levels/levels';
 import { LessonComponent } from './Features/Grammar/lessons/lessons';
 import { LevelsComponent as VocabLevels } from './Features/Vocabulary/levels/levels';
+import { LessonsComponent as VocabLessions } from './Features/Vocabulary/lessons/lessons';
+// Thêm dòng này lên nhóm import ở đầu file
+import { VocabularyComponent } from './Features/Vocabulary/vocabulary/vocabulary';
+
 export const routes: Routes = [
     // 1. Mặc định vào thẳng trang chọn Level
     { path: 'grammar', component: Levels },
@@ -26,8 +30,7 @@ export const routes: Routes = [
     { path: 'vocabulary/levels', component: VocabLevels },
 
     // 2. Bấm vào Level -> Ra danh sách Lesson Từ vựng
-    //{ path: 'vocabulary/lessons/:levelId', component: VocabLessons },
-
+    { path: 'vocabulary/lessons/:id', component: VocabLessions },
     // 3. Bấm vào Lesson -> Ra danh sách Từ vựng chi tiết để học
-    //{ path: 'vocabulary/details/:lessonId', component: VocabDetails },
+    { path: 'vocabulary/list/:levelId/:lessonId', component: VocabularyComponent },
 ];

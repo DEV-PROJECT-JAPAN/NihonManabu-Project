@@ -8,7 +8,10 @@
 
     <nav class="sidebar-menu">
       <a href="javascript:void(0)" class="menu-item"><i class="fas fa-chess-knight"></i> <span>Hiển thị</span></a>
-      <a routerLink="/vocabulary/levels" routerLinkActive="active"><i class="fas fa-book"></i> <span>Từ vựng</span></a>
+      <a href="javascript:void(0)" class="menu-item" (click)="goToVocabulary()"
+        [class.active]="checkActive('/vocabulary/levels')">
+        <i class="fas fa-book"></i> <span>Từ vựng</span>
+      </a>
       <a href="javascript:void(0)" class="menu-item active"><i class="fas fa-bullhorn"></i> <span>Ngữ pháp</span></a>
       <a href="javascript:void(0)" class="menu-item"><i class="fas fa-route"></i> <span>Lộ trình</span></a>
       <a href="javascript:void(0)" class="menu-item"><i class="fas fa-chart-line"></i> <span>Ghi nhớ</span></a>

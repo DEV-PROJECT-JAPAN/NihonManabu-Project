@@ -1,0 +1,149 @@
+z<div class="container py-5">
+    <div class="d-flex align-items-center mb-4">
+        <a [routerLink]="['/vocabulary/lessons', levelId]"
+            class="btn btn-light rounded-circle me-3 shadow-sm p-2 text-dark">
+            <i class="fa-solid fa-arrow-left fs-5"></i>
+        </a>
+        <h2 class="fw-black text-dark m-0">Luyện tập từ vựng: {{ lessonTitle }}</h2>
+    </div>
+
+    @if (originalCards.length > 0) {
+    <div class="pro-vocab-wrapper mx-auto mb-5">
+        <div class="position-relative flashcard-main-zone mb-4">
+            <button class="btn-nav-side prev rounded-circle shadow-sm" (click)="prevCard()" title="Từ trước"
+                [disabled]="currentIndex === 0">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <div class="flashcard-box mx-auto" id="flashcard" [class.flipped]="isFlipped" (click)="toggleFlip()">
+                <div class="flashcard-inner shadow-lg">
+
+                    <div
+                        class="flashcard-front bg-white d-flex flex-column justify-content-center align-items-center border">
+                        <span
+                            class="badge bg-light text-muted border mb-4 rounded-pill px-3 py-1 text-uppercase fs-8 tracking-wider">Mặt
+                            trước</span>
+                        <h1 class="display-1 fw-black text-dark m-0 mb-3">{{ currentCard?.kanji }}</h1>
+                        <div class="text-center bg-light px-4 py-2 rounded-pill border border-light shadow-sm">
+                            <span class="text-primary fw-black fs-3 me-2">{{ currentCard?.hiragana }}</span>
+                            <span class="text-muted fst-italic fs-6">({{ currentCard?.romaji }})</span>
+                        </div>
+                        <button class="btn-flash-corner corner-speaker"
+                            (click)="speakText(currentCard?.textToSpeak, $event)" title="Nghe phát âm">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+
+                    <div class="flashcard-back d-flex flex-column justify-content-center align-items-center p-4">
+                        <span
+                            class="badge bg-secondary-subtle text-dark mb-4 rounded-pill px-3 py-1 text-uppercase fs-8 tracking-wider">Ý
+                            nghĩa</span>
+                        <h2 class="fw-black text-warning m-0 display-5 text-center">{{ currentCard?.meaning }}</h2>
+                        <p
+                            class="fst-italic text-center mt-4 opacity-75 border-top border-secondary border-opacity-50 pt-3 w-100 px-3 fs-6">
+                            {{ currentCard?.exampleSentence }}</p>
+                        <button class="btn-flash-corner corner-speaker text-white"
+                            (click)="speakText(currentCard?.textToSpeak, $event)" title="Nghe phát âm">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-nav-side next rounded-circle shadow-sm" (click)="nextCard()" title="Từ tiếp theo"
+                [disabled]="currentIndex === displayCards.length - 1">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="pro-status-bar d-flex justify-content-between align-items-center rounded-4 p-3 shadow">
+            <div class="d-flex gap-2">
+                <button id="btn-auto-play" class="btn btn-status-icon rounded-pill px-3"
+                    [class.active-play]="isAutoPlay" (click)="toggleAutoPlay()" title="Bật/Tắt tự động đọc">
+                    <i class="fa-solid" [class.fa-volume-high]="isAutoPlay" [class.fa-volume-xmark]="!isAutoPlay"></i>
+                    Auto: {{ isAutoPlay ? 'ON' : 'OFF' }}
+                </button>
+                <button class="btn btn-status-icon rounded-pill px-3" (click)="shuffleCards()"
+                    title="Trộn ngẫu nhiên danh sách">
+                    <i class="fa-solid fa-shuffle me-1"></i> Trộn từ
+                </button>
+                <button class="btn btn-status-icon rounded-pill px-3" (click)="resetOrder()"
+                    title="Quay về thứ tự bài học mặc định">
+                    <i class="fa-solid fa-list-ol me-1"></i> Mặc định
+                </button>
+            </div>
+
+            <div class="d-flex align-items-center gap-4">
+                <button class="btn-state state-wrong rounded-circle shadow" (click)="toggleMastered('wrong')"
+                    title="Chưa thuộc">
+                    <i class="fa-solid fa-xmark fs-5"></i>
+                </button>
+                <span class="btn btn-progress-label fw-black fs-4 m-0 px-2 text-warning">{{ currentIndex + 1 }} / {{
+                    displayCards.length }}</span>
+                <button class="btn-state state-correct rounded-circle shadow" (click)="toggleMastered('correct')"
+                    title="Đã thuộc">
+                    <i class="fa-solid fa-check fs-5"></i>
+                </button>
+            </div>
+
+            <div class="d-flex gap-2 align-items-center">
+                <span class="text-white opacity-50 small fw-bold me-2 tracking-wide">JP → VI</span>
+                <button class="btn btn-status-icon rounded-circle fs-4 px-3" (click)="toggleBookmark()"
+                    title="Lưu sổ tay ôn tập">
+                    <i class="fa-star" [class.fa-solid]="starredState[currentCard?.id || 0]"
+                        [class.fa-regular]="!starredState[currentCard?.id || 0]"
+                        [class.text-warning]="starredState[currentCard?.id || 0]"
+                        [class.text-light]="!starredState[currentCard?.id || 0]"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-black text-secondary m-0">Danh sách từ vựng chi tiết</h4>
+        <div class="d-flex gap-3 align-items-center">
+            <button (click)="exportPdf()" class="btn btn-outline-danger rounded-pill px-3 shadow-sm"
+                title="Tải xuống file PDF">
+                <i class="fa-solid fa-file-pdf me-1"></i> Xuất file PDF
+            </button>
+            <span class="badge bg-dark rounded-pill px-3 py-2 m-0">Tổng số: {{ originalCards.length }} từ</span>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+        <table class="table align-middle mb-0 bg-white">
+            <thead class="table-light border-bottom">
+                <tr>
+                    <th class="ps-4 text-muted py-3">Từ vựng</th>
+                    <th class="text-muted py-3">Nghĩa</th>
+                    <th class="text-muted py-3 text-center">Nghe giọng</th>
+                    <th class="pe-4 text-muted py-3">Ví dụ ngữ cảnh</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (v of originalCards; track v.id) {
+                <tr>
+                    <td class="ps-4 py-3">
+                        <div class="fw-black text-dark fs-4">{{ v.kanji }}</div>
+                        <div class="text-primary small fw-bold">{{ v.hiragana }} <span class="text-muted fw-normal">({{
+                                v.romaji }})</span></div>
+                    </td>
+                    <td class="fw-bold text-success fs-5">{{ v.meaning }}</td>
+                    <td class="text-center">
+                        <button class="btn btn-outline-primary btn-sm rounded-circle p-2 shadow-sm"
+                            (click)="speakText(v.textToSpeak)">
+                            <i class="fa-solid fa-volume-high px-1"></i>
+                        </button>
+                    </td>
+                    <td class="text-secondary small pe-4 fst-italic">{{ v.exampleSentence }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    } @else {
+    <div class="alert alert-warning text-center rounded-4 p-4">
+        Bài học này hiện chưa có từ vựng nào.
+    </div>
+    }
+</div>
