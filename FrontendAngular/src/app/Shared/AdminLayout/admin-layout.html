@@ -20,71 +20,58 @@
 
             <div class="menu-label">Quản lý nội dung học</div>
 
-            <a [routerLink]="['/admin/levels']" routerLinkActive="active" class="menu-item">
-                <div class="menu-icon-wrapper"><i class="fas fa-layer-group"></i></div>
-                <span>Cấp độ (Levels)</span>
-            </a>
 
-            <a [routerLink]="['/admin/lessons']" routerLinkActive="active" class="menu-item">
-                <div class="menu-icon-wrapper"><i class="fas fa-book-open"></i></div>
-                <span>Bài học (Lessons)</span>
-            </a>
-            <<<<<<< Updated upstream <a [routerLink]="['/admin/vocabulary']" routerLinkActive="active"
+
+
+            <a href="javascript:void(0)" (click)="goToGrammar()" [class.active]="checkActive('admin/grammar')"
                 class="menu-item">
-                <div class="menu-icon-wrapper"><i class="fas fa-font"></i></div>
-                <span>Từ vựng (Vocabularies)</span>
-                </a>
+                <div class="menu-icon-wrapper"><i class="fas fa-brain"></i></div>
+                <span>Ngữ pháp (Grammars)</span>
+            </a>
 
-                <a href="javascript:void(0)" (click)="goToGrammar()" [class.active]="checkActive('admin/grammar')"
-                    class="menu-item">
-                    <div class="menu-icon-wrapper"><i class="fas fa-brain"></i></div>
-                    <span>Ngữ pháp (Grammars)</span>
-                </a>
+            <div class="menu-label">Kho câu hỏi & đáp án</div>
 
-                <div class="menu-label">Kho câu hỏi & đáp án</div>
+            <a href="javascript:void(0)" (click)="goToQuestion()" [class.active]="checkActive('admin/question')"
+                class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-question-circle"></i></div>
+                <span>Danh sách Câu hỏi</span>
+            </a>
 
-                <a href="javascript:void(0)" (click)="goToQuestion()" [class.active]="checkActive('admin/question')"
-                    class="menu-item">
-                    <div class="menu-icon-wrapper"><i class="fas fa-question-circle"></i></div>
-                    <span>Danh sách Câu hỏi</span>
-                </a>
+            <div class="menu-label">Người dùng & Hệ thống</div>
 
-                <div class="menu-label">Người dùng & Hệ thống</div>
+            <a [routerLink]="['/admin/level']" routerLinkActive="active" class="menu-item">
+                <i class="fas fa-layer-group"></i>
+                <span>Quản lý Cấp độ</span>
+            </a>
+            <a [routerLink]="['/admin/lesson']" routerLinkActive="active" class="menu-item">
+                <i class="fas fa-book-open"></i>
+                <span>Quản lý Bài học</span>
+            </a>
+            <a [routerLink]="['/admin/vocabulary']" routerLinkActive="active" class="menu-item">
+                <i class="fas fa-language"></i>
+                <span>Quản lý Từ vựng</span>
+            </a>
 
-                =======
-                <a [routerLink]="['/admin/level']" routerLinkActive="active" class="menu-item">
-                    <i class="fas fa-layer-group"></i>
-                    <span>Quản lý Cấp độ</span>
-                </a>
-                <a [routerLink]="['/admin/lesson']" routerLinkActive="active" class="menu-item">
-                    <i class="fas fa-book-open"></i>
-                    <span>Quản lý Bài học</span>
-                </a>
-                <a [routerLink]="['/admin/vocabulary']" routerLinkActive="active" class="menu-item">
-                    <i class="fas fa-language"></i>
-                    <span>Quản lý Từ vựng</span>
-                </a>
-                >>>>>>> Stashed changes
-                <a [routerLink]="['/admin/users']" routerLinkActive="active" class="menu-item">
-                    <div class="menu-icon-wrapper"><i class="fas fa-users-cog"></i></div>
-                    <span>Học viên (Users)</span>
-                </a>
+            <a [routerLink]="['/admin/users']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-users-cog"></i></div>
+                <span>Học viên (Users)</span>
+            </a>
 
-                <a [routerLink]="['/admin/transactions']" routerLinkActive="active" class="menu-item">
-                    <div class="menu-icon-wrapper"><i class="fas fa-credit-card"></i></div>
-                    <span>Giao dịch (Transactions)</span>
-                </a>
+            <a [routerLink]="['/admin/transactions']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-credit-card"></i></div>
+                <span>Giao dịch (Transactions)</span>
+            </a>
 
-                <a [routerLink]="['/admin/badges']" routerLinkActive="active" class="menu-item">
-                    <div class="menu-icon-wrapper"><i class="fas fa-award"></i></div>
-                    <span>Danh hiệu (Badges)</span>
-                </a>
+            <a [routerLink]="['/admin/badges']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-award"></i></div>
+                <span>Danh hiệu (Badges)</span>
+            </a>
 
-                <div class="menu-label">Cấu hình</div>
-                <a [routerLink]="['/admin/settings']" routerLinkActive="active" class="menu-item">
-                    <div class="menu-icon-wrapper"><i class="fas fa-sliders-h"></i></div>
-                    <span>Cấu hình hệ thống</span>
-                </a>
+            <div class="menu-label">Cấu hình</div>
+            <a [routerLink]="['/admin/settings']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-sliders-h"></i></div>
+                <span>Cấu hình hệ thống</span>
+            </a>
         </nav>
     </aside>
 
