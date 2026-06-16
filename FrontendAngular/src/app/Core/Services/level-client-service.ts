@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { LevelModel } from '../../Models/level-model';
 import { BaseService } from './BaseService';
 import { catchError, map } from 'rxjs/operators';
-import { LevelAdminModel } from '../../Models/AdminModel/level-admin.model';
+import { LevelAdminModel } from '../../Models/AdminModel/level-admin-model';
 
 @Injectable({
   providedIn: 'root'

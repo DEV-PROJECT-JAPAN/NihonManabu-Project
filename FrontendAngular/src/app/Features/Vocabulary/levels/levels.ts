@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';//cung cấp công cụ điều hướng giữa các trang
 
 import { LevelClientService } from '../../../Core/Services/level-client-service';
 
@@ -16,10 +16,8 @@ import { LevelModel } from '../../../Models/level-model'; // Hoặc đường d�
 export class LevelsComponent implements OnInit {
 
   // 1. "State" của Component (Tương đương: public List<LevelModel> Levels { get; set; } = new(); )
-  public levels: LevelModel[] = [];
-
-  // 2. Tiêm Service (Tương đương: public IndexModel(LevelClientService levelClientService) )
-  constructor(
+  public levels: LevelModel[] = [];//biến chứa danh sach
+  constructor(//tiêm các dịch vụ vào component để sử dụng
     private _levelClientService: LevelClientService,
     private _cdr: ChangeDetectorRef,
     private _router: Router

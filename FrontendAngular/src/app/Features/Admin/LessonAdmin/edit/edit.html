@@ -1,0 +1,95 @@
+<div class="container mt-5" style="max-width: 700px;">
+    <div class="d-flex align-items-center mb-4">
+        <a routerLink="/admin/lesson" class="btn btn-outline-secondary btn-sm rounded-circle me-3 p-2">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+        <h2 class="fw-bold m-0 text-White  text-uppercase fs-4">Cập nhật bài học tiếng Nhật</h2>
+    </div>
+
+    <div class="card shadow border-0" style="border-radius: 15px;">
+        <div class="card-body p-4">
+
+            @if (isLoading()) {
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Đang tải dữ liệu...</span>
+                </div>
+                <h5 class="text-muted fw-semibold">Đang tải thông tin bài học...</h5>
+            </div>
+            } @else {
+            @if (errorMessage()) {
+            <div class="alert alert-danger" role="alert">
+                {{ errorMessage() }}
+            </div>
+            }
+
+            <form [formGroup]="lessonForm" (ngSubmit)="onSubmit()">
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-secondary">
+                        <i class="fa-solid fa-layer-group me-1"></i> Cấp độ JLPT <span class="text-danger">*</span>
+                    </label>
+                    <select formControlName="levelId" class="form-select form-select-lg border-2"
+                        [class.is-invalid]="lessonForm.get('levelId')?.invalid && lessonForm.get('levelId')?.touched"
+                        style="border-radius: 10px;">
+                        <option value="">-- Chọn Cấp Độ Học --</option>
+                        @for (lvl of levels(); track lvl.id) {
+                        <option [value]="lvl.id">{{ lvl.name }}</option>
+                        }
+                    </select>
+
+                    @if (lessonForm.get('levelId')?.invalid && lessonForm.get('levelId')?.touched) {
+                    <span class="text-danger small mt-1 d-block">Vui lòng chọn một cấp độ.</span>
+                    }
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-secondary">
+                        <i class="fa-solid fa-heading me-1"></i> Tiêu đề bài học <span class="text-danger">*</span>
+                    </label>
+                    <input formControlName="title" type="text" class="form-control form-control-lg border-2"
+                        [class.is-invalid]="lessonForm.get('title')?.invalid && lessonForm.get('title')?.touched"
+                        placeholder="Ví dụ: Bài 1: Chào hỏi cơ bản" style="border-radius: 10px;" />
+
+                    @if (lessonForm.get('title')?.hasError('required') && lessonForm.get('title')?.touched) {
+                    <span class="text-danger small mt-1 d-block">Tiêu đề bài học không được để trống.</span>
+                    }
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-secondary">
+                        <i class="fa-solid fa-arrow-down-1-9 me-1"></i> Thứ tự sắp xếp <span
+                            class="text-danger">*</span>
+                    </label>
+                    <input formControlName="order" type="number" class="form-control form-control-lg border-2"
+                        [class.is-invalid]="lessonForm.get('order')?.invalid && lessonForm.get('order')?.touched"
+                        style="border-radius: 10px;" min="1" />
+
+                    @if (lessonForm.get('order')?.hasError('required') && lessonForm.get('order')?.touched) {
+                    <span class="text-danger small mt-1 d-block">Thứ tự không được để trống.</span>
+                    }
+                </div>
+
+                <hr class="my-4 text-muted opacity-25">
+
+                <div class="d-flex justify-content-end gap-3">
+                    <a routerLink="/admin/lesson" [queryParams]="{ selectedLevelId: previousSelectedLevelId() }"
+                        class="btn btn-light btn-lg px-4 fw-semibold border" style="border-radius: 10px;">
+                        Hủy bỏ
+                    </a>
+
+                    <button type="submit" class="btn btn-primary btn-lg px-5 fw-semibold shadow-sm"
+                        [disabled]="isSubmitting()" style="border-radius: 10px;">
+                        @if (isSubmitting()) {
+                        <span class="spinner-border spinner-border-sm me-1"></span> Đang cập nhật...
+                        } @else {
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Cập Nhật Bài Học
+                        }
+                    </button>
+                </div>
+
+            </form>
+            }
+        </div>
+    </div>
+</div>
