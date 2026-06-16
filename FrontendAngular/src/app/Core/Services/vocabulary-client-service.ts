@@ -6,7 +6,6 @@ import { LevelModel } from '../../Models/level-model';
 import { LessonModel } from '../../Models/lesson-model';
 import { BaseService } from './BaseService';
 import { VocabularyModel } from '../../Models/vocabulary-model';
-
 import { VocabularyAdminModel } from '../../Models/AdminModel/vocabulary-admin-model';
 @Injectable({
     providedIn: 'root'
@@ -17,7 +16,6 @@ export class VocabularyClientService extends BaseService {
     constructor(private _http: HttpClient) {
         super();
     }
-
 
 
     /**
