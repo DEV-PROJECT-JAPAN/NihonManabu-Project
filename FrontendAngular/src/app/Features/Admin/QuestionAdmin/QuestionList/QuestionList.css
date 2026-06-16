@@ -1,0 +1,337 @@
+:host {
+    --bg-card-panel: #111726;
+    --bg-input-fields: #1b233d;
+    --text-pure-white: #f8fafc;
+    --text-gray-muted: #64748b;
+    --text-light-blue: #94a3b8;
+
+    --color-primary-blue: #3b82f6;
+    --color-neon-green: #10b981;
+    --color-neon-purple: #a855f7;
+    --color-neon-orange: #ff7f11;
+
+    --border-thin-glow: rgba(255, 255, 255, 0.04);
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in {
+    animation: fadeInPage 0.4s ease-out;
+}
+
+@keyframes fadeInPage {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header-title {
+    font-size: 24px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(to right, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-gradient-orange {
+    background: linear-gradient(135deg, #ff9f43 0%, var(--color-neon-orange) 100%);
+    color: white !important;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: var(--transition-fast);
+}
+
+.btn-gradient-orange:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 127, 17, 0.3);
+}
+
+.py-2-\.5 {
+    padding-top: 9px !important;
+    padding-bottom: 9px !important;
+}
+
+.alert-custom-info {
+    background-color: rgba(59, 130, 246, 0.06);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    color: var(--color-primary-blue);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* =========================================================================
+   🎛️ FILTERS PANEL
+   ========================================================================= */
+.filter-premium-card {
+    background-color: var(--bg-card-panel);
+    border: 1px solid var(--border-thin-glow);
+    border-radius: 12px;
+}
+
+.filter-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-gray-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.admin-input-group {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--bg-input-fields);
+    transition: var(--transition-fast);
+}
+
+.admin-input-group:focus-within {
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.admin-input-group .input-group-text {
+    background: transparent;
+    border: none;
+    color: #4b5b75;
+    padding-left: 14px;
+    font-size: 14px;
+}
+
+.admin-input-group .form-select {
+    background-color: transparent !important;
+    color: var(--text-pure-white) !important;
+    font-size: 14px;
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.admin-input-group .form-select option {
+    background-color: #161d30;
+    color: white;
+}
+
+.disabled-group {
+    opacity: 0.35;
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: not-allowed;
+}
+
+/* =========================================================================
+   📊 DATA TABLE
+   ========================================================================= */
+.admin-table-wrapper {
+    background-color: var(--bg-card-panel);
+    border: 1px solid var(--border-thin-glow);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.admin-custom-table thead {
+    background-color: rgba(255, 255, 255, 0.01);
+    border-bottom: 1px solid var(--border-thin-glow);
+}
+
+.admin-custom-table th {
+    color: var(--text-gray-muted) !important;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 18px 20px !important;
+    border-bottom: none !important;
+}
+
+.admin-custom-table td {
+    padding: 20px 20px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02) !important;
+    color: var(--text-light-blue);
+}
+
+.admin-tr-hover {
+    transition: var(--transition-fast);
+}
+
+.admin-tr-hover:hover {
+    background-color: rgba(255, 255, 255, 0.01);
+}
+
+.admin-id-tag {
+    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--text-gray-muted);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.question-content-text {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* =========================================================================
+   📦 SỬA LỖI ĐÁP ÁN DÍNH HÀNG NGANG (BẮT BUỘC DỌC TRÊN TOÀN HỆ THỐNG)
+   ========================================================================= */
+.answer-preview-list {
+    display: flex !important;
+    flex-direction: column !important;
+    /* Ép buộc xuống dòng */
+    gap: 8px !important;
+    /* Khoảng cách giữa các hàng con */
+    margin-top: 6px;
+    align-items: flex-start !important;
+}
+
+.answer-preview-list span {
+    display: flex !important;
+    align-items: center !important;
+    padding: 2px 0;
+    line-height: 1.4;
+    width: 100%;
+}
+
+.answer-preview-list .mini-icon {
+    font-size: 13px;
+    width: 16px;
+    text-align: center;
+    margin-right: 10px !important;
+    /* Tách chữ ra khỏi icon */
+    flex-shrink: 0;
+}
+
+.order-number-prefix {
+    color: #4b5b75;
+    font-family: monospace;
+    font-size: 13.5px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.answer-text-string {
+    color: #8493a8;
+    font-size: 13.5px;
+    word-break: break-word;
+}
+
+.correct-highlight {
+    color: var(--color-neon-green) !important;
+}
+
+.correct-highlight .mini-icon {
+    color: var(--color-neon-green) !important;
+}
+
+.correct-highlight .answer-text-string {
+    color: #a7f3d0 !important;
+    font-weight: 600;
+}
+
+/* =========================================================================
+   🔮 BADGES SHAPE
+   ========================================================================= */
+.badge-pill {
+    display: inline-block;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-tracnghiem {
+    background-color: rgba(59, 130, 246, 0.08);
+    color: var(--color-primary-blue);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.badge-sapxep {
+    background-color: rgba(168, 85, 247, 0.08);
+    color: var(--color-neon-purple);
+    border: 1px solid rgba(168, 85, 247, 0.15);
+}
+
+.bg-secondary-pill {
+    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--text-gray-muted);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table-empty-state {
+    font-size: 14px;
+    color: #516279 !important;
+    border-bottom: none !important;
+}
+
+.empty-icon-glow {
+    font-size: 28px;
+    filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.2));
+}
+
+/* =========================================================================
+   🎛️ NÚT HÀNH ĐỘNG PHÓNG TO (EASY TO CLICK)
+   ========================================================================= */
+.btn-action-edit {
+    background-color: rgba(59, 130, 246, 0.06);
+    color: var(--color-primary-blue);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    /* Đệm nút to rõ ràng */
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.btn-action-edit:hover {
+    background-color: var(--color-primary-blue);
+    color: white !important;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
+}
+
+.btn-action-delete {
+    background-color: rgba(239, 68, 68, 0.04);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.12);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    /* Đệm nút to rõ ràng */
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-action-delete:hover {
+    background-color: #ef4444;
+    color: white !important;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
+}
+
+.text-primary-blue {
+    color: var(--color-primary-blue) !important;
+}
+
+.text-neon-green {
+    color: var(--color-neon-green) !important;
+}
+
+.text-neon-purple {
+    color: var(--color-neon-purple) !important;
+}

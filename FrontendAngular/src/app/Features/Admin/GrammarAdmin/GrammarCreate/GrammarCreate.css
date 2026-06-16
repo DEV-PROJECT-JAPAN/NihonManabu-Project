@@ -1,0 +1,234 @@
+/* =========================================================================
+   🎛️ LUXURY VARIABLES (HẠ TÔNG MÀU SÂU MỊN MÀNG)
+   ========================================================================= */
+:host {
+    --panel-bg: #0e1424;
+    /* Hạ sắc độ từ xanh mực chói xuống tối sẫm */
+    --input-fill: #141b32;
+    /* Ô input sẫm màu tạo độ chìm */
+    --input-focus-border: #3b82f6;
+
+    --text-silver: #cbd5e1;
+    /* Chữ xám bạc dịu mắt */
+    --text-dark-muted: #4b5b75;
+    --border-glow-line: rgba(255, 255, 255, 0.03);
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hiệu ứng trồi trang mượt mà */
+.animate-fade-in {
+    animation: slideUpIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Nút back link quay lại */
+.back-link {
+    color: #64748b;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
+
+.back-link:hover {
+    color: #ffffff !important;
+    transform: translateX(-2px);
+}
+
+/* =========================================================================
+   📦 THIẾT KẾ CARD FORM (GLASSMORPHISM EMBEDDED)
+   ========================================================================= */
+.admin-premium-card {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-glow-line);
+    border-radius: 14px;
+    /* Bo tròn mịn góc 14px chuẩn cao cấp */
+    position: relative;
+}
+
+/* Đường phân tách mảnh nhẹ tinh tế */
+.card-premium-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.card-title-main {
+    color: #ffffff;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+    font-weight: 700;
+}
+
+.card-subtitle-text {
+    color: #5d6f88;
+    font-size: 13px;
+    margin-left: 48px;
+}
+
+/* Khung tròn phát quang bao quanh Icon */
+.icon-box-glow {
+    width: 34px;
+    height: 34px;
+    background-color: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    border-radius: 8px;
+    color: #10b981;
+    font-size: 14px;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+}
+
+/* Nhãn trường nhập liệu dạng mờ nhỏ nhã nhặn */
+.premium-form-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #5d6f88;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* =========================================================================
+   🎛️ KHỐI Ô NHẬP LIỆU CAPSULE INPUTS
+   ========================================================================= */
+.premium-input-group {
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--input-fill);
+    transition: var(--transition-smooth);
+}
+
+.premium-input-group .input-group-text {
+    background: transparent;
+    border: none;
+    color: #3d4a6b;
+    padding-left: 14px;
+    font-size: 14px;
+}
+
+.premium-input-group .form-control,
+.premium-input-group .form-select {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    font-size: 14px;
+    padding: 11px 12px;
+    border: none !important;
+}
+
+.premium-input-group .form-select option {
+    background-color: #0b0e1a;
+    color: white;
+}
+
+/* Hiệu ứng viền phát quang êm dịu khi click chuột vào */
+.premium-input-group:focus-within {
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+/* Vùng viết văn bản lớn (Textarea) */
+.premium-textarea {
+    background-color: var(--input-fill) !important;
+    border: 1px solid rgba(255, 255, 255, 0.03) !important;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #ffffff !important;
+    transition: var(--transition-smooth);
+}
+
+.premium-textarea:focus {
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12) !important;
+    outline: none;
+}
+
+/* Khóa group khi chưa chọn Cấp độ */
+.disabled-premium-group {
+    opacity: 0.25;
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: not-allowed;
+}
+
+/* =========================================================================
+   🚨 THÔNG BÁO BẮT LỖI REAL-TIME (VALIDATION)
+   ========================================================================= */
+.is-invalid-group {
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.text-danger-glow {
+    color: #ef4444;
+    text-shadow: 0 0 4px rgba(239, 68, 68, 0.2);
+}
+
+.text-danger-msg {
+    color: #ee5e5e;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.alert-danger-neon {
+    background-color: rgba(239, 68, 68, 0.04);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-radius: 8px;
+}
+
+/* =========================================================================
+   ⚙️ THANH NÚT ĐIỀU KHIỂN (ACTION BUTTONS)
+   ========================================================================= */
+.footer-action-bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Nút Lưu Gradient Xanh Ngọc dịu mát */
+.btn-save-premium {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white !important;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: var(--transition-smooth);
+}
+
+.btn-save-premium:hover:not([disabled]) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+}
+
+.btn-save-premium:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+/* Nút Hủy bỏ */
+.btn-cancel-premium {
+    background-color: #171f38;
+    color: #a3b3cc;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: var(--transition-base);
+    text-decoration: none !important;
+}
+
+.btn-cancel-premium:hover {
+    background-color: #222c4e;
+    color: #ffffff;
+}

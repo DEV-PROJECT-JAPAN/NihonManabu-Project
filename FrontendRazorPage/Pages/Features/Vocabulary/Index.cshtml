@@ -23,47 +23,50 @@
             {
                 <div class="col-12 col-md-6 col-lg-4">
                     <a asp-page="./Lesson" asp-route-levelId="@lvl.Id" class="text-decoration-none">
-                        <div class="card h-100 border-0 shadow-sm p-4 hover-card-jlpt position-relative overflow-hidden" style="border-radius: 20px; background: #ffffff;">
-                            <div class="position-absolute top-0 start-0 h-100" style="width: 6px; background-color: #4f46e5;"></div>
+                        <div class="card h-100 border-0 shadow-sm p-4 hover-card-jlpt position-relative overflow-hidden"
+                             style="border-radius: 20px; background: #ffffff;">
+                            <div class="position-absolute top-0 start-0 h-100" style="width: 6px; background-color: #4f46e5;">
+                            </div>
 
                             <div class="ps-2">
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                     <h1 class="fw-black m-0 text-indigo display-5">@lvl.Name</h1>
-                                    <span class="badge bg-indigo-subtle text-indigo rounded-pill px-3 py-2 fw-bold">Học ngay</span>
+                                    <span class="badge bg-indigo-subtle text-indigo rounded-pill px-3 py-2 fw-bold">Học
+                                        ngay</span>
+                                    </div>
+                                    <p class="text-secondary fw-medium m-0 fs-6 leading-relaxed">
+                                        @lvl.Description
+                                    </p>
                                 </div>
-                                <p class="text-secondary fw-medium m-0 fs-6 leading-relaxed">
-                                    @lvl.Description
-                                </p>
                             </div>
-                        </div>
-                    </a>
-                </div>
-            }
-        </div>
-    }
+                        </a>
+                    </div>
+                }
+            </div>
+        }
 
   
 
 
-<style>
-        .fw-black {
-            font-weight: 900 !important;
-        }
+        <style>
+                .fw-black {
+                    font-weight: 900 !important;
+                }
 
-        .text-indigo {
-            color: #4f46e5 !important;
-        }
+                .text-indigo {
+                    color: #4f46e5 !important;
+                }
 
-        .bg-indigo-subtle {
-            background-color: #e0e7ff !important;
-            color: #4f46e5 !important;
-        }
+                .bg-indigo-subtle {
+                    background-color: #e0e7ff !important;
+                    color: #4f46e5 !important;
+                }
 
-        .leading-relaxed {
-            line-height: 1.6;
-        }
+                .leading-relaxed {
+                    line-height: 1.6;
+                }
 
-        .fs-8 {
-            font-size: 0.72rem !important;
-        }
-</style>
+                .fs-8 {
+                    font-size: 0.72rem !important;
+                }
+        </style>

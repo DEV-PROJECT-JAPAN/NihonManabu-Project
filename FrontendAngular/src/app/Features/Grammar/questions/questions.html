@@ -39,7 +39,7 @@
             <div class="mode-title">Bài Tập Sắp Xếp</div>
             <div class="mode-desc">Xếp các thẻ từ xáo trộn thành một câu ngữ pháp hoàn chỉnh đúng nghĩa.</div>
         </a>
-        <a (click)="changeQuestionType(0)" class="mode-card mode-all">
+        <a (click)="changeQuestionType(3)" class="mode-card mode-all">
             <div class="mode-icon"><i class="fas fa-layer-group"></i></div>
             <div class="mode-title">Bài Tập Tổng Hợp</div>
             <div class="mode-desc">Bao gồm toàn bộ tất cả câu hỏi cả trắc nghiệm và sắp xếp câu.</div>
@@ -145,3 +145,11 @@
     </div>
     }
 </div>
+<!-- <div class="alert alert-warning m-4">
+    <h5>🔍 TRẠNG THÁI DEBUG HỆ THỐNG:</h5>
+    <p><b>1. QuestionType hiện tại:</b> {{ questionType }}</p>
+    <p><b>1. IdGrammar hỏi đang có:</b> {{ grammarId }}</p>
+    <p><b>2. Số lượng câu hỏi đang có:</b> {{ questions?.length }}</p>
+    <p><b>3. Chi tiết "ruột" dữ liệu JSON:</b></p>
+    <pre style="background: #222; color: #fff; p: 10px; max-height: 200px; overflow: auto;">{{ questions | json }}</pre>
+</div> -->

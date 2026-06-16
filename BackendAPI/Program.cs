@@ -4,13 +4,13 @@ using BackendAPI.Models.Data;
 using BackendAPI.Models;
 using BackendAPI.Services;
 using Microsoft.EntityFrameworkCore;
-
+using QuestPDF.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 // =========================================================================
 // 1. CẤU HÌNH CÁC DỊCH VỤ HỆ THỐNG (SYSTEM SERVICES)
 // =========================================================================
-
+QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

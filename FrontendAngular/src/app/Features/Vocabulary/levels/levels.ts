@@ -21,7 +21,8 @@ export class LevelsComponent implements OnInit {
   // 2. Tiêm Service (Tương đương: public IndexModel(LevelClientService levelClientService) )
   constructor(
     private _levelClientService: LevelClientService,
-    private _cdr: ChangeDetectorRef
+    private _cdr: ChangeDetectorRef,
+    private _router: Router
   ) { }
 
   // 3. ngOnInit chạy ngay khi trang vừa mở (Tương đương: public async Task OnGetAsync() )
@@ -43,6 +44,15 @@ export class LevelsComponent implements OnInit {
       }
     });
   }
+  public selectLevel(id: number): void {
+    console.log('ID cấp độ nhận được là:', id); // ◄ Thêm dòng này để kiểm tra ở tab Console (F12)
 
+    if (!id) {
+      console.error('Lỗi: ID bị undefined hoặc bằng 0, không thể chuyển trang!');
+      return;
+    }
+
+    this._router.navigate(['/vocabulary/lessons', id]);
+  }
 
 }

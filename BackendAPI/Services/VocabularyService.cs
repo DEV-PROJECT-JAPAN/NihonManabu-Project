@@ -5,8 +5,11 @@ using BackendAPI.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
-
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 namespace BackendAPI.Services
 {
     public class VocabularyService : IVocabularyService
@@ -29,7 +32,7 @@ namespace BackendAPI.Services
             return await _context.Lessons
                 .Where(l => l.LevelId == levelId)
                 .OrderBy(l => l.Order)
-                .Select(l => new LessonDTO
+                .Select(l => new LessonDTO//gasn vào đt 
                 {
                     Id = l.Id,
                     LevelId = l.LevelId,
@@ -163,6 +166,75 @@ namespace BackendAPI.Services
 
             _context.Vocabularies.Remove(vocab);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<byte[]> ExportVocabularyPdfAsync(int lessonId)
+        {
+            // 1. Dùng _context để chọc thẳng vào Database lấy từ vựng theo LessonId
+            var vocabularies = await _context.Vocabularies // (Nhớ sửa 'Vocabularies' thành tên DbSet thật trong file DbContext của bạn)
+                                             .Where(v => v.LessonId == lessonId)
+                                             .ToListAsync();
+
+            if (vocabularies == null || !vocabularies.Any())
+            {
+                return Array.Empty<byte>(); // Trả về mảng rỗng nếu không có dữ liệu
+            }
+
+            // 2. Dùng QuestPDF vẽ giao diện file PDF
+            var document = QuestPDF.Fluent.Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(2, Unit.Centimetre);
+                    page.PageColor(Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(12));
+
+                    // Tiêu đề
+                    page.Header().Text("Danh Sách Từ Vựng")
+                        .SemiBold().FontSize(20).FontColor(Colors.Blue.Darken2);
+
+                    // Bảng dữ liệu
+                    page.Content().PaddingVertical(1, Unit.Centimetre).Table(table =>
+                    {
+                        table.ColumnsDefinition(columns =>
+                        {
+                            columns.RelativeColumn(2); // Cột Từ vựng
+                            columns.RelativeColumn(2); // Cột Ý nghĩa
+                            columns.RelativeColumn(3); // Cột Ví dụ
+                        });
+
+                        table.Header(header =>
+                        {
+                            header.Cell().BorderBottom(1).Padding(5).Text("Từ vựng").Bold();
+                            header.Cell().BorderBottom(1).Padding(5).Text("Ý nghĩa").Bold();
+                            header.Cell().BorderBottom(1).Padding(5).Text("Ví dụ").Bold();
+                        });
+
+                        foreach (var item in vocabularies)
+                        {
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5)
+                                 .Text($"{item.Kanji}\n({item.Hiragana})");
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5)
+                                 .Text(item.Meaning);
+                            table.Cell().BorderBottom(1).BorderColor(Colors.Grey.Lighten2).Padding(5)
+                                 .Text(item.ExampleSentence).Italic();
+                        }
+                    });
+
+                    // Số trang
+                    page.Footer().AlignCenter().Text(x =>
+                    {
+                        x.Span("Trang ");
+                        x.CurrentPageNumber();
+                        x.Span(" / ");
+                        x.TotalPages();
+                    });
+                });
+            });
+
+            // 3. Xuất ra mảng bytes để Controller mang đi trả về cho Angular
+            return document.GeneratePdf();
         }
     }
 }

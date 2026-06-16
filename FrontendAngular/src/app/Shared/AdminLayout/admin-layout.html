@@ -1,0 +1,480 @@
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<div class="admin-container">
+
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <img [src]="'/assets/img/logo.png'" alt="NihonManabu Logo" class="brand-logo">
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a [routerLink]="['/admin/dashboard']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-chart-pie"></i></div>
+                <span>Tổng quan (Dashboard)</span>
+            </a>
+
+            <div class="menu-label">Quản lý nội dung học</div>
+
+            <a [routerLink]="['/admin/levels']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-layer-group"></i></div>
+                <span>Cấp độ (Levels)</span>
+            </a>
+
+            <a [routerLink]="['/admin/lessons']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-book-open"></i></div>
+                <span>Bài học (Lessons)</span>
+            </a>
+
+            <a [routerLink]="['/admin/vocabulary']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-font"></i></div>
+                <span>Từ vựng (Vocabularies)</span>
+            </a>
+
+            <a href="javascript:void(0)" (click)="goToGrammar()" [class.active]="checkActive('admin/grammar')"
+                class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-brain"></i></div>
+                <span>Ngữ pháp (Grammars)</span>
+            </a>
+
+            <div class="menu-label">Kho câu hỏi & đáp án</div>
+
+            <a href="javascript:void(0)" (click)="goToQuestion()" [class.active]="checkActive('admin/question')"
+                class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-question-circle"></i></div>
+                <span>Danh sách Câu hỏi</span>
+            </a>
+
+            <div class="menu-label">Người dùng & Hệ thống</div>
+
+            <a [routerLink]="['/admin/users']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-users-cog"></i></div>
+                <span>Học viên (Users)</span>
+            </a>
+
+            <a [routerLink]="['/admin/transactions']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-credit-card"></i></div>
+                <span>Giao dịch (Transactions)</span>
+            </a>
+
+            <a [routerLink]="['/admin/badges']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-award"></i></div>
+                <span>Danh hiệu (Badges)</span>
+            </a>
+
+            <div class="menu-label">Cấu hình</div>
+            <a [routerLink]="['/admin/settings']" routerLinkActive="active" class="menu-item">
+                <div class="menu-icon-wrapper"><i class="fas fa-sliders-h"></i></div>
+                <span>Cấu hình hệ thống</span>
+            </a>
+        </nav>
+    </aside>
+
+    <div class="admin-main">
+        <header class="admin-header">
+            <div class="header-left">
+
+            </div>
+
+            <div class="header-right">
+                <button class="header-icon-btn" title="Thông báo">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge-dot"></span>
+                </button>
+                <button class="header-icon-btn" title="Tin nhắn">
+                    <i class="fas fa-envelope"></i>
+                </button>
+
+            </div>
+        </header>
+
+        <main class="admin-content-body">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+
+</div>
+
+<style>
+    /* =========================================================================
+   🎛️ CORES & VARIABLES (PREMIUM DARK MATRIX)
+   ========================================================================= */
+    :host {
+        --bg-admin: #0b111e;
+        /* Nền tối sâu thẳm giống vế phải của ông */
+        --bg-sidebar: #161d30;
+        /* Xanh mực đậm quý tộc chuẩn màu user sidebar */
+        --bg-header: rgba(22, 29, 48, 0.8);
+        --bg-input: #1f2945;
+
+        --text-main: #f1f5f9;
+        /* Chữ trắng ngà chống lóa */
+        --text-muted: #6b7c96;
+        /* Chữ nhãn mờ phụ */
+
+        --color-primary: #3b82f6;
+        /* Xanh Royal điện tử chủ đạo */
+        --color-primary-glow: rgba(59, 130, 246, 0.4);
+        --color-neon-green: #10b981;
+        /* Chấm xanh trạng thái hoạt động online */
+
+        --border-premium: rgba(255, 255, 255, 0.05);
+        --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .admin-container {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--bg-admin);
+        color: var(--text-main);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        overflow: hidden;
+    }
+
+    /* =========================================================================
+   🧭 SIDEBAR GLASSMORPHISM STYLE
+   ========================================================================= */
+    .admin-sidebar {
+        width: 265px;
+        /* Tỉ lệ vàng để chứa trọn vẹn chữ tiếng Anh đi kèm */
+        height: 100%;
+        background-color: var(--bg-sidebar);
+        border-right: 1px solid var(--border-premium);
+        display: flex;
+        flex-direction: column;
+        padding: 0 14px 16px 14px;
+        z-index: 10;
+    }
+
+    /* Khu vực bọc Logo đầu trang */
+    .sidebar-brand {
+        height: 85px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid var(--border-premium);
+        padding: 0 10px;
+    }
+
+    .brand-logo {
+        height: 32px;
+        /* 🌟 ĐÃ SỬA: Ép kích thước vừa vặn để logo NIHONMANABU bung rõ nét chữ */
+        width: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.15));
+        transition: var(--transition-base);
+    }
+
+    /* Thực đơn điều hướng */
+    .sidebar-menu {
+        flex: 1;
+        margin-top: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        overflow-y: auto;
+    }
+
+    .sidebar-menu::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+
+    .menu-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-muted);
+        letter-spacing: 0.8px;
+        padding: 18px 12px 6px 12px;
+        text-transform: uppercase;
+    }
+
+    .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        /* Khoảng cách lý tưởng giữa icon và chữ */
+        padding: 10px 12px;
+        color: #9daec6;
+        text-decoration: none !important;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: var(--transition-base);
+    }
+
+    /* 🌟 ĐÃ KHỬ LỖI: Biến ô vuông xám thành khung trong suốt để Icon lộ diện tự do */
+    .menu-icon-wrapper {
+        width: 22px;
+        height: 22px;
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .menu-icon-wrapper i {
+        font-size: 16px;
+        /* Kích thước icon chuẩn UI quốc tế */
+        color: #8da2bb;
+        /* Màu icon thanh thoát phối màu nền sâu */
+        transition: color 0.2s ease;
+    }
+
+    /* Trạng thái Rê chuột (Hover) */
+    .menu-item:hover {
+        background-color: rgba(255, 255, 255, 0.03);
+        color: #ffffff;
+    }
+
+    .menu-item:hover i {
+        color: #ffffff;
+    }
+
+    /* 🌟 TRẠNG THÁI ACTIVE (Đèn sáng lề trái độc quyền) */
+    .menu-item.active {
+        background: linear-gradient(90deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.01) 100%);
+        color: #ffffff;
+        font-weight: 600;
+        position: relative;
+    }
+
+    .menu-item.active i {
+        color: #2b5fb2;
+        /* Đổi icon sang màu xanh rực rỡ */
+    }
+
+    /* Dải LED neon bám dọc mép sidebar trái cực ngầu */
+    .menu-item.active::after {
+        content: "";
+        position: absolute;
+        left: -14px;
+        top: 15%;
+        height: 70%;
+        width: 3px;
+        background-color: var(--color-primary);
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        box-shadow: 0 0 10px var(--color-primary);
+    }
+
+    /* Khối Admin Footer */
+    .sidebar-footer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border-premium);
+    }
+
+    .admin-avatar {
+        position: relative;
+    }
+
+    .admin-avatar img {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .status-dot {
+        width: 9px;
+        height: 9px;
+        background-color: var(--color-neon-green);
+        border: 2px solid var(--bg-sidebar);
+        border-radius: 50%;
+        position: absolute;
+        bottom: -1px;
+        right: -1px;
+        box-shadow: 0 0 8px var(--color-neon-green);
+    }
+
+    .admin-info {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .admin-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: #ffffff;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .admin-role {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 1px;
+    }
+
+    .btn-logout {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 14px;
+        padding: 8px;
+        border-radius: 6px;
+        transition: var(--transition-base);
+    }
+
+    .btn-logout:hover {
+        color: #ef4444;
+        background-color: rgba(239, 68, 68, 0.1);
+    }
+
+    /* =========================================================================
+   🖥️ VÙNG NAV VÀ BODY PHẢI GIỮ NGUYÊN BIẾN
+   ========================================================================= */
+    .admin-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background-color: var(--bg-admin);
+    }
+
+    .admin-header {
+        height: 64px;
+        background-color: var(--bg-sidebar);
+        border-bottom: 1px solid var(--border-premium);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: var(--bg-input);
+        border: 1px solid rgba(255, 255, 255, 0.02);
+        padding: 6px 14px;
+        border-radius: 8px;
+        width: 260px;
+        transition: var(--transition-base);
+        position: relative;
+    }
+
+    .search-box i {
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    .search-box input {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 13px;
+        width: 100%;
+        outline: none;
+    }
+
+    .search-box input::placeholder {
+        color: #495a73;
+    }
+
+    .search-shortcut {
+        font-family: monospace;
+        font-size: 11px;
+        background-color: rgba(255, 255, 255, 0.04);
+        color: #495a73;
+        padding: 1px 6px;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    .search-box:focus-within {
+        border-color: rgba(59, 130, 246, 0.4);
+        box-shadow: 0 0 16px rgba(59, 130, 246, 0.1);
+        width: 290px;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-icon-btn {
+        background: none;
+        border: none;
+        color: #94a3b8;
+        font-size: 15px;
+        cursor: pointer;
+        position: relative;
+        padding: 8px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-base);
+    }
+
+    .header-icon-btn:hover {
+        background-color: rgba(255, 255, 255, 0.04);
+        color: white;
+    }
+
+    .header-icon-btn .badge-dot {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 6px;
+        height: 6px;
+        background-color: #ef4444;
+        border-radius: 50%;
+        box-shadow: 0 0 6px #ef4444;
+    }
+
+    .divider {
+        width: 1px;
+        height: 16px;
+        background-color: rgba(255, 255, 255, 0.05);
+        margin: 0 4px;
+    }
+
+    .current-date {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .admin-content-body {
+        flex: 1;
+        padding: 28px;
+        overflow-y: auto;
+        background-color: var(--bg-admin);
+    }
+
+    .admin-content-body::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .admin-content-body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .admin-content-body::-webkit-scrollbar-thumb {
+        background: #1f2a3f;
+        border-radius: 10px;
+    }
+
+    .admin-content-body::-webkit-scrollbar-thumb:hover {
+        background: #2b3b59;
+    }
+</style>

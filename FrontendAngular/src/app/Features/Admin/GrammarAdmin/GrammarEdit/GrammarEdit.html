@@ -1,0 +1,138 @@
+<div class="container-fluid py-4 animate-fade-in">
+
+    <div class="mb-4">
+        <a [routerLink]="['/admin/grammar/index']"
+            class="text-decoration-none small back-link d-inline-flex align-items-center">
+            <i class="fas fa-arrow-left mr-2"></i> Trở về danh sách ngữ pháp
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-7 col-xl-6">
+
+            <div class="admin-premium-card shadow-lg">
+
+                <div class="card-premium-header p-4">
+                    <h5 class="card-title-main m-0 d-flex align-items-center">
+                        <span class="p-2 icon-box-glow mr-3 d-flex align-items-center justify-content-center">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                        Chỉnh Sửa Mẫu Ngữ Pháp
+                    </h5>
+                    <p class="card-subtitle-text mb-0 mt-2">Cập nhật nội dung thực thể gốc (ID bản ghi: #{{ grammar.id
+                        }})</p>
+                </div>
+
+                <div class="card-premium-body p-4">
+
+                    @if (errorMessage) {
+                    <div class="alert alert-danger-neon small mb-4 animate-row" role="alert">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> {{ errorMessage }}
+                    </div>
+                    }
+
+                    <form (ngSubmit)="onSubmit()" #editForm="ngForm" autocomplete="off">
+
+                        <div class="form-group-spaced">
+                            <label class="premium-form-label">Cấp Độ Hệ Thống</label>
+                            <div class="input-group premium-input-group">
+                                <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
+                                <select id="levelSelect" class="form-select border-0" name="selectedLevelId"
+                                    [(ngModel)]="selectedLevelId" (change)="onLevelChange()">
+                                    <option [value]="null">-- Chọn Cấp Độ Mới Để Đổi Bài --</option>
+                                    @for (lvl of levels; track lvl.id) {
+                                    <option [value]="lvl.id">{{ lvl.name }}</option>
+                                    }
+                                </select>
+                            </div>
+                            <span class="premium-text-hint">
+                                <i class="fas fa-info-circle mr-1 text-primary-blue"></i> Chọn cấp độ nếu bạn muốn phân
+                                bổ lại mẫu ngữ pháp này sang bài học khác.
+                            </span>
+                        </div>
+
+                        <div class="form-group-spaced">
+                            <label class="premium-form-label">Bài Học Hiện Tại (ID gốc: #{{ grammar.lessonId }}) <span
+                                    class="text-danger-glow">*</span></label>
+                            <div class="input-group premium-input-group"
+                                [class.is-invalid-group]="lessonSelect.invalid && lessonSelect.touched">
+                                <span class="input-group-text"><i class="fas fa-book"></i></span>
+                                <select id="lessonSelect" class="form-select border-0" name="lessonId"
+                                    [(ngModel)]="grammar.lessonId" #lessonSelect="ngModel" required>
+                                    <option [value]="grammar.lessonId">Giữ nguyên bài học hiện tại (#{{ grammar.lessonId
+                                        }})</option>
+                                    @for (les of lessons; track les.id) {
+                                    <option [value]="les.id">Bài {{ les.order }}: {{ les.title }}</option>
+                                    }
+                                </select>
+                            </div>
+                            @if (lessonSelect.invalid && lessonSelect.touched) {
+                            <span class="text-danger-msg small d-block mt-1">
+                                <i class="fas fa-info-circle mr-1"></i> Vui lòng chọn bài học cho cấu trúc này.
+                            </span>
+                            }
+                        </div>
+
+                        <div class="form-group-spaced">
+                            <label class="premium-form-label">Cấu Trúc Ngữ Pháp <span
+                                    class="text-danger-glow">*</span></label>
+                            <div class="input-group premium-input-group"
+                                [class.is-invalid-group]="structureInput.invalid && structureInput.touched">
+                                <span class="input-group-text"><i class="fas fa-spellcheck"></i></span>
+                                <input type="text" class="form-control input-text-custom" name="structure"
+                                    [(ngModel)]="grammar.structure" #structureInput="ngModel" required />
+                            </div>
+                            @if (structureInput.invalid && structureInput.touched) {
+                            <span class="text-danger-msg small d-block mt-1">
+                                <i class="fas fa-info-circle mr-1"></i> Tên cấu trúc ngữ pháp không được để trống.
+                            </span>
+                            }
+                        </div>
+
+                        <div class="form-group-spaced">
+                            <label class="premium-form-label">Giải Thích Ý Nghĩa & Ngữ Cảnh <span
+                                    class="text-danger-glow">*</span></label>
+                            <textarea class="form-control premium-textarea" name="explanation"
+                                [(ngModel)]="grammar.explanation" #explanationInput="ngModel" rows="5"
+                                required></textarea>
+                            @if (explanationInput.invalid && explanationInput.touched) {
+                            <span class="text-danger-msg small d-block mt-1">
+                                <i class="fas fa-info-circle mr-1"></i> Vui lòng điền giải thích ý nghĩa ngữ pháp.
+                            </span>
+                            }
+                        </div>
+
+                        <div class="premium-timeline-grid mb-2">
+                            <div class="timeline-meta-item">
+                                <i class="far fa-calendar-plus icon-meta"></i>
+                                <div class="meta-content">
+                                    <span class="meta-label">Ngày tạo ban đầu</span>
+                                    <span class="meta-value">{{ grammar.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+                                </div>
+                            </div>
+                            <div class="timeline-meta-item">
+                                <i class="far fa-calendar-check icon-meta"></i>
+                                <div class="meta-content">
+                                    <span class="meta-label">Cập nhật gần nhất</span>
+                                    <span class="meta-value">
+                                        {{ grammar.updatedAt ? (grammar.updatedAt | date: 'dd/MM/yyyy HH:mm') : '---' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end footer-action-bar pt-4 mt-4">
+                            <a [routerLink]="['/admin/grammar/index']" class="btn btn-cancel-premium px-4">
+                                Hủy thay đổi
+                            </a>
+                            <button type="submit" [disabled]="editForm.invalid" class="btn btn-update-premium px-4">
+                                <i class="fas fa-save mr-2"></i> Cập Nhật Hệ Thống
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

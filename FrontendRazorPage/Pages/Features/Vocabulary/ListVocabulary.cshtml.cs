@@ -47,8 +47,8 @@ namespace FrontendRazorPage.Pages.Features.Vocabulary
         }
         public async Task<IActionResult> OnGetExportPdfAsync(int lessonId)
         {
-            
-           
+
+
             var vocabularies = await _service.GetCardsAsync(lessonId);
 
             // 2. Dùng code C# "vẽ" ra file PDF mới tinh (không liên quan gì đến HTML/CSS của web)

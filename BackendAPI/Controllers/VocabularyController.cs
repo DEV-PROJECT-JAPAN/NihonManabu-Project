@@ -51,7 +51,7 @@ namespace BackendAPI.Controllers
         // ==================== KHU VỰC XỬ LÝ DÀNH CHO ADMIN ====================
         // ===================================================================
 
-        
+
         [HttpGet("admin/by-lesson/{lessonId:int}")]
         public async Task<IActionResult> GetVocabulariesByLessonForAdmin(int lessonId)
         {
@@ -120,7 +120,20 @@ namespace BackendAPI.Controllers
             if (!isDeleted) return NotFound("Không tìm thấy từ vựng để xóa.");
             return Ok(new { message = "Xóa từ vựng thành công!" });
         }
+        [HttpGet("export-pdf/{lessonId}")]
+        public async Task<IActionResult> ExportPdf(int lessonId)
+        {
+            // Controller chỉ gọi xuống Service giải quyết hộ
+            byte[] pdfBytes = await _backendService.ExportVocabularyPdfAsync(lessonId);
 
+            if (pdfBytes == null || pdfBytes.Length == 0)
+            {
+                return NotFound("Bài học này chưa có từ vựng để xuất file PDF.");
+            }
+
+            // Trả file về cho bên phía Angular đón nhận
+            return File(pdfBytes, "application/pdf");
+        }
 
     }
 }

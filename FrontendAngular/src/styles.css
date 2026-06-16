@@ -1,4 +1,6 @@
 /* Đưa biến cấu hình màu sắc lên tầng cao nhất của ứng dụng */
+
+
 :root {
     --primary-color: #3B82F6;
     --primary-light: rgba(59, 130, 246, 0.12);

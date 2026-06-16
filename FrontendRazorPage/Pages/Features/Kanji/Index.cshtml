@@ -1,4 +1,3 @@
-﻿@page "/"
 @model FrontendRazorPage.Pages.KanjiNotebookModel
 @{
     Layout = "_Layout";
@@ -6,7 +5,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link
+href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+rel="stylesheet">
 
 <style>
     :root {
@@ -28,7 +29,8 @@
         width: 100%;
         max-width: 1180px;
         margin: 0 auto;
-        padding: 0 20px 20px 20px; /* Bỏ hẳn padding-top để đẩy kịch lên sát logo */
+        padding: 0 20px 20px 20px;
+        /* Bỏ hẳn padding-top để đẩy kịch lên sát logo */
     }
 
     header.kanji-header {
@@ -48,21 +50,21 @@
         gap: 18px;
     }
 
-        .brand-mark .seal {
-            width: 56px;
-            height: 56px;
-            border: 3px solid var(--seal);
-            color: var(--seal);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-display);
-            font-size: 1.7rem;
-            font-weight: 700;
-            transform: rotate(-3deg);
-            flex-shrink: 0;
-        }
+    .brand-mark .seal {
+        width: 56px;
+        height: 56px;
+        border: 3px solid var(--seal);
+        color: var(--seal);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-size: 1.7rem;
+        font-weight: 700;
+        transform: rotate(-3deg);
+        flex-shrink: 0;
+    }
 
     h1.kanji-title {
         font-family: var(--font-display);
@@ -90,23 +92,25 @@
         white-space: nowrap;
     }
 
-        .count-badge b {
-            color: var(--seal);
-            font-size: 1.15rem;
-        }
+    .count-badge b {
+        color: var(--seal);
+        font-size: 1.15rem;
+    }
 
     /* --- CẤU TRÚC GRID NỘI DUNG CHÍNH --- */
     .kanji-content-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 28px;
-        align-content: start; /* Khử hoàn toàn căn giữa dọc của main-wrapper */
+        align-content: start;
+        /* Khử hoàn toàn căn giữa dọc của main-wrapper */
     }
 
     @@media (min-width: 920px) {
         .kanji-content-grid {
             grid-template-columns: 1.05fr 0.95fr;
-            align-items: start; /* Đỉnh 2 cột luôn bằng nhau kịch trần */
+            align-items: start;
+            /* Đỉnh 2 cột luôn bằng nhau kịch trần */
         }
 
         .list-area {
@@ -142,16 +146,16 @@
         transition: all 0.15s ease;
     }
 
-        .cat-btn:hover {
-            border-color: var(--seal);
-            color: var(--ink);
-        }
+    .cat-btn:hover {
+        border-color: var(--seal);
+        color: var(--ink);
+    }
 
-        .cat-btn.active {
-            background: var(--seal);
-            border-color: var(--seal);
-            color: #fff;
-        }
+    .cat-btn.active {
+        background: var(--seal);
+        border-color: var(--seal);
+        color: #fff;
+    }
 
     .kanji-grid {
         display: grid;
@@ -169,33 +173,33 @@
         transition: transform 0.12s ease, border-color 0.12s ease;
     }
 
-        .kanji-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--gold);
-        }
+    .kanji-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--gold);
+    }
 
-        .kanji-card.active {
-            border-color: var(--seal);
-            background: var(--seal-soft);
-        }
+    .kanji-card.active {
+        border-color: var(--seal);
+        background: var(--seal-soft);
+    }
 
-        .kanji-card .glyph {
-            font-family: var(--font-display);
-            font-size: 2.1rem;
-            font-weight: 500;
-            line-height: 1;
-            display: block;
-        }
+    .kanji-card .glyph {
+        font-family: var(--font-display);
+        font-size: 2.1rem;
+        font-weight: 500;
+        line-height: 1;
+        display: block;
+    }
 
-        .kanji-card .meaning {
-            display: block;
-            margin-top: 6px;
-            font-size: 0.72rem;
-            color: var(--ink-soft);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+    .kanji-card .meaning {
+        display: block;
+        margin-top: 6px;
+        font-size: 0.72rem;
+        color: var(--ink-soft);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 
     .detail-panel {
         background: var(--paper-card);
@@ -222,21 +226,21 @@
         border: 1px solid var(--line);
     }
 
-        .stroke-stage svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
+    .stroke-stage svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
 
-        .stroke-stage .guide-svg {
-            z-index: 1;
-        }
+    .stroke-stage .guide-svg {
+        z-index: 1;
+    }
 
-        .stroke-stage .kanji-svg {
-            z-index: 2;
-        }
+    .stroke-stage .kanji-svg {
+        z-index: 2;
+    }
 
     .stroke-svg-host path {
         fill: none;
@@ -260,13 +264,13 @@
         min-width: 200px;
     }
 
-        .detail-info .glyph-big {
-            font-family: var(--font-display);
-            font-size: clamp(2.6rem, 5vw, 3.4rem);
-            font-weight: 700;
-            line-height: 1;
-            margin: 0 0 6px;
-        }
+    .detail-info .glyph-big {
+        font-family: var(--font-display);
+        font-size: clamp(2.6rem, 5vw, 3.4rem);
+        font-weight: 700;
+        line-height: 1;
+        margin: 0 0 6px;
+    }
 
     .example-box {
         background: var(--paper);
@@ -327,7 +331,7 @@
         padding: 10px 20px;
         cursor: pointer;
         letter-spacing: 0.05em;
-        box-shadow: 0 4px 10px -4px rgba(184,57,44,0.6);
+        box-shadow: 0 4px 10px -4px rgba(184, 57, 44, 0.6);
     }
 
     .audio-btn {
@@ -346,10 +350,10 @@
         transition: all 0.15s;
     }
 
-        .audio-btn:hover {
-            border-color: var(--gold);
-            background: #fff;
-        }
+    .audio-btn:hover {
+        border-color: var(--gold);
+        background: #fff;
+    }
 
     .toggle-label {
         display: flex;
@@ -363,7 +367,7 @@
     .readings {
         margin-top: 22px;
         display: grid;
-        grid-template-columns: repeat(2, minmax(0,1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
     }
 
@@ -422,7 +426,11 @@
 </div>
 
 <script>
-        /* ============ KHỞI TẠO DỮ LIỆU ĐỘNG TỪ BACKEND BẢNG LESSONS & VOCABULARIES ============ */
+<<<<<<< HEAD
+    /* ============ KHỞI TẠO DỮ LIỆU ĐỘNG TỪ BACKEND BẢNG LESSONS & VOCABULARIES ============ */
+=======
+    /* ============ KHỞI TẠO DỮ LIỆU ĐỘNG TỪ BACKEND BẢNG LESSONS & VOCABULARIES ============ */
+>>>>>>> develop
 
     // Sử dụng cú pháp Razor (@@Html.Raw) để nhận danh mục bài học từ Model C# và biến thành mảng Object trong JS
     const DB_CATEGORIES = @Html.Raw(Json.Serialize(Model.CategoryList));
@@ -451,7 +459,11 @@
     /**
      * Hàm khởi chạy chính (Entry Point) khi trang web tải xong
      */
-    function init(){
+<<<<<<< HEAD
+    function init() {
+=======
+    function init() {
+>>>>>>> develop
         // Hiển thị tổng số lượng chữ Kanji nhận được từ Database lên giao diện công cụ đếm
         document.getElementById('total-count').textContent = KANJI_DATA.length;
 
@@ -462,7 +474,11 @@
         renderGrid();
 
         // Nếu trong Database có dữ liệu, mặc định tự động chọn và hiển thị chi tiết chữ Kanji đầu tiên
-        if(KANJI_DATA.length > 0) {
+<<<<<<< HEAD
+        if (KANJI_DATA.length > 0) {
+=======
+        if (KANJI_DATA.length > 0) {
+>>>>>>> develop
             selectKanji(KANJI_DATA[0].kanji);
         }
     }
@@ -470,7 +486,11 @@
     /**
      * Hàm vẽ các nút danh mục (Bài học) lên thanh menu ngang
      */
-    function renderCategories(){
+<<<<<<< HEAD
+    function renderCategories() {
+=======
+    function renderCategories() {
+>>>>>>> develop
         const wrap = document.getElementById('categories');
         wrap.innerHTML = ''; // Xóa sạch các nút cũ trước khi vẽ lại
 
@@ -494,7 +514,11 @@
     /**
      * Hàm vẽ danh sách các ô vuông chứa chữ Kanji (Grid) dựa theo bộ lọc danh mục
      */
-    function renderGrid(){
+<<<<<<< HEAD
+    function renderGrid() {
+=======
+    function renderGrid() {
+>>>>>>> develop
         const grid = document.getElementById('kanji-grid');
         grid.innerHTML = ''; // Xóa sạch danh sách chữ cũ trước khi lọc
 
@@ -531,7 +555,11 @@
      * Hàm xử lý hiển thị vùng chi tiết (Panel bên phải) khi click chọn một chữ Kanji
      * @@param {string} char - Ký tự Kanji được chọn (Ví dụ: '木')
      */
-    async function selectKanji(char){
+<<<<<<< HEAD
+    async function selectKanji(char) {
+=======
+    async function selectKanji(char) {
+>>>>>>> develop
         activeChar = char; // Đánh dấu ký tự này đang được chọn
         renderGrid();      // Cập nhật lại lưới chữ để ô vừa click chuyển sang trạng thái active (đổi màu)
 
@@ -633,7 +661,11 @@
      * Hàm tải file đồ họa vector nét vẽ Kanji từ thư viện CDN KanjiVG
      * @@param {string} char - Ký tự Kanji cần lấy file vẽ
      */
-    async function loadStrokeOrder(char){
+<<<<<<< HEAD
+    async function loadStrokeOrder(char) {
+=======
+    async function loadStrokeOrder(char) {
+>>>>>>> develop
         const host = document.getElementById('stroke-host');
         const status = document.getElementById('status-line');
 
@@ -642,9 +674,15 @@
         // Đường dẫn API trực tiếp đến kho lưu trữ SVG của dự án mã nguồn mở KanjiVG thông qua jsDelivr CDN
         const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
 
-        try{
+<<<<<<< HEAD
+        try {
             const res = await fetch(url); // Gửi yêu cầu tải file qua mạng Internet
-            if(!res.ok) throw new Error(); // Nếu lỗi mạng hoặc không tìm thấy từ, nhảy vào khối catch
+            if (!res.ok) throw new Error(); // Nếu lỗi mạng hoặc không tìm thấy từ, nhảy vào khối catch
+=======
+        try {
+            const res = await fetch(url); // Gửi yêu cầu tải file qua mạng Internet
+            if (!res.ok) throw new Error(); // Nếu lỗi mạng hoặc không tìm thấy từ, nhảy vào khối catch
+>>>>>>> develop
 
             const svgText = await res.text(); // Chuyển kết quả nhận được thành chuỗi văn bản XML/SVG
             const parser = new DOMParser(); // Khởi tạo bộ phân tích cú pháp chuỗi thành DOM Object
@@ -659,7 +697,11 @@
             host.appendChild(svgEl);    // Bơm mã đồ họa SVG nét vẽ thật vào ô chứa
             animateStrokes(svgEl);      // Kích hoạt hàm chạy hoạt ảnh vẽ từng nét từ từ
             status.textContent = 'Tải nét vẽ thành công.';
-        }catch(err){
+<<<<<<< HEAD
+        } catch (err) {
+=======
+        } catch (err) {
+>>>>>>> develop
             // Nếu lỗi (mất mạng, hoặc kho KanjiVG không có từ này), thông báo chuyển sang dùng font hệ thống tĩnh
             status.textContent = 'Dùng font mặc định hệ thống (Không tải được hoạt ảnh SVG nét vẽ).';
         }
@@ -669,7 +711,11 @@
      * Hàm xử lý kỹ thuật giả lập hoạt ảnh vẽ tay cho từng nét chữ bằng hiệu ứng CSS Stroke Dash
      * @@param {SVGElement} svgEl - Thẻ SVG chứa các đường dẫn <path> mô tả nét vẽ
      */
-    function animateStrokes(svgEl){
+<<<<<<< HEAD
+    function animateStrokes(svgEl) {
+=======
+    function animateStrokes(svgEl) {
+>>>>>>> develop
         // Tìm toàn bộ các thẻ <path> nằm trong nhóm nét vẽ của cấu trúc SVG KanjiVG
         const paths = svgEl.querySelectorAll('g[id^="kvg:StrokePaths"] path');
 
@@ -695,4 +741,6 @@
 
     // Gọi hàm khởi tạo khi toàn bộ mã kịch bản phía trên đã sẵn sàng nạp vào bộ nhớ trình duyệt
     init();
+    /////////////////////////DDAAY LAF NHANH DEVELOP CHAP NHANT MOI HON/////////////////////////
+
 </script>

@@ -1,0 +1,23 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { QuestionCreate } from './QuestionCreate';
+
+describe('Create', () => {
+  let component: QuestionCreate;
+  let fixture: ComponentFixture<QuestionCreate>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [QuestionCreate]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(QuestionCreate);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
