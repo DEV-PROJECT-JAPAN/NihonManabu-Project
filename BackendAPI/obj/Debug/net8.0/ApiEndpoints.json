@@ -459,7 +459,7 @@
   {
     "ContainingType": "BackendAPI.Controllers.PracticeController",
     "Method": "PracticeUser",
-    "RelativePath": "api/Practice/practice-user",
+    "RelativePath": "api/Practice/practice-user/{FolderId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -467,7 +467,7 @@
       {
         "Name": "FolderId",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

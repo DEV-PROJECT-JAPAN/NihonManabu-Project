@@ -1,0 +1,61 @@
+<div class="folder-grid-container">
+  <button class="btn btn-custom btn-back" (click)="onBack.emit()">
+    <i class="fas fa-arrow-left"></i> Quay Lại Menu
+  </button>
+
+  <div class="folder-grid mt-4">
+    <div class="folder-item folder-upload" (click)="openModal()">
+        <div class="folder-icon"><i class="fas fa-folder-plus"></i></div>
+        <div class="folder-name">Upload Data Mới</div>
+        <div class="folder-count">Tạo thư mục ôn tập</div>
+    </div>
+    @if (isModalOpen) {
+  <div class="custom-modal-overlay" (click)="closeModal()">
+    
+    <div class="modal-content custom-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+          <h5 class="modal-title fw-bold text-info"><i class="fas fa-cloud-upload-alt me-2"></i>Tạo Thư Mục Từ Vựng</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+
+      <form (ngSubmit)="submitUpload()">
+          <div class="modal-body">
+              <div class="mb-4">
+                  <label class="form-label text-muted fw-bold">Tên thư mục lưu trữ</label>
+                  <input type="text" class="form-control custom-input" [(ngModel)]="newFolderName" name="folderName" placeholder="VD: Kanji Bài 1..." required>
+              </div>
+
+              <div class="mb-3">
+                  <label class="form-label text-muted fw-bold">Mô tả thư mục</label>
+                  <input type="text" class="form-control custom-input" [(ngModel)]="newFolderDesc" name="folderDesc" placeholder="VD: Từ vựng bài 1..." required>
+              </div>
+
+              <div class="mb-3">
+                  <label class="form-label text-muted fw-bold">Upload file dữ liệu (Excel/CSV)</label>
+                  <input class="form-control custom-input" type="file" (change)="onFileSelected($event)" accept=".csv, .xlsx" required>
+                  <small class="text-secondary mt-2 d-block">* Chỉ chấp nhận định dạng .xlsx, .csv</small>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Hủy bỏ (Cancel)</button>
+              <button type="submit" class="btn btn-info fw-bold text-dark">Lưu Thư Mục (Save)</button>
+          </div>
+      </form>
+    </div>
+  </div>
+}
+    @for (folder of folders; track folder.id) {
+      <div class="folder-item" (click)="onSelectFolder.emit({ id: folder.id, name: folder.name })">
+        
+        <button class="delete-folder-btn" (click)="triggerDelete($event, folder.id, folder.name)" title="Xóa thư mục">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        
+        <div class="folder-icon"><i class="fas fa-folder"></i></div>
+        <div class="folder-name">{{ folder.name }}</div>
+        <div class="folder-count">{{ folder.description }}</div>
+      </div>
+    }
+  </div>
+</div>
+

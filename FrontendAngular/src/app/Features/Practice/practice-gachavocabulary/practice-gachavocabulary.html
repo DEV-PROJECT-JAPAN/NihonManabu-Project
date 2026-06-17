@@ -8,7 +8,10 @@
   @if (vocabList && vocabList.length > 0) {
     <div class="cards-grid">
       @for (vocab of vocabList; track vocab.id) {
-        <div class="flip-card" (click)="toggleCard(vocab.id)">
+        <div class="flip-card" 
+             [class.locked]="flippedCards.has(vocab.id)" 
+             (click)="toggleCard(vocab.id)">
+             
           <div class="flip-card-inner" [class.flipped]="flippedCards.has(vocab.id)">
             
             <div class="flip-card-front">
@@ -17,12 +20,12 @@
             </div>
 
             <div class="flip-card-back">
-              <button class="audio-btn" (click)="playAudio($event, vocab.hiragana || vocab.kanji || '')">
+              <button class="audio-btn" (click)="playAudio($event, $any(vocab).hiragana || $any(vocab).kanji || '')">
                 <i class="fas fa-volume-up"></i>
               </button>
-              <div class="card-kanji">{{ vocab.kanji }}</div>
-              <div class="card-hiragana">{{ vocab.hiragana }}</div>
-              <div class="card-meaning">{{ vocab.meaning }}</div>
+              <div class="card-kanji">{{ $any(vocab).kanji }}</div>
+              <div class="card-hiragana">{{ $any(vocab).hiragana }}</div>
+              <div class="card-meaning">{{ $any(vocab).meaning }}</div>
             </div>
 
           </div>
@@ -38,57 +41,3 @@
     <div class="empty-state text-center">Chưa có dữ liệu từ vựng!</div>
   }
 </div>
-
-<!-- <div class="cards-container position-relative">
-  <button class="btn btn-custom btn-back mb-4" (click)="onBack.emit()">
-    <i class="fas fa-arrow-left"></i> Quay Lại
-  </button>
-
-  <div class="draw-info text-center mb-4">{{ title }}</div>
-
-  <div class="play-area position-relative" style="min-height: 250px;">
-    
-    @if (isLoading) {
-      <div class="gacha-loading-overlay">
-        <div class="loading-content">
-          <i class="fas fa-magic mystery-icon"></i>
-          <h3 class="mt-3 text-info fw-bold">Đang triệu hồi từ vựng...</h3>
-          <p class="text-muted">Xin chờ trong giây lát</p>
-        </div>
-      </div>
-    }
-
-    @if (vocabList && vocabList.length > 0) {
-      <div class="cards-grid" [class.blurred]="isLoading">
-        @for (vocab of vocabList; track vocab.id) {
-          <div class="flip-card" [class.locked]="flippedCards.has(vocab.id)" (click)="toggleCard(vocab.id)">
-            <div class="flip-card-inner" [class.flipped]="flippedCards.has(vocab.id)">
-              
-              <div class="flip-card-front">
-                <div class="mystery-icon"><i class="fas fa-question"></i></div>
-                <div class="mystery-text">Mystery</div>
-              </div>
-
-              <div class="flip-card-back">
-                <button class="audio-btn" (click)="playAudio($event, vocab.hiragana || vocab.kanji || '')">
-                  <i class="fas fa-volume-up"></i>
-                </button>
-                <div class="card-kanji">{{ vocab.kanji }}</div>
-                <div class="card-hiragana">{{ vocab.hiragana }}</div>
-                <div class="card-meaning">{{ vocab.meaning }}</div>
-              </div>
-
-            </div>
-          </div>
-        }
-      </div>
-    } @else if (!isLoading) {
-      <div class="empty-state text-center">Chưa có dữ liệu từ vựng!</div>
-    }
-  </div>
-
-  <div class="action-buttons mt-4">
-    <button class="btn-custom btn-draw" (click)="triggerDrawAgain()" [disabled]="isLoading">Draw Again</button>
-    <button class="btn-custom btn-reset" (click)="resetCards()" [disabled]="isLoading">Reset Cards</button>
-  </div>
-</div> -->

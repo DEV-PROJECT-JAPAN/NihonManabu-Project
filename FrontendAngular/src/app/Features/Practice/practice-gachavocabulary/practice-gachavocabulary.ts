@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PracticeUserFolderModel } from '../../../Models/practice-userfolder-model';
 import { VocabularyModel } from '../../../Models/vocabulary-model';
 
+
 @Component({
   selector: 'app-practice-gachavocabulary',
   imports: [],
@@ -10,7 +11,7 @@ import { VocabularyModel } from '../../../Models/vocabulary-model';
 })
 export class PracticeGachavocabulary {
   // Dữ liệu Cha truyền xuống
-  @Input() vocabList: VocabularyModel[] = [];
+  @Input() vocabList: VocabularyModel[] | PracticeUserFolderModel[] = [];
   @Input() title: string = '✨ LẮC TỪ VỰNG NGẪU NHIÊN ✨';
   
   // Nút quay lại báo cho Cha
@@ -30,8 +31,15 @@ export class PracticeGachavocabulary {
   }
 
   shuffleCards() {
-    // Trộn mảng ngẫu nhiên (Logic Draw Again)
-    this.vocabList = [...this.vocabList].sort(() => Math.random() - 0.5);
+    // 1. Tạo bản sao của mảng hiện tại
+    const shuffled = [...this.vocabList];
+    
+    // 2. Trộn ngẫu nhiên
+    shuffled.sort(() => Math.random() - 0.5);
+    
+    // 3. Ép kiểu bằng 'as any' khi gán ngược lại để TypeScript không báo lỗi
+    this.vocabList = shuffled as any;
+    
     this.resetCards();
   }
 

@@ -23,50 +23,40 @@
     text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
-/* =========================================
-   KHU VỰC CHỨA LÁ BÀI (GRID FIX)
-   ========================================= */
 .cards-grid {
     display: flex; 
     flex-wrap: wrap;
     justify-content: center; 
-    gap: 3.5rem; /* Tăng khoảng cách cực rộng để bài không chạm nhau */
+    gap: 3.5rem; 
     margin-bottom: 3rem; 
     min-height: 320px; 
 }
 
-/* Hiệu ứng làm mờ khi đang Loading */
-.cards-grid.blurred {
-    opacity: 0.2;
-    pointer-events: none;
-    filter: blur(4px);
-    transition: all 0.4s ease;
-}
-
 /* =========================================
-   THIẾT KẾ LÁ BÀI (FLIP CARD)
+   THIẾT KẾ LÁ BÀI (FLIP CARD) & LOGIC KHÓA
    ========================================= */
-/* FIX CỐT LÕI 1: Ép mọi thành phần không được phình to ra ngoài */
 .flip-card * {
     box-sizing: border-box;
 }
 
 .flip-card {
     background-color: transparent;
-    width: 220px; /* Khóa cứng chiều rộng */
-    height: 300px; /* Khóa cứng chiều cao */
-    flex: 0 0 220px; /* FIX CỐT LÕI 2: Cấm Flexbox bóp méo hay kéo giãn thẻ */
+    width: 220px; 
+    height: 300px; 
+    flex: 0 0 220px; 
     perspective: 1000px;
     cursor: pointer;
-    margin: 10px; /* Lớp bảo vệ chống dính thẻ */
+    margin: 10px; 
 }
 
-/* Làm tê liệt hoàn toàn thẻ đã lật (Không cho click, không cho hover) */
+/* KHÓA THẺ: Đổi con trỏ chuột, KHÔNG dùng pointer-events: none 
+  để vẫn cho phép click vào nút Audio bên trong mặt sau.
+*/
 .flip-card.locked {
-    pointer-events: none;
+    cursor: default; 
 }
 
-/* CHỈ áp dụng hiệu ứng bay lên cho những thẻ CHƯA bị khóa */
+/* HIỆU ỨNG BAY LÊN: CHỈ áp dụng cho thẻ CHƯA BỊ KHÓA */
 .flip-card:not(.locked):hover .flip-card-inner {
     transform: translateY(-10px);
     box-shadow: 0 15px 25px rgba(0, 212, 255, 0.4);
@@ -87,7 +77,6 @@
     transform: rotateY(180deg); 
 }
 
-/* Dùng chung cho 2 mặt thẻ */
 .flip-card-front, .flip-card-back {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -100,7 +89,6 @@
     padding: 1.5rem;
 }
 
-/* MẶT TRƯỚC (BÍ ẨN) */
 .flip-card-front {
     background: linear-gradient(145deg, #1a1f2e 0%, #0d0f17 100%);
     border: 2px solid rgba(0, 212, 255, 0.5);
@@ -113,6 +101,7 @@
     text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
     animation: float 3s ease-in-out infinite;
 }
+
 @keyframes float { 
     0%, 100% { transform: translateY(0); } 
     50% { transform: translateY(-10px); } 
@@ -120,7 +109,6 @@
 
 .mystery-text { font-size: 1.2rem; font-weight: 700; color: #00d4ff; }
 
-/* MẶT SAU (KẾT QUẢ) */
 .flip-card-back {
     background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); 
     border: 2px solid #ffffff;
@@ -158,7 +146,7 @@
 .audio-btn:hover { background: #ffffff; color: #0072ff; transform: scale(1.1); }
 
 /* =========================================
-   NÚT BẤM (ACTION BUTTONS FIX)
+   NÚT BẤM (ACTION BUTTONS)
    ========================================= */
 .action-buttons { 
     display: flex; 
@@ -186,7 +174,7 @@
     color: #0f1419; 
     border: none;
 }
-.btn-draw:hover:not([disabled]) { 
+.btn-draw:hover { 
     background-color: #ffffff; 
     box-shadow: 0 0 25px rgba(0, 212, 255, 0.8); 
     transform: translateY(-2px);
@@ -197,45 +185,7 @@
     color: #00d4ff; 
     border: 2px solid #00d4ff; 
 }
-.btn-reset:hover:not([disabled]) { 
+.btn-reset:hover { 
     background-color: rgba(0, 212, 255, 0.1); 
     transform: translateY(-2px);
 }
-
-/* Nút bị khóa khi đang Loading */
-.btn-custom[disabled] {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(100%);
-}
-
-/* =========================================
-   MÀN HÌNH LOADING 2 GIÂY
-   ========================================= */
-.gacha-loading-overlay {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.loading-content {
-    text-align: center;
-    background: rgba(15, 20, 25, 0.9);
-    padding: 2rem 4rem;
-    border-radius: 16px;
-    border: 1px solid #00d4ff;
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
-    animation: popIn 0.3s ease-out;
-}
-
-@keyframes popIn {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.loading-content .mystery-icon { font-size: 4rem; margin-bottom: 1rem; }
-.text-info { color: #00d4ff !important; margin: 0; }
-.text-muted { color: #8892b0 !important; margin-top: 0.5rem; }

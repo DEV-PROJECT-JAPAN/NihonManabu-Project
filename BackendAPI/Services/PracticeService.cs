@@ -72,93 +72,28 @@ namespace BackendAPI.Services
         // Ôn tập Gacha: Lấy 5 từ vựng ngẫu nhiên qua BẢNG CẦU NỐI
         public async Task<List<PracticeDTO>> GetVocabularyUserAsync(int FolderId, int UserId)
         {
+            var listid = _context.UserFlashcardLists
+                .Where(p => p.Id == FolderId && p.UserId == UserId)
+                .Select(p => p.Id)
+                .FirstOrDefault();
             // Đi thẳng vào bảng cầu nối FolderVocabularies
             return await _context.FolderVocabularies
                 .Include(fv => fv.UserVocabulary) // Nối sang lấy mặt chữ
                 .Include(fv => fv.UserFlashcardList) // Nối sang để check quyền sở hữu
                 .Where(fv => fv.ListId == FolderId && fv.UserFlashcardList.UserId == UserId)
                 .OrderBy(fv => Guid.NewGuid()) // Trộn bài ngẫu nhiên (Gacha)
-                .Take(5) // Bốc đúng 5 lá
+                //.Take(5) // Bốc đúng 5 lá
                 .Select(fv => new PracticeDTO
                 {
                     Id = fv.UserVocabulary.Id,
+                    ListId = listid,
                     Kanji = fv.UserVocabulary.Kanji,
                     Hiragana = fv.UserVocabulary.Hiragana,
                     Romaji = fv.UserVocabulary.Romaji,
                     Meaning = fv.UserVocabulary.Meaning
                 }).ToListAsync();
         }
-        //đọc file excel để nạp từ vựng vào flashcard list của user
-        //public async Task<bool> UploadFolderExcelAsync(int userId, string folderName, string description, IFormFile file)
-        //{
-        //    try
-        //    {
-        //        // 1. Lưu Folder mới vào DB trước để lấy cái ListId
-        //        var newFolder = new UserFlashcardList
-        //        {
-        //            UserId = userId,
-        //            Name = folderName,
-        //            Description = description
-        //        };
-        //        _context.UserFlashcardLists.Add(newFolder);
-        //        await _context.SaveChangesAsync(); // C# tự động nhét ID mới vào biến newFolder.Id
-
-        //        // 2. Mở file Excel ra đọc
-        //        using var stream = new MemoryStream();
-        //        await file.CopyToAsync(stream);
-        //        using var workbook = new XLWorkbook(stream);
-
-        //        var worksheet = workbook.Worksheet(1); // Mở Sheet đầu tiên
-
-        //        // 1. Quét vùng có dữ liệu
-        //        var usedRange = worksheet.RangeUsed();
-
-        //        // 2. MẶC ÁO GIÁP: Kiểm tra xem file có trống không
-        //        if (usedRange == null)
-        //        {
-        //            Console.WriteLine("Lỗi: File Excel trắng tinh hoặc sai định dạng!");
-        //            return false; // Dừng cuộc chơi luôn, không lưu vào DB nữa
-        //        }
-
-        //        // 3. Nếu có dữ liệu thì mới đếm hàng và bỏ qua dòng Tiêu đề
-        //        var rows = usedRange.RowsUsed().Skip(1);
-        //        var vocabList = new List<UserVocabulary>();
-
-        //        // 3. Quét từng dòng, map vào DB
-        //        foreach (var row in rows)
-        //        {
-        //            // Lấy dữ liệu từng ô (Cell), hàm GetString() giúp chống lỗi Null
-        //            var kanji = row.Cell(1).GetValue<string>();
-        //            var hiragana = row.Cell(2).GetValue<string>();
-        //            var meaning = row.Cell(3).GetValue<string>();
-        //            var Romaji = row.Cell(4).GetValue<string>(); // Nếu có cột Romaji
-
-        //            // Nếu cả 3 cột đều trống thì bỏ qua dòng này
-        //            if (string.IsNullOrWhiteSpace(kanji) && string.IsNullOrWhiteSpace(hiragana)) continue;
-
-        //            vocabList.Add(new UserVocabulary
-        //            {
-        //                Kanji = kanji,
-        //                Hiragana = hiragana,
-        //                Meaning = meaning,
-        //                Romaji = Romaji
-
-        //                // Thêm Romaji hoặc Example nếu Excel của anh có cột thứ 4, 5
-        //            });
-        //        }
-
-        //        // 4. Lưu một cục nguyên đống từ vựng vào DB
-        //        _context.UserVocabularies.AddRange(vocabList);
-        //        await _context.SaveChangesAsync();
-
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Lỗi đọc Excel: {ex.Message}");
-        //        return false;
-        //    }
-        //}
+        
         // 1. Đổi kiểu trả về ở đây (Nhớ sửa cả trong IPracticeService.cs nữa nhé)
         public async Task<(bool isSuccess, string errorMessage)> UploadFolderExcelAsync(int userId, string folderName, string description, IFormFile file)
         {
