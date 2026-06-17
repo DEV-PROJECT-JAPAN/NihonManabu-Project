@@ -2,6 +2,10 @@
 using BackendAPI.Interfaces;
 using BackendAPI.Models; // Gọi sang thư mục Models của Backend để sử dụng các class như Level, Lesson, Card
 using BackendAPI.Services; // Gọi sang thư mục Services của Backend vừa tạo
+<<<<<<< Updated upstream
+=======
+using Microsoft.AspNetCore.Authorization;
+>>>>>>> Stashed changes
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 namespace BackendAPI.Controllers
@@ -22,7 +26,13 @@ namespace BackendAPI.Controllers
             _practiceService = practiceService;
         }
         //lấy danh sách từ vựng của user đã học
+<<<<<<< Updated upstream
         [HttpGet("practice-system")]
+=======
+        //chạy ổn
+        [HttpGet("practice-system")]
+        //[Authorize]
+>>>>>>> Stashed changes
         public async Task<IActionResult> GetVocabularySystemAsync()
         {
             // 1. Lấy ID người dùng từ trạm trung chuyển (Bây giờ ra 1, sau này ra ID thật)
@@ -46,6 +56,10 @@ namespace BackendAPI.Controllers
             return Ok(data);
         }
         //danh sách các folder của người dùng
+<<<<<<< Updated upstream
+=======
+        //chạy ổn
+>>>>>>> Stashed changes
         [HttpGet("user-folders")]
         public async Task<IActionResult> UserFolders()
         {
@@ -57,7 +71,13 @@ namespace BackendAPI.Controllers
             return Ok(data);
         }
         // Tải file excel lên để nạp từ vựng vào flashcard list của user
+<<<<<<< Updated upstream
         [HttpPost("upload-folder-excel")]
+=======
+        //chạy ổn
+        [HttpPost("upload-folder-excel")]
+        //[Authorize]
+>>>>>>> Stashed changes
         public async Task<IActionResult> UploadFolderExcel([FromForm] UploadFolderRequestDTO request)
         {
             if (request.File == null || request.File.Length == 0)
@@ -78,6 +98,10 @@ namespace BackendAPI.Controllers
             return BadRequest(new { success = false, message = result.errorMessage });
         }
         // Xóa folder của người dùng
+<<<<<<< Updated upstream
+=======
+        //chạy ổn
+>>>>>>> Stashed changes
         [HttpDelete("delete-folder/{folderId}")]
         public async Task<IActionResult> DeleteFolder(int folderId)
         {

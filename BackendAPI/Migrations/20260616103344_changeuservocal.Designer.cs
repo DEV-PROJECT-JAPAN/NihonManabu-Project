@@ -4,6 +4,7 @@ using BackendAPI.Models.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAPI.Migrations
 {
     [DbContext(typeof(JapaneseDbContext))]
-    partial class JapaneseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260616103344_changeuservocal")]
+    partial class changeuservocal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -57,7 +60,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers", (string)null);
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Badge", b =>
@@ -86,36 +89,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Badges", (string)null);
-                });
-
-            modelBuilder.Entity("BackendAPI.Models.FolderVocabulary", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ListId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("VocabularyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ListId");
-
-                    b.HasIndex("VocabularyId");
-
-                    b.ToTable("FolderVocabularies", (string)null);
+                    b.ToTable("Badges");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.FolderVocabulary", b =>
@@ -176,7 +150,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.ToTable("Grammars", (string)null);
+                    b.ToTable("Grammars");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.LearningProgress", b =>
@@ -214,7 +188,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("VocabularyId");
 
-                    b.ToTable("LearningProgresses", (string)null);
+                    b.ToTable("LearningProgresses");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Lesson", b =>
@@ -245,7 +219,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("LevelId");
 
-                    b.ToTable("Lessons", (string)null);
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Level", b =>
@@ -272,7 +246,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Levels", (string)null);
+                    b.ToTable("Levels");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Question", b =>
@@ -303,7 +277,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("GrammarId");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Transaction", b =>
@@ -337,7 +311,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.User", b =>
@@ -393,7 +367,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.UserBadge", b =>
@@ -425,7 +399,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserBadges", (string)null);
+                    b.ToTable("UserBadges");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.UserFlashcardList", b =>
@@ -457,7 +431,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserFlashcardLists", (string)null);
+                    b.ToTable("UserFlashcardLists");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.UserSubscription", b =>
@@ -517,6 +491,9 @@ namespace BackendAPI.Migrations
                     b.Property<DateTime>("LastReviewed")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ListId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Meaning")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -535,11 +512,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("Id");
 
-<<<<<<< Updated upstream
-                    b.ToTable("UserVocabularies", (string)null);
-=======
                     b.ToTable("UserVocabularies");
->>>>>>> Stashed changes
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Vocabulary", b =>
@@ -551,14 +524,12 @@ namespace BackendAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AudioUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ExampleSentence")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Hiragana")
@@ -566,7 +537,6 @@ namespace BackendAPI.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Kanji")
-                        .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("LessonId")
@@ -591,7 +561,7 @@ namespace BackendAPI.Migrations
 
                     b.HasIndex("LessonId");
 
-                    b.ToTable("Vocabularies", (string)null);
+                    b.ToTable("Vocabularies");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Answer", b =>
@@ -614,11 +584,7 @@ namespace BackendAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("BackendAPI.Models.UserVocabulary", "UserVocabulary")
-<<<<<<< Updated upstream
-                        .WithMany("FolderVocabularies")
-=======
                         .WithMany()
->>>>>>> Stashed changes
                         .HasForeignKey("VocabularyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -719,8 +685,6 @@ namespace BackendAPI.Migrations
                     b.Navigation("User");
                 });
 
-<<<<<<< Updated upstream
-=======
             modelBuilder.Entity("BackendAPI.Models.UserSubscription", b =>
                 {
                     b.HasOne("BackendAPI.Models.User", "User")
@@ -732,7 +696,6 @@ namespace BackendAPI.Migrations
                     b.Navigation("User");
                 });
 
->>>>>>> Stashed changes
             modelBuilder.Entity("BackendAPI.Models.Vocabulary", b =>
                 {
                     b.HasOne("BackendAPI.Models.Lesson", "Lesson")
@@ -783,14 +746,6 @@ namespace BackendAPI.Migrations
             modelBuilder.Entity("BackendAPI.Models.UserFlashcardList", b =>
                 {
                     b.Navigation("FolderVocabularies");
-<<<<<<< Updated upstream
-                });
-
-            modelBuilder.Entity("BackendAPI.Models.UserVocabulary", b =>
-                {
-                    b.Navigation("FolderVocabularies");
-=======
->>>>>>> Stashed changes
                 });
 #pragma warning restore 612, 618
         }

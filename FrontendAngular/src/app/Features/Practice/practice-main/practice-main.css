@@ -1,0 +1,52 @@
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-top: 2rem;
+}
+
+.page-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+/* Lưới Thư mục (Folders Grid) */
+.folder-grid-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+.folder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+.folder-item {
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: var(--border-radius);
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+.folder-item:hover {
+    border-color: var(--primary-color);
+    background: rgba(26, 31, 46, 0.8);
+    transform: scale(1.03);
+}
+.folder-icon { font-size: 3rem; color: #f6d365; margin-bottom: 1rem; }
+.folder-name { color: white; font-weight: 600; font-size: 1.1rem; }
+.folder-count { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem; }
+.folder-upload { border: 2px dashed var(--primary-color); background: transparent; }
+.folder-upload .folder-icon { color: var(--primary-color); }

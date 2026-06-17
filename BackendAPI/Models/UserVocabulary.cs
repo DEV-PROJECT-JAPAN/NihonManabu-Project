@@ -25,11 +25,14 @@ namespace BackendAPI.Models
         [StringLength(100)]
         public string? Romaji { get; set; } // Thêm dấu ?
 
+<<<<<<< Updated upstream
         [StringLength(500)]
         public string? AudioUrl { get; set; } = null; // Thêm dấu ?
 
         [StringLength(1000)]
         public string? ExampleSentence { get; set; } = null; // Thêm dấu ?
+=======
+>>>>>>> Stashed changes
 
         // =======================================================
         // CỤM TRƯỜNG QUẢN LÝ TIẾN TRÌNH & THUẬT TOÁN NGẮT QUÃNG (SPACED REPETITION)

@@ -25,7 +25,55 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ReminderBackgroundService>();
 
 builder.Services.AddDbContext<JapaneseDbContext>(options =>
+<<<<<<< Updated upstream
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+=======
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        // ⚡ THẦN CHÚ: Ép hệ thống dùng cơ chế Chia nhỏ câu lệnh truy vấn (SplitQuery)
+        // Giúp triệt hạ hoàn toàn Warning 20504, tăng tốc bốc câu hỏi và đáp án!
+        sqlOptions => sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+    ));
+
+// 💡 LƯU Ý CHO NHÓM: Đã xóa bỏ đoạn AddDbContext thứ hai bị thừa ở đây để tránh đè cấu hình!
+
+// =========================================================================
+// 3. ĐĂNG KÝ CÁC DỊCH VỤ NGHIỆP VỤ (BUSINESS SERVICES - DEPENDENCY INJECTION)
+// =========================================================================
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ILevelService, LevelService>();
+builder.Services.AddScoped<IVocabularyService, VocabularyService>();
+builder.Services.AddScoped<ILessonService, LessonService>();
+builder.Services.AddScoped<IPracticeService, PracticeService>();
+
+
+////DTO
+builder.Services.AddScoped<IGrammarService<GrammarDTO>, GrammarService<GrammarDTO>>();
+
+
+
+// Đăng ký Service dành cho Admin model gốc, để phục vụ cho các tác vụ quản trị (CRUD) mà không cần phải qua lớp DTO trung gian
+builder.Services.AddScoped<IGrammarService<Grammar>, GrammarService<Grammar>>();
+builder.Services.AddScoped(typeof(IQuestionAdminService<>), typeof(QuestionAdminService<>));
+// =========================================================================
+// 4. XÂY DỰNG VÀ CẤU HÌNH PIPELINE XỬ LÝ REQUEST (MIDDLEWARES)
+// =========================================================================
+
+// Thêm CORS policy cho Angular
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Cấp phép cho Angular
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // Thêm dòng này nếu bạn có dùng Cookie/Token đăng nhập
+    });
+});
+
+
+>>>>>>> Stashed changes
 var app = builder.Build();
 
 
@@ -36,6 +84,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    try
+//    {
+//        // Lấy DbContext từ DI Container
+//        var context = services.GetRequiredService<BackendAPI.Models.Data.JapaneseDbContext>();
+
+//        // Gọi hàm Initialize của anh em mình vừa tạo
+//        BackendAPI.Models.Data.DbInitializer.Initialize(context);
+//    }
+//    catch (Exception ex)
+//    {
+//        // Ghi log ra console nếu có lỗi trong quá trình nhét data
+//        var logger = services.GetRequiredService<ILogger<Program>>();
+//        logger.LogError(ex, "Có lỗi xảy ra trong quá trình Seed Database.");
+//    }
+//}
 
 app.UseHttpsRedirection();
 
@@ -43,9 +109,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+<<<<<<< Updated upstream
 // ==========================================
 // KÍCH HOẠT SEED DATA KHI APP CHẠY LÊN
 // ==========================================
 
 
 app.Run();
+=======
+
+
+// Kích hoạt nổ máy, đưa Server vào trạng thái lắng nghe mạng
+app.Run();
+>>>>>>> Stashed changes
