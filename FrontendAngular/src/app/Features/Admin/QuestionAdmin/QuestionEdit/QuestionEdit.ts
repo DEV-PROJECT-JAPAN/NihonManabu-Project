@@ -185,7 +185,7 @@ export class QuestionEdit implements OnInit {
    * Hàm hỗ trợ quay xe lùi lại trang List chính, giữ nguyên vẹn 3 tầng bộ lọc
    */
   goBackToList(): void {
-    this._router.navigate(['/admin/question'], {
+    this._router.navigate(['/admin/question/index'], {
       queryParams: {
         SelectedLevelId: this.selectedLevelId,
         SelectedLessonId: this.selectedLessonId,
