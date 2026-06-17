@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BaseService } from './BaseService'; // Thay đổi đường dẫn cho đúng với dự án của bạn
+import { BaseService } from './BaseService'; 
 
-// Định nghĩa các Interface khớp với DTO và Model của Backend
 export interface User {
   id: number;
   username?: string; 
@@ -24,13 +23,14 @@ export interface ChangeRoleDto {
   providedIn: 'root'
 })
 export class AdminService extends BaseService {
-  // Kết hợp _apiBaseUrl từ BaseService để tạo endpoint cụ thể cho Admin
   private readonly adminApiUrl = `${this._apiBaseUrl}/admin`; 
 
-  // Sử dụng 'public override http: HttpClient' nếu BaseService cũng inject HttpClient,
-  // Hoặc giữ nguyên nếu BaseService không inject nó.
-  constructor(private http: HttpClient) { 
-    super(); // Bắt buộc phải gọi super() khi kế thừa trong TypeScript
+  // Sử dụng inject(HttpClient) thay vì khai báo private trong constructor 
+  // để tránh hoàn toàn việc ghi đè (shadowing) biến http từ BaseService nếu có.
+  private readonly http = inject(HttpClient);
+
+  constructor() { 
+    super(); 
   }
 
   // Lấy dữ liệu Dashboard
@@ -43,7 +43,7 @@ export class AdminService extends BaseService {
     return this.http.get<User[]>(`${this.adminApiUrl}/users`);
   }
 
-  // Thay đổi quyền của User (khớp với [HttpPut("change-role")] và ChangeRoleDto)
+  // Thay đổi quyền của User 
   changeUserRole(payload: ChangeRoleDto): Observable<any> {
     return this.http.put(`${this.adminApiUrl}/change-role`, payload);
   }

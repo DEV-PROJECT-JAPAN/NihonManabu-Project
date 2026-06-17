@@ -1,11 +1,12 @@
 ﻿using BackendAPI.DTOs;
 using BackendAPI.Interfaces;
-using BackendAPI.Models.Data;
 using BackendAPI.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using BackendAPI.Models.Data;
 using BackendAPI.Services;
+using BackendAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using QuestPDF.Infrastructure;
 using System.Text;
 using MyGrammar = BackendAPI.Models.Grammar;
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 // Feature Services
 builder.Services.AddScoped<ILevelService, LevelService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
