@@ -49,7 +49,6 @@ namespace BackendAPI.Services
                 })
                 .ToListAsync();
         }
-<<<<<<< Updated upstream
         // ôn tập : lấy tất cả từ vựng mà user đã thêm vào flashcard list của họ
         //public async Task<List<PracticeDTO>> GetVocabularyUserAsync(int FolderId, int UserId)
         //{
@@ -70,9 +69,6 @@ namespace BackendAPI.Services
         //        }).ToList();
         //    });
         //}
-=======
-
->>>>>>> Stashed changes
         // Ôn tập Gacha: Lấy 5 từ vựng ngẫu nhiên qua BẢNG CẦU NỐI
         public async Task<List<PracticeDTO>> GetVocabularyUserAsync(int FolderId, int UserId)
         {
@@ -93,7 +89,6 @@ namespace BackendAPI.Services
                 }).ToListAsync();
         }
         //đọc file excel để nạp từ vựng vào flashcard list của user
-<<<<<<< Updated upstream
         //public async Task<bool> UploadFolderExcelAsync(int userId, string folderName, string description, IFormFile file)
         //{
         //    try
@@ -165,28 +160,19 @@ namespace BackendAPI.Services
         //    }
         //}
         // 1. Đổi kiểu trả về ở đây (Nhớ sửa cả trong IPracticeService.cs nữa nhé)
-=======
->>>>>>> Stashed changes
         public async Task<(bool isSuccess, string errorMessage)> UploadFolderExcelAsync(int userId, string folderName, string description, IFormFile file)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-<<<<<<< Updated upstream
-=======
                 // 1. TẠO FOLDER (Bổ sung CreatedAt, UpdatedAt)
->>>>>>> Stashed changes
                 var newFolder = new UserFlashcardList
                 {
                     UserId = userId,
                     Name = folderName,
-<<<<<<< Updated upstream
-                    Description = description
-=======
                     Description = description,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now
->>>>>>> Stashed changes
                 };
                 _context.UserFlashcardLists.Add(newFolder);
                 await _context.SaveChangesAsync();
@@ -199,10 +185,7 @@ namespace BackendAPI.Services
                 var usedRange = worksheet.RangeUsed();
                 if (usedRange == null)
                 {
-<<<<<<< Updated upstream
                     // 2. Trả về false kèm lý do
-=======
->>>>>>> Stashed changes
                     return (false, "File Excel trắng tinh không có dữ liệu!");
                 }
 
@@ -211,18 +194,11 @@ namespace BackendAPI.Services
 
                 foreach (var row in rows)
                 {
-<<<<<<< Updated upstream
-                    var kanji = row.Cell(1).GetValue<string>()?.Trim();
-                    var hiragana = row.Cell(2).GetValue<string>()?.Trim();
-                    var meaning = row.Cell(3).GetValue<string>()?.Trim();
-                    var romaji = row.Cell(4).GetValue<string>()?.Trim();
-=======
                     // 2. ĐỌC EXCEL AN TOÀN (Dùng GetString() thay vì GetValue<string>())
                     var kanji = row.Cell(1).GetString()?.Trim();
                     var hiragana = row.Cell(2).GetString()?.Trim();
                     var meaning = row.Cell(3).GetString()?.Trim();
                     var romaji = row.Cell(4).GetString()?.Trim();
->>>>>>> Stashed changes
 
                     if (string.IsNullOrWhiteSpace(kanji) && string.IsNullOrWhiteSpace(hiragana)) continue;
 
@@ -237,24 +213,17 @@ namespace BackendAPI.Services
                     }
                     else
                     {
-<<<<<<< Updated upstream
-=======
                         // 3. TẠO TỪ VỰNG MỚI (Bổ sung đầy đủ các cột bắt buộc)
->>>>>>> Stashed changes
                         var newVocab = new UserVocabulary
                         {
                             Kanji = kanji,
                             Hiragana = hiragana,
                             Meaning = meaning,
-<<<<<<< Updated upstream
-                            Romaji = romaji
-=======
                             Romaji = romaji,
                             IsMastered = false,
                             ReviewCount = 0,
                             CreatedAt = DateTime.Now,
                             UpdatedAt = DateTime.Now
->>>>>>> Stashed changes
                         };
                         _context.UserVocabularies.Add(newVocab);
                         await _context.SaveChangesAsync();
@@ -262,12 +231,6 @@ namespace BackendAPI.Services
                         vocabIdToLink = newVocab.Id;
                     }
 
-<<<<<<< Updated upstream
-                    folderVocabLinks.Add(new FolderVocabulary
-                    {
-                        ListId = newFolder.Id,
-                        VocabularyId = vocabIdToLink
-=======
                     // 4. TẠO CẦU NỐI (Bổ sung CreatedAt, UpdatedAt)
                     folderVocabLinks.Add(new FolderVocabulary
                     {
@@ -275,7 +238,6 @@ namespace BackendAPI.Services
                         VocabularyId = vocabIdToLink,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now
->>>>>>> Stashed changes
                     });
                 }
 
@@ -291,29 +253,21 @@ namespace BackendAPI.Services
                 }
 
                 await transaction.CommitAsync();
-<<<<<<< Updated upstream
 
                 // 3. Xử lý xong mượt mà thì báo true
-=======
->>>>>>> Stashed changes
                 return (true, "Thành công");
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-<<<<<<< Updated upstream
 
                 // 4. BẮT GỌN LỖI: Lấy lỗi sâu nhất của EF Core để báo về Swagger
-=======
->>>>>>> Stashed changes
+
                 string errorDetail = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return (false, $"Lỗi Database/Excel: {errorDetail}");
             }
         }
-<<<<<<< Updated upstream
-=======
         //xóa folder của user, khi xóa folder thì sẽ tự động xóa các bản ghi liên quan trong bảng cầu nối (FolderVocabulary) nhờ vào thiết lập cascade delete trong EF Core
->>>>>>> Stashed changes
         public async Task<bool> DeleteFolderAsync(int folderId, int userId)
         {
             try

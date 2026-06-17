@@ -1,6 +1,8 @@
 ﻿using BackendAPI.Interfaces;
 using BackendAPI.Models.Data;
+using BackendAPI.DTOs;
 using BackendAPI.Services;
+using DocumentFormat.OpenXml.EMMA;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,14 +22,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IVocabularyService, VocabularyService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IGrammarService, GrammarService>();
+builder.Services.AddScoped<IGrammarService<Grammar>, GrammarService<Grammar>>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ReminderBackgroundService>();
 
 builder.Services.AddDbContext<JapaneseDbContext>(options =>
-<<<<<<< Updated upstream
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-=======
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         // ⚡ THẦN CHÚ: Ép hệ thống dùng cơ chế Chia nhỏ câu lệnh truy vấn (SplitQuery)
@@ -73,7 +72,6 @@ builder.Services.AddCors(options =>
 });
 
 
->>>>>>> Stashed changes
 var app = builder.Build();
 
 
@@ -84,41 +82,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    try
-//    {
-//        // Lấy DbContext từ DI Container
-//        var context = services.GetRequiredService<BackendAPI.Models.Data.JapaneseDbContext>();
-
-//        // Gọi hàm Initialize của anh em mình vừa tạo
-//        BackendAPI.Models.Data.DbInitializer.Initialize(context);
-//    }
-//    catch (Exception ex)
-//    {
-//        // Ghi log ra console nếu có lỗi trong quá trình nhét data
-//        var logger = services.GetRequiredService<ILogger<Program>>();
-//        logger.LogError(ex, "Có lỗi xảy ra trong quá trình Seed Database.");
-//    }
-//}
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
-<<<<<<< Updated upstream
-// ==========================================
-// KÍCH HOẠT SEED DATA KHI APP CHẠY LÊN
-// ==========================================
-
-
-app.Run();
-=======
-
-
 // Kích hoạt nổ máy, đưa Server vào trạng thái lắng nghe mạng
 app.Run();
->>>>>>> Stashed changes

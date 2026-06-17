@@ -22,10 +22,8 @@ namespace BackendAPI.Models.Data
         public DbSet<Badge> Badges { get; set; }
         public DbSet<UserBadge> UserBadges { get; set; }
         public DbSet<FolderVocabulary> FolderVocabularies { get; set; }
-<<<<<<< Updated upstream
-=======
         public DbSet<UserSubscription> Subscriptions { get; set; }
->>>>>>> Stashed changes
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

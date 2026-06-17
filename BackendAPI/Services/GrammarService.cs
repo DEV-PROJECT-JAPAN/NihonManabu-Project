@@ -1,11 +1,13 @@
 ﻿using BackendAPI.DTOs;
 using BackendAPI.Interfaces;
+using BackendAPI.Models;
 using BackendAPI.Models.Data;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace BackendAPI.Services
 {
-    public class GrammarService : IGrammarService
+    public class GrammarService<T> : IGrammarService<T> where T : class
     {
         private readonly JapaneseDbContext _context;
 
@@ -13,6 +15,7 @@ namespace BackendAPI.Services
         {
             _context = context;
         }
+
 
         public async Task<List<GrammarDTO>> GetGrammarByLessonAsync(int lessonId)
         {
@@ -31,47 +34,102 @@ namespace BackendAPI.Services
                 .ToListAsync();
         }
 
-        /// <summary>
-        /// 🎯 HÀM 2: Lấy ngân hàng câu hỏi + đáp án theo Mẫu ngữ pháp và Chức năng lựa chọn
-        /// </summary>
-        /// <param name="grammarId">ID của mẫu ngữ pháp đang học</param>
-        /// <param name="questionType">"Quiz" (Trắc nghiệm), "Arrange" (Sắp xếp), hoặc "All" (Tổng hợp)</param>
-        public async Task<List<QuestionDTO>> GetQuestionsByGrammarAsync(int grammarId, int questionType)
+
+
+        public async Task<Grammar> CreateAsync(Grammar grammar)
         {
-            if (grammarId <= 0) return new List<QuestionDTO>();
+            // 1. Tự động gán thời gian tạo/cập nhật trực tiếp trên Entity gốc
+            grammar.CreatedAt = DateTime.Now; // Hoặc DateTime.UtcNow tùy dự án của bạn
+            grammar.UpdatedAt = DateTime.Now;
 
-            var query = _context.Questions
-                .Include(q => q.Answers)
-                .Where(q => q.GrammarId == grammarId);
+            // 2. Vì không dùng DTO nữa, bạn chỉ việc add thẳng đối tượng grammar nhận từ Controller vào DB Context
+            _context.Grammars.Add(grammar);
 
-            // Phân loại bộ lọc theo đúng số nguyên Đội trưởng quy định
-            if (questionType == 1 || questionType == 2)
-            {
-                query = query.Where(q => q.QuestionType == questionType);
-            }
+            // 3. Lưu thay đổi xuống Database, sau dòng này thuộc tính grammar.Id sẽ tự động có giá trị do DB sinh ra
+            await _context.SaveChangesAsync();
 
-            return await query
-                .Select(q => new QuestionDTO
-                {
-                    Id = q.Id,
-                    GrammarId = q.GrammarId ?? 0,
-                    Content = q.Content ?? string.Empty,
-                    QuestionType = q.QuestionType, // Bây giờ nó trả về int (1 hoặc 2)
-
-                    Answers = q.Answers != null
-                        ? q.Answers.Select(a => new AnswerDTO
-                        {
-                            Id = a.Id,
-                            QuestionId = a.QuestionId,
-                            Text = a.Text ?? string.Empty,
-                            IsCorrect = a.IsCorrect,
-                            DisplayOrder = a.DisplayOrder ?? string.Empty
-                        }).ToList()
-                        : new List<AnswerDTO>()
-                })
-                .ToListAsync();
+            // 4. Trả về chính đối tượng grammar đã có đầy đủ Id và ngày giờ
+            return grammar;
         }
 
-       
+
+        public async Task<bool> UpdateAsync(int id, Grammar grammar)
+        {
+            var existing = await _context.Grammars.FindAsync(id);
+            if (existing == null) return false;
+
+            // Đè trực tiếp dữ liệu Admin sửa vào bảng gốc
+            existing.LessonId = grammar.LessonId;
+            existing.Structure = grammar.Structure;
+            existing.Explanation = grammar.Explanation;
+            existing.UpdatedAt = DateTime.Now; // Ghi nhận thời gian sửa
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var grammar = await _context.Grammars.FindAsync(id);
+            if (grammar == null) return false;
+
+            _context.Grammars.Remove(grammar);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<T?> GetGrammarByIdAsync(int grammarId)
+        {
+            // 1. Luôn luôn bốc bảng gốc lên trước
+            var g = await _context.Grammars.Include(g => g.Lesson).FirstOrDefaultAsync(x => x.Id == grammarId);
+            if (g == null) return null;
+
+            // 2. Phân loại DTO dựa trên yêu cầu của Controller
+
+            // Nếu phía Admin gọi và đòi GrammarAdminDto
+            if (typeof(T) == typeof(Grammar))
+            {
+                var adminDto = new Grammar
+                {
+                    Id = g.Id,
+                    LessonId = g.LessonId,
+                    Structure = g.Structure,
+                    Explanation = g.Explanation,
+                    CreatedAt = g.CreatedAt,
+                    UpdatedAt = g.UpdatedAt
+                };
+                return adminDto as T; // Ép kiểu về T để trả về
+            }
+
+            if (typeof(T) == typeof(GrammarDTO))
+            {
+                var userDto = new GrammarDTO
+                {
+                    Id = g.Id,
+                    LessonId = g.LessonId,
+                    Structure = g.Structure,
+                    Explanation = g.Explanation
+                };
+                return userDto as T;
+            }
+
+            return null;
+        }
+
+        public async Task<IEnumerable<Grammar>> GetAllGrammarsAsync()
+        {
+            return await _context.Grammars
+             .AsNoTracking()
+             .Select(g => new Grammar
+             {
+                 Id = g.Id,
+                 LessonId = g.LessonId,
+                 Structure = g.Structure,
+                 Explanation = g.Explanation,
+                 CreatedAt = g.CreatedAt,
+                 UpdatedAt = g.UpdatedAt
+             })
+             .ToListAsync();
+        }
     }
 }
