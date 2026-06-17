@@ -34,10 +34,6 @@ namespace BackendAPI.Services
                 .ToListAsync();
         }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> feature/login
         public async Task<Grammar> CreateAsync(Grammar grammar)
         {
             // 1. Tự động gán thời gian tạo/cập nhật trực tiếp trên Entity gốc
