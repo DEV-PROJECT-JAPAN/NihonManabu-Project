@@ -1,9 +1,11 @@
 ﻿using BackendAPI.DTOs;
 using BackendAPI.Interfaces;
 using BackendAPI.Models;
+using BCrypt.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using BCrypt.Net;
+using System.Security.Claims;
 
 namespace BackendAPI.Controllers
 {
@@ -158,21 +160,20 @@ namespace BackendAPI.Controllers
             });
         }
 
-        [HttpGet("profile/{email}")]
-        public async Task<IActionResult> GetProfile(string email)
+        [Authorize]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
         {
-            var user = await _authRepository.GetUserByEmailAsync(email);
-
-            if (user == null)
-                return NotFound();
-
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var user = await _authRepository.GetUserByEmailAsync(email!);
+            if (user == null) return NotFound();
             return Ok(new
             {
-                UserName = user.UserName,
-                Email = user.Email,
-                TotalExp = user.TotalExp,
-                CurrentStreak = user.CurrentStreak,
-                Role = user.Role
+                user.UserName,
+                user.Email,
+                user.TotalExp,
+                user.CurrentStreak,
+                user.Role
             });
         }
     }

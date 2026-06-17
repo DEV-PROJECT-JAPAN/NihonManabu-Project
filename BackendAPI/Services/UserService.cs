@@ -16,25 +16,22 @@ namespace BackendAPI.Services
         public int GetCurrentUserId()
         {
             var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext == null) return 1;
-
-            // =========================================================================
-            // LÀM MẸO BÂY GIỜ (CHƯA CÓ LOGIN)
-            // Nếu bạn làm Đăng nhập chưa xong, hệ thống chưa có Token xác thực hợp lệ.
-            // Hàm này tự động trả về ID = 1 để các thành viên khác thoải mái test database.
-            // =========================================================================
-            if (httpContext.User.Identity?.IsAuthenticated != true)
+            
+            // Nếu không có context hoặc user chưa đăng nhập/chưa xác thực
+            if (httpContext?.User.Identity?.IsAuthenticated != true)
             {
-                return 1;
+                throw new UnauthorizedAccessException("Người dùng chưa đăng nhập hoặc Token không hợp lệ.");
             }
 
-            // =========================================================================
-            // KHI BẠN LÀM ĐĂNG NHẬP HOÀN THÀNH:
-            // Bạn ấy chỉ cần mở file này ra và viết logic bóc tách JWT Token ở đây.
-            // Các thành viên khác hoàn toàn KHÔNG BỊ ẢNH HƯỞNG hay phải sửa lại code.
-            // =========================================================================
+            // Lấy UserId từ Claims của JWT Token dựa trên NameIdentifier
             var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return int.TryParse(userIdClaim, out int realUserId) ? realUserId : 1;
+
+            if (int.TryParse(userIdClaim, out int userId))
+            {
+                return userId;
+            }
+
+            throw new UnauthorizedAccessException("Không tìm thấy ID người dùng hợp lệ trong Token.");
         }
     }
 }

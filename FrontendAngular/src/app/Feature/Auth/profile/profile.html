@@ -1,0 +1,44 @@
+<div class="profile-page">
+  @if (error) {
+    <div class="profile-alert">{{ error }}</div>
+    <a routerLink="/auth/login" class="profile-link">Đăng nhập lại</a>
+  } @else if (authService.currentUser()) {
+    <div class="profile-card">
+      <h1 class="profile-title">Hồ sơ</h1>
+      
+      <dl class="profile-list">
+        <div class="profile-row">
+          <dt>Tên</dt>
+          <dd>{{ authService.currentUser()?.userName }}</dd>
+        </div>
+        <div class="profile-row">
+          <dt>Email</dt>
+          <dd>{{ authService.currentUser()?.email }}</dd>
+        </div>
+        <div class="profile-row">
+          <dt>Vai trò</dt>
+          <dd>{{ authService.currentUser()?.role }}</dd>
+        </div>
+        <div class="profile-row">
+          <dt>Điểm kinh nghiệm</dt>
+          <dd>{{ authService.currentUser()?.totalExp }}</dd>
+        </div>
+        <div class="profile-row">
+          <dt>Chuỗi ngày học</dt>
+          <dd>{{ authService.currentUser()?.currentStreak }} ngày</dd>
+        </div>
+      </dl> <div class="profile-actions" style="display: flex; gap: 12px; margin-top: 20px;">
+        <a routerLink="/" class="profile-back-btn" style="flex: 1; text-align: center; padding: 10px; background: #334155; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <i class="fas fa-arrow-left me-2"></i> Quay về trang chủ
+        </a>
+        
+        <button type="button" class="profile-logout" (click)="onLogout()" style="flex: 1; margin-top: 0;">
+          Đăng xuất
+        </button>
+      </div>
+
+    </div>
+  } @else {
+    <p class="profile-loading">Đang tải...</p>
+  }
+</div>

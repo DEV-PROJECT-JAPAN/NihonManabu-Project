@@ -1,107 +1,134 @@
 <div class="app-layout-wrapper">
 
+    <!-- ========================================= -->
+    <!-- SIDEBAR NAVIGATION -->
+    <!-- ========================================= -->
     <aside class="app-sidebar">
         <div class="sidebar-brand">
-            <span class="brand-name">NihonManabu</span>
-        </div>
-
-        <nav class="sidebar-menu">
-
-            <a routerLink="/grammar/levels"
-               routerLinkActive="active"
-               class="menu-item">
-                <i class="fas fa-chess-knight"></i>
-                <span>Hiển thị</span>
+            <a routerLink="/" style="text-decoration: none; display: flex; align-items: center;">
+                <span class="brand-name">NihonManabu</span>
             </a>
-
-            <a href="javascript:void(0)"
+        </div>
+        
+        <nav class="sidebar-menu">
+            <!-- Từ vựng -->
+            <a routerLink="/vocabulary/levels"
+               routerLinkActive="active"
                class="menu-item"
                (click)="goToVocabulary()"
                [class.active]="checkActive('vocabulary')">
                 <i class="fas fa-book"></i>
                 <span>Từ vựng</span>
             </a>
-
+            
+            <!-- Ngữ pháp -->
             <a routerLink="/grammar/levels"
                routerLinkActive="active"
                class="menu-item">
                 <i class="fas fa-bullhorn"></i>
                 <span>Ngữ pháp</span>
             </a>
-
-            <a href="javascript:void(0)" class="menu-item">
+            
+            <!-- Lộ trình -->
+            <a routerLink="/pathway" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-route"></i>
                 <span>Lộ trình</span>
             </a>
-
+        
+            <!-- Ghi nhớ / Practice -->
             <a routerLink="/practice" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-chart-line"></i>
                 <span>Ghi nhớ</span>
             </a>
-
-            <a href="javascript:void(0)" class="menu-item">
+            
+            <!-- Chủ động -->
+            <a routerLink="/active-learning" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-user-friends"></i>
                 <span>Chủ động</span>
             </a>
-
-            <a href="javascript:void(0)" class="menu-item">
+            
+            <!-- Shadowing -->
+            <a routerLink="/shadowing" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-headphones"></i>
                 <span>Shadowing</span>
             </a>
 
-            <!-- <a href="javascript:void(0)" class="menu-item premium-link">
-                <i class="fas fa-bolt"></i>
-                <span>Nâng cấp</span>
-            </a> -->
-            <a routerLink="upgradeACC" routerLinkActive="active" class="menu-item premium-link">
+            <!-- Nâng cấp tài khoản -->
+            <a routerLink="/upgradeACC" routerLinkActive="active" class="menu-item premium-link">
                 <i class="fas fa-bolt"></i>
                 <span>Nâng cấp</span>
             </a>
-
         </nav>
 
         <div class="sidebar-footer">
-            <a href="javascript:void(0)" class="menu-item setting-btn">
+            <a routerLink="/settings" routerLinkActive="active" class="menu-item setting-btn">
                 <i class="fas fa-cog"></i>
                 <span>Cài đặt</span>
             </a>
         </div>
     </aside>
 
+    <!-- ========================================= -->
+    <!-- MAIN CONTENT AREA -->
+    <!-- ========================================= -->
     <main class="app-main-content">
-
+        <!-- TOP NAVBAR -->
         <header class="app-top-navbar d-flex justify-content-end align-items-center px-4 py-3">
             <div class="navbar-actions d-flex align-items-center gap-3">
+                <button class="nav-icon-btn"><i class="fas fa-trophy"></i></button>
+                <button class="nav-icon-btn"><i class="fas fa-bell"></i></button>
+                
+                <!-- USER LOGGED IN -->
+                @if (authService.currentUser()) {
+                    <div class="profile-dropdown-wrapper">
+                        <button class="avatar-toggle-btn" (click)="toggleDropdown($event)">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="ms-2 d-none d-md-inline" style="font-size: 13px; font-weight: 600;">
+                                {{ authService.currentUser()?.role }}
+                            </span>
+                            <i class="fas fa-chevron-down ms-1 arrow-icon" [class.rotated]="isDropdownOpen"></i>
+                        </button>
 
-                <button class="nav-icon-btn">
-                    <i class="fas fa-trophy"></i>
-                </button>
-
-                <button class="nav-icon-btn">
-                    <i class="fas fa-bell"></i>
-                </button>
-                <button
-                    class="btn btn-sm btn-outline-light px-3 login-btn"
-                    routerLink="/auth/login">
-
-                    <i class="fas fa-sign-in-alt me-1"></i>
-                    Đăng nhập
-                </button>
-
+                        @if (isDropdownOpen) {
+                            <div class="profile-mini-dropdown">
+                                <div class="dropdown-header">
+                                    <div style="font-weight: 700; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                                        {{ authService.currentUser()?.userName }}
+                                    </div>
+                                </div>
+                                <hr class="dropdown-divider">
+                                
+                                <a [routerLink]="['/auth/profile']" class="dropdown-item" (click)="isDropdownOpen = false">
+                                    <i class="fas fa-id-card me-2"></i> Hồ sơ cá nhân
+                                </a>
+                                
+                                <a routerLink="/auth/login" class="dropdown-item logout-action" (click)="onLogout()">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                </a>
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <!-- GUEST LOGIN BUTTON -->
+                    <button class="btn btn-sm btn-outline-light px-3 login-btn" routerLink="/auth/login">
+                        <i class="fas fa-sign-in-alt me-1"></i> Đăng nhập
+                    </button>
+                }
             </div>
         </header>
 
+        <!-- ROUTER OUTLET -->
         <section class="content-body">
-
             <router-outlet></router-outlet>
-
         </section>
-
     </main>
 
 </div>
+
+<!-- ========================================= -->
+<!-- COMPONENT STYLES -->
+<!-- ========================================= -->
 <style>
-    /* Thiết lập bộ khung Flexbox bọc toàn app */
     .app-layout-wrapper {
         display: flex;
         width: 100vw;
@@ -110,20 +137,16 @@
         background-color: #0F172A;
         color: #F1F5F9;
     }
-
-    /* 🧭 STYLE THANH SIDEBAR BÊN TRÁI */
     .app-sidebar {
         width: 240px;
         height: 100%;
         background-color: #0B0F19;
-        /* Màu tối sẫm đồng bộ hệ thống */
         border-right: 1px solid #1E293B;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         flex-shrink: 0;
     }
-
     .sidebar-brand {
         padding: 24px;
         display: flex;
@@ -131,14 +154,12 @@
         gap: 10px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
-
     .brand-name {
         font-size: 16px;
         font-weight: 800;
         color: #FFFFFF;
         letter-spacing: 0.5px;
     }
-
     .sidebar-menu {
         display: flex;
         flex-direction: column;
@@ -146,7 +167,6 @@
         padding: 16px 12px;
         flex-grow: 1;
     }
-
     .menu-item {
         display: flex;
         align-items: center;
@@ -159,39 +179,29 @@
         text-decoration: none !important;
         transition: all 0.2s ease;
     }
-
     .menu-item i {
         width: 18px;
         font-size: 16px;
         text-align: center;
     }
-
     .menu-item:hover {
         color: #FFFFFF;
         background: rgba(255, 255, 255, 0.03);
     }
-
     .menu-item.active {
         color: #FFFFFF;
         background: #3B82F6;
     }
-
-    /* Mục Active sáng xanh */
-
     .premium-link {
         color: #F59E0B !important;
     }
-
     .premium-link:hover {
         background: rgba(245, 158, 11, 0.1) !important;
     }
-
     .sidebar-footer {
         padding: 12px;
         border-top: 1px solid rgba(255, 255, 255, 0.03);
     }
-
-    /* 🖥️ STYLE VÙNG HIỂN THỊ NỘI DUNG BÊN PHẢI */
     .app-main-content {
         flex-grow: 1;
         height: 100%;
@@ -199,14 +209,12 @@
         flex-direction: column;
         overflow: hidden;
     }
-
     .app-top-navbar {
         height: 64px;
         background-color: #0F172A;
         border-bottom: 1px solid #1E293B;
         flex-shrink: 0;
     }
-
     .nav-icon-btn {
         background: transparent;
         border: none;
@@ -216,45 +224,79 @@
         padding: 6px 10px;
         transition: color 0.2s ease;
     }
-
     .nav-icon-btn:hover {
         color: #FFFFFF;
     }
-
-    .login-btn {
-        border-color: #334155;
+    
+    /* DROPDOWN AVATAR STYLES */
+    .profile-dropdown-wrapper {
+        position: relative;
+    }
+    .avatar-toggle-btn {
+        background: transparent;
+        border: none;
         color: #CBD5E1;
-        font-weight: 600;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 6px;
+    }
+    .avatar-toggle-btn i.fa-user-circle {
+        font-size: 24px;
+    }
+    .arrow-icon {
+        font-size: 11px;
+        transition: transform 0.2s ease;
+    }
+    .arrow-icon.rotated {
+        transform: rotate(180deg);
+    }
+    .profile-mini-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 8px;
+        width: 200px;
+        background-color: #1E293B;
+        border: 1px solid #334155;
         border-radius: 8px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        padding: 6px 0;
     }
-
-    .login-btn:hover {
-        background: #3B82F6;
-        border-color: #3B82F6;
+    .dropdown-header {
+        padding: 8px 16px;
+        font-size: 13px;
     }
-
-    /* Vùng body chứa bài tập có thanh cuộn dọc tự lập */
+    /* Đã sửa lỗi đứt đoạn ở class divider */
+    .dropdown-divider {
+        margin: 6px 0;
+        border-top: 1px solid #334155;
+        opacity: 1;
+    }
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 8px 16px;
+        color: #CBD5E1;
+        font-size: 13px;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+    .dropdown-item:hover {
+        background-color: #334155;
+        color: #fff;
+    }
+    .logout-action {
+        color: #EF4444;
+    }
+    .logout-action:hover {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: #EF4444;
+    }
     .content-body {
         flex-grow: 1;
+        padding: 24px;
         overflow-y: auto;
-        padding: 10px 0;
-    }
-
-    /* Tùy chỉnh thanh cuộn dọc (Scrollbar) siêu mảnh cao cấp */
-    .content-body::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .content-body::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .content-body::-webkit-scrollbar-thumb {
-        background: #1E293B;
-        border-radius: 10px;
-    }
-
-    .content-body::-webkit-scrollbar-thumb:hover {
-        background: #334155;
     }
 </style>

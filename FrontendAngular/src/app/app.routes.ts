@@ -22,10 +22,18 @@ import { LessonsComponent } from './Features/Vocabulary/lessons/lessons';
 import { VocabularyComponent } from './Features/Vocabulary/vocabulary/vocabulary';
 
 // ==========================
-// USER - AUTH
+// USER - AUTH & PROFILE
 // ==========================
-import { Login} from './Feature/Auth/login/login';
-import { RegisterComponent} from './Feature/Auth/register/register';
+import { Login } from './Feature/Auth/login/login';
+import { RegisterComponent } from './Feature/Auth/register/register';
+import { ProfileComponent } from './Feature/Auth/profile/profile';
+
+// ==========================
+// USER - PRACTICE & PAYMENT
+// ==========================
+import { PracticeMain } from './Features/Practice/practice-main/practice-main';
+import { PaymentComponent } from './Features/payment/payment';
+
 // ==========================
 // ADMIN - GRAMMAR
 // ==========================
@@ -60,11 +68,8 @@ import { LessonEditComponent } from './Features/Admin/LessonAdmin/edit/edit';
 import { VocabularyIndexComponent } from './Features/Admin/VocabularyAdmin/index';
 import { VocabularyCreateComponent } from './Features/Admin/VocabularyAdmin/create/create';
 import { VocabularyEditComponent } from './Features/Admin/VocabularyAdmin/edit/edit';
-import { PracticeMain } from './Features/Practice/practice-main/practice-main';
-import { PaymentComponent } from './Features/payment/payment';
 
 export const routes: Routes = [
-
     // =========================================
     // ROOT
     // =========================================
@@ -81,6 +86,11 @@ export const routes: Routes = [
         path: '',
         component: UserLayoutComponent,
         children: [
+            // ✨ Profile cá nhân của người dùng nằm trong User Layout
+            {
+                path: 'auth/profile',
+                component: ProfileComponent
+            },
 
             // ---------- Vocabulary ----------
             {
@@ -105,20 +115,7 @@ export const routes: Routes = [
                     }
                 ]
             },
-            // ---------- Auth ----------
-            {
-               path: 'auth',
-                children: [
-                    {
-                        path: 'login',
-                        component: Login
-                    },
-                    {
-                        path: 'register',
-                        component: RegisterComponent
-                    }
-                ]
-            },
+
             // ---------- Grammar ----------
             {
                 path: 'grammar',
@@ -146,15 +143,34 @@ export const routes: Routes = [
                     }
                 ]
             },
-            // 🚀 ROUTE MỚI CHO PRACTICE (GHI NHỚ) - Tạm thời để ở đây, sau này có thể tách ra module riêng nếu cần
+
+            // ---------- Practice ----------
             {
                 path: 'practice', 
                 component: PracticeMain
-
             },
+
+            // ---------- Upgrade Account (Payment) ----------
             {
                 path: 'upgradeACC',
                 component: PaymentComponent
+            }
+        ]
+    },
+
+    // =========================================
+    // AUTH AREA (ĐỘC LẬP - KHÔNG ĂN THEO LAYOUT CHUNG)
+    // =========================================
+    {
+        path: 'auth',
+        children: [
+            {
+                path: 'login',
+                component: Login
+            },
+            {
+                path: 'register',
+                component: RegisterComponent
             }
         ]
     },
@@ -166,14 +182,13 @@ export const routes: Routes = [
         path: 'admin',
         component: AdminLayoutComponent,
         children: [
-
             {
                 path: '',
                 redirectTo: 'grammar',
                 pathMatch: 'full'
             },
 
-            // ---------- Grammar ----------
+            // ---------- Admin Grammar ----------
             {
                 path: 'grammar',
                 children: [
@@ -192,7 +207,7 @@ export const routes: Routes = [
                 ]
             },
 
-            // ---------- Question ----------
+            // ---------- Admin Question ----------
             {
                 path: 'question',
                 children: [
@@ -211,7 +226,7 @@ export const routes: Routes = [
                 ]
             },
 
-            // ---------- Level ----------
+            // ---------- Admin Level ----------
             {
                 path: 'level',
                 children: [
@@ -230,7 +245,7 @@ export const routes: Routes = [
                 ]
             },
 
-            // ---------- Lesson ----------
+            // ---------- Admin Lesson ----------
             {
                 path: 'lesson',
                 children: [
@@ -249,7 +264,7 @@ export const routes: Routes = [
                 ]
             },
 
-            // ---------- Vocabulary ----------
+            // ---------- Admin Vocabulary ----------
             {
                 path: 'vocabulary',
                 children: [
@@ -271,7 +286,7 @@ export const routes: Routes = [
     },
 
     // =========================================
-    // NOT FOUND
+    // CẢNH SÁT GIAO THÔNG (NOT FOUND REDIRECT)
     // =========================================
     {
         path: '**',
