@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { PaymentClientService } from '../../Core/Services/payment-Service';
+import { PaymentClientService } from '../../Core/Services/payment-client-Service';
 
 @Component({
   selector: 'app-payment',

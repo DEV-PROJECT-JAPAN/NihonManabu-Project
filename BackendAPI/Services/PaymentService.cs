@@ -19,7 +19,7 @@ namespace BackendAPI.Services
 
         public async Task<string> GenerateVipPaymentQrAsync(int userId)
         {
-            decimal vipPrice = 1000;
+            decimal vipPrice = 2000;
 
             // Tìm hoặc tạo bill Pending
             var pendingTx = await _context.Transactions

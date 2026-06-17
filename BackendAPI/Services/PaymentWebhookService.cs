@@ -71,7 +71,7 @@ namespace BackendAPI.Services
 
                 // KIỂM TRA SỐ TIỀN THỰC TẾ NHẬN ĐƯỢC
                 // Nếu khách chuyển thiếu tiền (Ví dụ gói VIP là 50k mà chuyển có 20k)
-                if (data.Amount < 50000)
+                if (data.Amount < 1999)
                 {
                     _logger.LogWarning($"User {userId} chuyển thiếu tiền ({data.Amount}đ). Đã ghi nhận Transaction nhưng KHÔNG thăng cấp VIP.");
                     await _context.SaveChangesAsync();

@@ -47,14 +47,14 @@ namespace BackendAPI.Controllers
         // CỔNG NHẬN WEBHOOK TỪ NGÂN HÀNG
         [HttpPost("bank-webhook")]
         [AllowAnonymous] // 🛡️ Cho phép bên ngoài gọi vào không cần JWT Token
-        public async Task<IActionResult> ReceiveBankWebhook([FromBody] BankWebhookDTO webhookData)
+        public async Task<IActionResult> ReceiveBankWebhook([FromBody] BankWebhookDTO webhookData, [FromHeader(Name = "x-api-key")] string incomingApiKey)
         {
             try
             {
                 // 1. CHỐNG HACKER: Kiểm tra mã bảo mật API Key
                 // Mã này lấy từ file appsettings.json (VD: ALPHA_PGR_SECRET_KEY_9999)
                 var mySecretKey = _config["VietQRConfig:WebhookSecret"];
-                var incomingApiKey = Request.Headers["x-api-key"].ToString();
+                incomingApiKey = Request.Headers["x-api-key"].ToString();
 
                 // Nếu không gửi mã hoặc mã sai -> Đuổi cổ ngay lập tức
                 if (string.IsNullOrEmpty(mySecretKey) || incomingApiKey != mySecretKey)
