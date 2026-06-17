@@ -21,6 +21,9 @@ builder.Services.AddScoped<LevelClientService>();
 builder.Services.AddHttpClient<LessonClientService>();
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
+builder.Services.AddScoped<PracticeClientService>();
+
+
 builder.Services.AddRazorPages();
 
 

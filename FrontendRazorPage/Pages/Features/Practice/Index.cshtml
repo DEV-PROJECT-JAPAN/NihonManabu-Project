@@ -1,0 +1,833 @@
+@page
+@model FrontendRazorPage.Pages.Features.Practice.IndexModel
+@{
+    ViewData["Title"] = "Vocabulary Review";
+}
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+            /* [Giữ nguyên toàn bộ CSS cũ của anh ở đây] */
+            :root {
+                --primary-color: #00d4ff;
+                --secondary-color: #ffff00;
+                --dark-bg: #0f1419;
+                --card-bg: #1a1f2e;
+                --text-light: #ffffff;
+                --text-muted: #a0aec0;
+                --success-color: #10b981;
+                --border-radius: 12px;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f2e 100%);
+                color: var(--text-light);
+                font-family: 'Quicksand', sans-serif;
+                min-height: 100vh;
+                padding: 2rem 1rem;
+            }
+
+            .page-header {
+                text-align: center;
+                margin-bottom: 3rem;
+            }
+
+            .page-title {
+                font-family: 'Orbitron', monospace;
+                font-size: 2.5rem;
+                font-weight: 900;
+                color: var(--primary-color);
+                text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+                letter-spacing: 2px;
+                margin-bottom: 0.5rem;
+            }
+
+            .page-subtitle {
+                font-size: 1.1rem;
+                color: var(--text-muted);
+                margin-bottom: 0.5rem;
+            }
+
+            .draw-info {
+                font-size: 0.9rem;
+                color: var(--primary-color);
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            /* Gacha Cards CSS cũ */
+            .cards-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 2rem;
+                background-color: rgba(26, 31, 46, 0.5);
+                border-radius: var(--border-radius);
+                border: 2px solid var(--primary-color);
+                box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+            }
+
+            .cards-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .flip-card {
+                background-color: transparent;
+                width: 100%;
+                height: 250px;
+                perspective: 1000px;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            }
+
+            .flip-card-inner {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                transform-style: preserve-3d;
+                border-radius: var(--border-radius);
+                box-shadow: 0 8px 16px rgba(0, 212, 255, 0.3);
+            }
+
+                .flip-card-inner.flipped {
+                    transform: rotateY(180deg);
+                }
+
+            .flip-card-front, .flip-card-back {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                backface-visibility: hidden;
+                border-radius: var(--border-radius);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1.5rem;
+                border: 2px solid var(--primary-color);
+            }
+
+            .flip-card-front {
+                background: linear-gradient(135deg, var(--card-bg) 0%, #0d0f17 100%);
+                color: var(--text-light);
+                flex-direction: column;
+                gap: 1rem;
+                position: relative;
+                overflow: hidden;
+            }
+
+                .flip-card-front::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0, 212, 255, 0.1) 35px, rgba(0, 212, 255, 0.1) 70px);
+                    pointer-events: none;
+                }
+
+            .flip-card-front-content {
+                position: relative;
+                z-index: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.8rem;
+            }
+
+            .mystery-icon {
+                font-size: 3rem;
+                color: var(--primary-color);
+                text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+                animation: pulse 2s ease-in-out infinite;
+            }
+            @@keyframes pulse {
+                0%, 100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.6;
+                }
+            }
+
+            .mystery-text {
+                font-size: 1.2rem;
+                font-weight: 700;
+                letter-spacing: 1px;
+                color: var(--primary-color);
+                text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+            }
+
+            .flip-hint {
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-top: 0.5rem;
+            }
+
+            .flip-card-back {
+                background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+                color: var(--dark-bg);
+                transform: rotateY(180deg);
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 1.2rem;
+                font-weight: 600;
+            }
+
+            .card-kanji {
+                font-size: 2.5rem;
+                font-weight: 900;
+                letter-spacing: 2px;
+                line-height: 1;
+                text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .card-hiragana {
+                font-size: 1.2rem;
+                opacity: 0.95;
+                letter-spacing: 1px;
+            }
+
+            .card-meaning {
+                font-size: 1rem;
+                opacity: 0.9;
+                line-height: 1.4;
+                word-wrap: break-word;
+                margin-top: 0.5rem;
+            }
+
+            .flip-card:hover {
+                transform: scale(1.02);
+            }
+
+                .flip-card:hover .flip-card-inner {
+                    box-shadow: 0 12px 24px rgba(0, 212, 255, 0.6);
+                }
+
+                .flip-card:hover .flip-card-front {
+                    border-color: var(--secondary-color);
+                }
+
+                .flip-card:hover .mystery-icon {
+                    font-size: 3.3rem;
+                }
+
+            .action-buttons {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                margin-top: 2rem;
+            }
+
+            .btn-custom {
+                padding: 0.75rem 2rem;
+                font-size: 1rem;
+                font-weight: 600;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                font-family: 'Orbitron', monospace;
+            }
+
+            .btn-draw {
+                background-color: var(--primary-color);
+                color: var(--dark-bg);
+                border: 2px solid var(--primary-color);
+            }
+
+                .btn-draw:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+                    background-color: var(--secondary-color);
+                    border-color: var(--secondary-color);
+                    color: var(--dark-bg);
+                }
+
+            .btn-reset {
+                background-color: transparent;
+                color: var(--primary-color);
+                border: 2px solid var(--primary-color);
+            }
+
+                .btn-reset:hover {
+                    background-color: var(--primary-color);
+                    color: var(--dark-bg);
+                    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+                }
+
+            /* ============================================
+                       PHẦN CSS MỚI THÊM VÀO
+                       ============================================ */
+            /* View Switcher Logic */
+            .view-section {
+                display: none;
+                animation: fadeIn 0.4s ease;
+            }
+
+                .view-section.active {
+                    display: block;
+                }
+            @@keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(15px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .btn-back {
+                margin-bottom: 1.5rem;
+                background: transparent;
+                color: var(--primary-color);
+                border: 1px solid var(--primary-color);
+            }
+
+                .btn-back:hover {
+                    background: var(--primary-color);
+                    color: var(--dark-bg);
+                }
+            /* ============================================
+   AUDIO BUTTON STYLING
+   ============================================ */
+.audio-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.15); /* Nền hơi tối mờ ảo */
+    color: var(--dark-bg);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10; /* Đảm bảo nút loa luôn nổi lên trên cùng */
+}
+
+.audio-btn:hover {
+    background: var(--dark-bg);
+    color: var(--secondary-color); /* Chuyển màu vàng chanh khi hover */
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+            /* Style cho Main Menu */
+            .menu-wrapper {
+                max-width: 900px;
+                margin: 0 auto;
+                display: flex;
+                gap: 2rem;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .menu-card {
+                background: var(--card-bg);
+                border: 2px solid rgba(0, 212, 255, 0.3);
+                border-radius: var(--border-radius);
+                padding: 3rem 2rem;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.3s;
+                flex: 1;
+                min-width: 300px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            }
+
+                .menu-card:hover {
+                    border-color: var(--primary-color);
+                    transform: translateY(-8px);
+                    box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2);
+                }
+
+            .menu-icon {
+                font-size: 4.5rem;
+                color: var(--primary-color);
+                margin-bottom: 1.5rem;
+                text-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            }
+
+            .menu-title {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: white;
+                margin-bottom: 1rem;
+            }
+
+            .menu-desc {
+                color: var(--text-muted);
+                font-size: 0.95rem;
+            }
+
+            /* Style cho Uploaded Folder Grid */
+            .folder-grid-container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .folder-grid {
+                display: grid;
+                /* Quy tắc: Cứ 4 folder xuống dòng 1 lần trên màn hình bự */
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+            }
+
+            .folder-item {
+                background: var(--card-bg);
+                border: 1px solid rgba(0, 212, 255, 0.2);
+                border-radius: var(--border-radius);
+                padding: 2rem 1rem;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.2s;
+                position: relative;
+            }
+
+                .folder-item:hover {
+                    border-color: var(--primary-color);
+                    background: rgba(26, 31, 46, 0.8);
+                    transform: scale(1.03);
+                }
+
+            .folder-icon {
+                font-size: 3rem;
+                color: #f6d365;
+                margin-bottom: 1rem;
+            }
+
+            .folder-name {
+                color: white;
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+
+            .folder-count {
+                color: var(--text-muted);
+                font-size: 0.85rem;
+                margin-top: 0.5rem;
+            }
+
+            /* Đặc biệt: Folder Upload đứng đầu */
+            .folder-upload {
+                border: 2px dashed var(--primary-color);
+                background: transparent;
+            }
+
+                .folder-upload .folder-icon {
+                    color: var(--primary-color);
+                }
+
+                .folder-upload:hover {
+                    background: rgba(0, 212, 255, 0.05);
+                }
+
+            /* Style ép chuẩn cho Modal form Dark Theme */
+            .modal-content {
+                background-color: var(--card-bg);
+                border: 1px solid var(--primary-color);
+                color: white;
+            }
+
+            .modal-header {
+                border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            }
+
+            .modal-footer {
+                border-top: 1px solid rgba(0, 212, 255, 0.2);
+            }
+
+            .btn-close {
+                filter: invert(1) grayscale(100%) brightness(200%);
+            }
+
+            .custom-input {
+                background: rgba(0, 0, 0, 0.4);
+                border: 1px solid rgba(0, 212, 255, 0.4);
+                color: white;
+            }
+
+                .custom-input:focus {
+                    background: rgba(0, 0, 0, 0.6);
+                    border-color: var(--primary-color);
+                    color: white;
+                    box-shadow: 0 0 10px rgba(0,212,255,0.3);
+                }
+
+            /* Ép dòng Responsive cho Folder Grid */
+            @@media (max-width: 992px) {
+                .folder-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+            @@media (max-width: 768px) {
+                .folder-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+            @@media (max-width: 480px) {
+                .folder-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+    .delete-folder-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 77, 77, 0.2);
+        color: #ff4d4d;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        z-index: 5;
+    }
+
+        .delete-folder-btn:hover {
+            background: #ff4d4d;
+            color: white;
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+            transform: scale(1.1);
+        }
+    </style>
+
+    <div class="page-header">
+        <div class="page-title"><i class="fas fa-graduation-cap"></i> TRUNG TÂM ÔN TẬP</div>
+        <div class="page-subtitle" id="dynamicSubtitle">Chọn phương thức học của bạn</div>
+    </div>
+
+    <div id="mainMenuView" class="view-section active">
+        <div class="menu-wrapper">
+            <div class="menu-card" onclick="switchView('systemVocabView', '✨ Gacha Random Words ✨')">
+                <div class="menu-icon"><i class="fas fa-database"></i></div>
+                <div class="menu-title">Từ vựng Hệ thống</div>
+                <div class="menu-desc">Ôn tập kho từ vựng tiếng Nhật chuẩn mà bạn đã lưu trong tiến trình học trên ứng dụng.</div>
+            </div>
+
+            <div class="menu-card" onclick="switchView('uploadedVocabView', '📂 Quản lý từ vựng cá nhân')">
+                <div class="menu-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <div class="menu-title">Từ vựng Upload</div>
+                <div class="menu-desc">Tạo thư mục và tải lên file từ vựng cá nhân để luyện tập theo nhu cầu riêng biệt.</div>
+            </div>
+        </div>
+    </div>
+    @*view ôn tập từ vựng hệ thống*@
+    <div id="systemVocabView" class="view-section">
+        <div class="cards-container">
+            <button class="btn btn-custom btn-back mb-4" onclick="switchView('mainMenuView', 'Chọn phương thức học của bạn')">
+                <i class="fas fa-arrow-left"></i> Quay Lại Menu
+            </button>
+
+            <div class="draw-info text-center mb-4">✨ LẮC 5 TỪ VỰNG NGẪU NHIÊN ✨</div>
+
+        @if (Model.PracticeVocabularySystem != null && Model.PracticeVocabularySystem.Count > 0)
+        {
+            <div class="cards-grid">
+                @foreach (var vocab in Model.PracticeVocabularySystem)
+                {
+                    <div class="flip-card" onclick="flipCard(this)">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <div class="flip-card-front-content">
+                                    <div class="mystery-icon"><i class="fas fa-question"></i></div>
+                                    <div class="mystery-text">Mystery</div>
+                                    <div class="flip-hint">Click to Reveal</div>
+                                </div>
+                            </div>
+                            <div class="flip-card-back">
+                                <button class="audio-btn" onclick="playVocabAudio(event, 'audio-@vocab.Id', '@vocab.Kanji', '@vocab.Hiragana')">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                                <audio id="audio-@vocab.Id" src="" preload="none"></audio>
+                                <div class="card-kanji">@vocab.Kanji</div>
+                                <div class="card-hiragana">@vocab.Hiragana</div>
+                                <div class="card-meaning">@vocab.Meaning</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-custom btn-draw" onclick="location.reload()">
+                    <i class="fas fa-redo"></i> Draw Again
+                </button>
+                <button class="btn-custom btn-reset" onclick="resetAllCards()">
+                    <i class="fas fa-undo"></i> Reset Cards
+                </button>
+            </div>
+        }
+            else
+            {
+                <div class="empty-state text-center">
+                    <div class="empty-state-icon"><i class="fas fa-inbox"></i></div>
+                    <h3>Chưa có dữ liệu</h3>
+                    <p>Hiện chưa có từ vựng nào trong CSDL để tiến hành Gacha.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.DebugError))
+    {
+        <div style="max-width: 900px; margin: 0 auto 2rem auto; background-color: #ff4d4d; color: white; padding: 15px; border-radius: 8px; text-align: center;">
+            <strong>🚨 BẮT ĐƯỢC LỖI KẾT NỐI API:</strong> <br/>
+            @Model.DebugError
+        </div>
+    }
+@*view ôn tập từ vựng từ file upload*@
+<div id="uploadedVocabView" class="view-section">
+    <div class="folder-grid-container">
+        <button class="btn btn-custom btn-back" onclick="switchView('mainMenuView', 'Chọn phương thức học của bạn')">
+            <i class="fas fa-arrow-left"></i> Quay Lại Menu
+        </button>
+
+        <div class="folder-grid mt-4">
+
+            <div class="folder-item folder-upload" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                <div class="folder-icon"><i class="fas fa-folder-plus"></i></div>
+                <div class="folder-name">Upload Data Mới</div>
+                <div class="folder-count">Tạo thư mục ôn tập</div>
+            </div>
+            @foreach (var vocal in Model.Userfolders)
+            {
+                <div class="folder-item" onclick="openFolderGacha(@vocal.Id, '@vocal.Name')">
+                    <button class="delete-folder-btn" onclick="deleteFolderBtnClick(event, @vocal.Id, '@vocal.Name')" title="Xóa thư mục">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <div class="folder-icon"><i class="fas fa-folder"></i></div>
+                    <div class="folder-name">@vocal.Name</div>
+                    <div class="folder-count">@vocal.Description</div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+<div id="folderGachaView" class="view-section">
+    <div class="cards-container">
+        <button class="btn btn-custom btn-back mb-4" onclick="switchView('uploadedVocabView', '📂 Quản lý từ vựng cá nhân')">
+            <i class="fas fa-arrow-left"></i> Quay Lại Các Thư Mục
+        </button>
+
+        <div class="draw-info text-center mb-4">
+            <span style="color: #f6d365;"><i class="fas fa-folder-open"></i> Thư mục đang học: </span>
+            <span id="currentFolderName" class="text-white fw-bold" style="font-size: 1.1rem;">Chưa chọn</span>
+        </div>
+
+        <div class="cards-grid">
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-custom btn-draw" onclick="location.reload()">
+                <i class="fas fa-random"></i> Trộn Từ Mới
+            </button>
+            <button class="btn-custom btn-reset" onclick="resetAllCards()">
+                <i class="fas fa-undo"></i> Úp Bài Lại
+            </button>
+        </div>
+    </div>
+</div>
+    @* form thêm từ vựng vào danh sách người dùng*@
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="post" enctype="multipart/form-data" asp-page-handler="UploadData" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-info"><i class="fas fa-cloud-upload-alt me-2"></i>Tạo Thư Mục Từ Vựng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <label class="form-label text-muted fw-bold">Tên thư mục lưu trữ</label>
+                        <input type="text" class="form-control custom-input" name="FolderName" placeholder="VD: Kanji Bài 1..." required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted fw-bold">Mô tả thư mục</label>
+                        <input type="text" class="form-control custom-input" name="Description" placeholder="VD: Từ vựng bài 1..." required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted fw-bold">Upload file dữ liệu (Excel/CSV)</label>
+                        <input class="form-control custom-input" type="file" name="VocabularyFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required>
+                        <small class="text-secondary mt-2 d-block">* Chỉ chấp nhận định dạng .xlsx</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ (Cancel)</button>
+                    <button type="submit" class="btn btn-info fw-bold text-dark">Lưu Thư Mục (Save)</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Hàm chuyển đổi giữa các Màn hình (Views)
+        function switchView(viewId, newSubtitle) {
+        // 1. Tắt hết tất cả màn hình
+        document.querySelectorAll('.view-section').forEach(section => {
+        section.classList.remove('active');
+        });
+        // 2. Bật màn hình được chỉ định
+        document.getElementById(viewId).classList.add('active');
+        // 3. Đổi dòng sub-title phía trên cùng cho phù hợp ngữ cảnh
+        document.getElementById('dynamicSubtitle').innerText = newSubtitle;
+        }
+
+        // Logic lật bài Gacha của anh giữ nguyên
+        function flipCard(cardElement) {
+        const flipInner = cardElement.querySelector('.flip-card-inner');
+        if (!flipInner.classList.contains('flipped')) {
+        flipInner.classList.add('flipped');
+        // cardElement.style.pointerEvents = 'none';
+        }
+        }
+
+        function resetAllCards() {
+        const allFlipCards = document.querySelectorAll('.flip-card');
+        allFlipCards.forEach(card => {
+        card.style.pointerEvents = 'auto';
+        card.querySelector('.flip-card-inner').classList.remove('flipped');
+        });
+        }
+
+        document.addEventListener('keydown', (event) => {
+        if (event.key.toLowerCase() === 'r') {
+        resetAllCards();
+        }
+        });
+        async function openFolderGacha(folderId, folderName) {
+    // 1. Chuyển UI mượt mà không chớp màn hình
+    switchView('folderGachaView', '✨ Luyện Tập Gacha ✨');
+    document.getElementById('currentFolderName').innerText = folderName;
+
+    // 2. Lấy dữ liệu từ C# về (cực lẹ, không reload)
+    const response = await fetch(`?handler=LoadFolderVocab&folderId=${folderId}`);
+    const words = await response.json();
+
+    // 3. Tự động vẽ các thẻ bài ra màn hình dựa trên dữ liệu vừa lấy
+    const cardsGrid = document.querySelector('#folderGachaView .cards-grid');
+    cardsGrid.innerHTML = ''; // Xóa sạch thẻ cũ
+
+    if (words && words.length > 0) {
+        words.forEach(vocab => {
+            // Nhét y xì đúc cấu trúc HTML CŨ CỦA ANH vào đây, nhàn tênh!
+            cardsGrid.innerHTML += `
+                <div class="flip-card" onclick="flipCard(this)">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="flip-card-front-content">
+                                <div class="mystery-icon"><i class="fas fa-box-open"></i></div>
+                                <div class="mystery-text">Mystery</div>
+                                <div class="flip-hint">Click to Reveal</div>
+                            </div>
+                        </div>
+                        <div class="flip-card-back">
+                            <button class="audio-btn" onclick="playVocabAudio(event, 'audio-${vocab.id}', '${vocab.kanji}', '${vocab.hiragana}')">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                            <audio id="audio-${vocab.id}" src="" preload="none"></audio>
+                            <div class="card-kanji">${vocab.kanji}</div>
+                            <div class="card-hiragana">${vocab.hiragana}</div>
+                            <div class="card-meaning">${vocab.meaning}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        cardsGrid.innerHTML = `<div class="text-center w-100 text-muted mt-4">Folder này chưa có từ vựng nào!</div>`;
+    }
+}
+        // HÀM MỚI: Xử lý phát âm thanh
+    function playVocabAudio(event, audioId, kanjiText, hiraganaText) {
+    // ⚠️ LỆNH SỐNG CÒN: Ngăn chặn sự kiện click xuyên thấu!
+    // Nếu không có lệnh này, khi bấm nút Loa, trình duyệt sẽ tưởng anh bấm vào thẻ và lật úp thẻ lại.
+    event.stopPropagation(); 
+
+    const audio = document.getElementById(audioId);
+    // if (audio && audio.src && audio.src !== "") {
+    //     audio.currentTime = 0; Trả âm thanh về đầu bài (để bấm nhiều lần liên tục được)
+    //     audio.play();
+    // } else {
+    //     alert("Audio đang được cập nhật, vui lòng thử lại sau!");
+    // }
+    if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    // Ưu tiên đọc bằng Hiragana để máy phát âm chuẩn nhất, nếu không có thì đọc bằng Kanji
+    const textToSpeak = hiraganaText || kanjiText;
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = 'ja-JP'; // Ép máy phải đọc bằng giọng tiếng Nhật
+    utterance.rate = 0.85;    // Giảm tốc độ đọc xuống một chút cho người học dễ nghe (1.0 là bình thường)
+
+    // Tìm giọng đọc chuẩn của Microsoft hoặc Google (nếu có sẵn trên máy)
+    let voices = window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = () => {
+    voices = window.speechSynthesis.getVoices();
+    };
+    const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.includes('ja'));
+    if (jpVoice) utterance.voice = jpVoice;
+
+    window.speechSynthesis.speak(utterance);
+    } else {
+    alert("Trình duyệt của bạn quá cũ, không hỗ trợ tính năng phát âm tự động!");
+    }
+    }
+    // Phép thuật: Dùng C# ép cục dữ liệu sang chuỗi JSON, rồi giao cho JS in ra Console
+    console.log("Danh sách từ vựng Hệ thống (C# gửi):", @Html.Raw(Json.Serialize(Model.PracticeVocabularySystem)));
+    async function deleteFolderBtnClick(event, folderId, folderName) {
+    // Lệnh SỐNG CÒN: Chặn không cho click xuyên thấu xuống cái thư mục (gây mở thư mục)
+    event.stopPropagation();
+
+    // Hiện hộp thoại hỏi lại cho chắc chắn
+    if (confirm(`🚨 CẢNH BÁO: Bạn có chắc chắn muốn xóa vĩnh viễn thư mục [${folderName}]?\n(Các từ vựng trong kho của bạn sẽ KHÔNG bị xóa)`)) {
+
+    // Gọi lên C# Frontend
+    const response = await fetch(`?handler=DeleteFolder&folderId=${folderId}`);
+    const data = await response.json();
+
+    if (data.success) {
+    // Xóa xong thì làm mới lại trang để mất cái Folder đi
+    location.reload();
+    } else {
+    alert("Có lỗi xảy ra, không thể xóa thư mục lúc này!");
+    }
+    }
+    }
+    </script>

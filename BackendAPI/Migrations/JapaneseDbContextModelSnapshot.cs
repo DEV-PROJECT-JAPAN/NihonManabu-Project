@@ -17,667 +17,735 @@ namespace BackendAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("BackendAPI.Models.Answer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("DisplayOrder")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("DisplayOrder")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsCorrect")
+                    .HasColumnType("bit");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                b.Property<int>("OrderId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                b.Property<int>("QuestionId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(500)");
+                b.Property<string>("Text")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("QuestionId");
+                b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
-                });
+                b.ToTable("Answers", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Badge", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Description")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IconUrl")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("IconUrl")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Badges");
-                });
+                b.ToTable("Badges", (string)null);
+            });
+
+            modelBuilder.Entity("BackendAPI.Models.FolderVocabulary", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("ListId")
+                    .HasColumnType("int");
+
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("VocabularyId")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.HasIndex("ListId");
+
+                b.HasIndex("VocabularyId");
+
+                b.ToTable("FolderVocabularies", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Grammar", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Explanation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Explanation")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LessonId")
-                        .HasColumnType("int");
+                b.Property<int>("LessonId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Structure")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)");
+                b.Property<string>("Structure")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("LessonId");
+                b.HasIndex("LessonId");
 
-                    b.ToTable("Grammars");
-                });
+                b.ToTable("Grammars", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.LearningProgress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsMasstered")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsMasstered")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastReviewed")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("LastReviewed")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("ReviewCount")
-                        .HasColumnType("int");
+                b.Property<int>("ReviewCount")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("VocabularyId")
-                        .HasColumnType("int");
+                b.Property<int>("VocabularyId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.HasIndex("VocabularyId");
+                b.HasIndex("VocabularyId");
 
-                    b.ToTable("LearningProgresses");
-                });
+                b.ToTable("LearningProgresses", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Lesson", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("LevelId")
-                        .HasColumnType("int");
+                b.Property<int>("LevelId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
+                b.Property<int>("Order")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("LevelId");
+                b.HasIndex("LevelId");
 
-                    b.ToTable("Lessons");
-                });
+                b.ToTable("Lessons", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Level", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Levels");
-                });
+                b.ToTable("Levels", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Question", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Content")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int?>("GrammarId")
-                        .HasColumnType("int");
+                b.Property<int?>("GrammarId")
+                    .HasColumnType("int");
 
-                    b.Property<int>("QuestionType")
-                        .HasColumnType("int");
+                b.Property<int>("QuestionType")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("GrammarId");
+                b.HasIndex("GrammarId");
 
-                    b.ToTable("Questions");
-                });
+                b.ToTable("Questions", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                b.Property<decimal>("Amount")
+                    .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("PaymentMethod")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PaymentMethod")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Status")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("Transactions");
-                });
+                b.ToTable("Transactions", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("CurrentStreak")
-                        .HasColumnType("int");
+                b.Property<int>("CurrentStreak")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Email")
+                    .IsRequired()
+                    .HasColumnType("max");
 
-                    b.Property<bool>("IsEmailConfirmed")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsEmailConfirmed")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastActiveDate")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("LastActiveDate")
+                    .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("LastTokenSentAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("LastTokenSentAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PasswordHash")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Role")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("TokenExpiresAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("TokenExpiresAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("TotalExp")
-                        .HasColumnType("int");
+                b.Property<int>("TotalExp")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("UserName")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VerificationToken")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("VerificationToken")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Users");
-                });
+                b.ToTable("Users", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.UserBadge", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BadgeId")
-                        .HasColumnType("int");
+                b.Property<int>("BadgeId")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EarnedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("EarnedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("BadgeId");
+                b.HasIndex("BadgeId");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("UserBadges");
-                });
+                b.ToTable("UserBadges", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.UserFlashcardList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("UserFlashcardLists");
-                });
+                b.ToTable("UserFlashcardLists", (string)null);
+            });
+
+            modelBuilder.Entity("BackendAPI.Models.UserSubscription", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<DateTime>("ExpiresAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<bool>("IsActive")
+                    .HasColumnType("bit");
+
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("UserId")
+                    .HasColumnType("int");
+
+                b.HasKey("Id");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("Subscriptions");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.UserVocabulary", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AudioUrl")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<string>("Hiragana")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ExampleSentence")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                b.Property<bool>("IsMastered")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("Hiragana")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                b.Property<string>("Kanji")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("IsMastered")
-                        .HasColumnType("bit");
+                b.Property<DateTime>("LastReviewed")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Kanji")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                b.Property<string>("Meaning")
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("LastReviewed")
-                        .HasColumnType("datetime2");
+                b.Property<int>("ReviewCount")
+                    .HasColumnType("int");
 
-                    b.Property<int>("ListId")
-                        .HasColumnType("int");
+                b.Property<string>("Romaji")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Meaning")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.Property<int>("ReviewCount")
-                        .HasColumnType("int");
+                b.HasKey("Id");
 
-                    b.Property<string>("Romaji")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ListId");
-
-                    b.ToTable("UserVocabularies");
-                });
+                b.ToTable("UserVocabularies", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Vocabulary", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AudioUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("datetime2");
 
                     b.Property<string>("ExampleSentence")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Hiragana")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
+                b.Property<string>("Hiragana")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Kanji")
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("LessonId")
-                        .HasColumnType("int");
+                b.Property<int>("LessonId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Meaning")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)");
+                b.Property<string>("Meaning")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Romaji")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Romaji")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("Hiragana");
+                b.HasIndex("Hiragana");
 
-                    b.HasIndex("Kanji");
+                b.HasIndex("Kanji");
 
-                    b.HasIndex("LessonId");
+                b.HasIndex("LessonId");
 
-                    b.ToTable("Vocabularies");
-                });
+                b.ToTable("Vocabularies", (string)null);
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Answer", b =>
-                {
-                    b.HasOne("BackendAPI.Models.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("BackendAPI.Models.Question", "Question")
+                    .WithMany("Answers")
+                    .HasForeignKey("QuestionId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Question");
-                });
+                b.Navigation("Question");
+            });
+
+            modelBuilder.Entity("BackendAPI.Models.FolderVocabulary", b =>
+            {
+                b.HasOne("BackendAPI.Models.UserFlashcardList", "UserFlashcardList")
+                    .WithMany("FolderVocabularies")
+                    .HasForeignKey("ListId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("BackendAPI.Models.UserVocabulary", "UserVocabulary")
+                    .WithMany("FolderVocabularies")
+                    .HasForeignKey("VocabularyId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("UserFlashcardList");
+
+                b.Navigation("UserVocabulary");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Grammar", b =>
-                {
-                    b.HasOne("BackendAPI.Models.Lesson", "Lesson")
-                        .WithMany("Grammars")
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("BackendAPI.Models.Lesson", "Lesson")
+                    .WithMany("Grammars")
+                    .HasForeignKey("LessonId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Lesson");
-                });
+                b.Navigation("Lesson");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.LearningProgress", b =>
-                {
-                    b.HasOne("BackendAPI.Models.User", "User")
-                        .WithMany("LearningProgresses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("BackendAPI.Models.User", "User")
+                    .WithMany("LearningProgresses")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("BackendAPI.Models.Vocabulary", "Vocabulary")
-                        .WithMany()
-                        .HasForeignKey("VocabularyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("BackendAPI.Models.Vocabulary", "Vocabulary")
+                    .WithMany()
+                    .HasForeignKey("VocabularyId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
+                b.Navigation("User");
 
-                    b.Navigation("Vocabulary");
-                });
+                b.Navigation("Vocabulary");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Lesson", b =>
-                {
-                    b.HasOne("BackendAPI.Models.Level", "Level")
-                        .WithMany("Lessons")
-                        .HasForeignKey("LevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("BackendAPI.Models.Level", "Level")
+                    .WithMany("Lessons")
+                    .HasForeignKey("LevelId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Level");
-                });
+                b.Navigation("Level");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Question", b =>
-                {
-                    b.HasOne("BackendAPI.Models.Grammar", "Grammar")
-                        .WithMany("Questions")
-                        .HasForeignKey("GrammarId");
+            {
+                b.HasOne("BackendAPI.Models.Grammar", "Grammar")
+                    .WithMany("Questions")
+                    .HasForeignKey("GrammarId");
 
-                    b.Navigation("Grammar");
-                });
+                b.Navigation("Grammar");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Transaction", b =>
-                {
-                    b.HasOne("BackendAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("BackendAPI.Models.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.UserBadge", b =>
-                {
-                    b.HasOne("BackendAPI.Models.Badge", "Badge")
-                        .WithMany("UserBadges")
-                        .HasForeignKey("BadgeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("BackendAPI.Models.Badge", "Badge")
+                    .WithMany("UserBadges")
+                    .HasForeignKey("BadgeId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("BackendAPI.Models.User", "User")
-                        .WithMany("UserBadges")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("BackendAPI.Models.User", "User")
+                    .WithMany("UserBadges")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Badge");
+                b.Navigation("Badge");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.UserFlashcardList", b =>
-                {
-                    b.HasOne("BackendAPI.Models.User", "User")
-                        .WithMany("UserFlashcardLists")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("BackendAPI.Models.User", "User")
+                    .WithMany("UserFlashcardLists")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("BackendAPI.Models.UserVocabulary", b =>
-                {
-                    b.HasOne("BackendAPI.Models.UserFlashcardList", "UserFlashcardList")
-                        .WithMany("UserVocabularies")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            modelBuilder.Entity("BackendAPI.Models.UserSubscription", b =>
+            {
+                b.HasOne("BackendAPI.Models.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("UserFlashcardList");
-                });
+                b.Navigation("User");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Vocabulary", b =>
-                {
-                    b.HasOne("BackendAPI.Models.Lesson", "Lesson")
-                        .WithMany("Vocabularies")
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("BackendAPI.Models.Lesson", "Lesson")
+                    .WithMany("Vocabularies")
+                    .HasForeignKey("LessonId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Lesson");
-                });
+                b.Navigation("Lesson");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Badge", b =>
-                {
-                    b.Navigation("UserBadges");
-                });
+            {
+                b.Navigation("UserBadges");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Grammar", b =>
-                {
-                    b.Navigation("Questions");
-                });
+            {
+                b.Navigation("Questions");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Lesson", b =>
-                {
-                    b.Navigation("Grammars");
+            {
+                b.Navigation("Grammars");
 
-                    b.Navigation("Vocabularies");
-                });
+                b.Navigation("Vocabularies");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Level", b =>
-                {
-                    b.Navigation("Lessons");
-                });
+            {
+                b.Navigation("Lessons");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.Question", b =>
-                {
-                    b.Navigation("Answers");
-                });
+            {
+                b.Navigation("Answers");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.User", b =>
-                {
-                    b.Navigation("LearningProgresses");
+            {
+                b.Navigation("LearningProgresses");
 
-                    b.Navigation("UserBadges");
+                b.Navigation("UserBadges");
 
-                    b.Navigation("UserFlashcardLists");
-                });
+                b.Navigation("UserFlashcardLists");
+            });
 
             modelBuilder.Entity("BackendAPI.Models.UserFlashcardList", b =>
-                {
-                    b.Navigation("UserVocabularies");
-                });
+            {
+                b.Navigation("FolderVocabularies");
+            });
+
+            modelBuilder.Entity("BackendAPI.Models.UserVocabulary", b =>
+            {
+                b.Navigation("FolderVocabularies");
+            });
 #pragma warning restore 612, 618
         }
     }

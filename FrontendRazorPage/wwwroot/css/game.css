@@ -1,0 +1,693 @@
+/* ============================================
+   CSS ROOT VARIABLES & THEME SYSTEM
+   ============================================ */
+:root {
+    /* Light/Default variables - will be overridden by themes */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --accent-main: #3b82f6;
+    --accent-secondary: #fbbf24;
+    --timer-good: #10b981;
+    --timer-warning: #f59e0b;
+    --timer-danger: #ef4444;
+    --target-correct: #10b981;
+    --target-wrong: #ef4444;
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
+    --font-main: 'Quicksand', sans-serif;
+    --font-display: 'Quicksand', sans-serif;
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Action/Sci-Fi Theme */
+body.theme-action {
+    --bg-primary: #0f1419;
+    --bg-secondary: #1a1f2e;
+    --text-primary: #ffffff;
+    --text-secondary: #a0aec0;
+    --accent-main: #00d4ff;
+    --accent-secondary: #ffff00;
+    --timer-good: #00ff00;
+    --timer-warning: #ffff00;
+    --timer-danger: #ff3333;
+    --target-correct: #00ff00;
+    --target-wrong: #ff3333;
+    --border-radius: 0px;
+    --border-radius-lg: 2px;
+    --font-display: 'Orbitron', monospace;
+    --shadow-light: 0 0 10px rgba(0, 212, 255, 0.3);
+    --shadow-medium: 0 0 20px rgba(0, 212, 255, 0.5);
+    --shadow-heavy: 0 0 30px rgba(0, 212, 255, 0.7);
+}
+
+/* Cute Theme */
+body.theme-cute {
+    --bg-primary: #fef5f5;
+    --bg-secondary: #ffe4e8;
+    --text-primary: #5a3a5a;
+    --text-secondary: #8b5a8b;
+    --accent-main: #a8e6cf;
+    --accent-secondary: #f8b195;
+    --timer-good: #98ff98;
+    --timer-warning: #ffd700;
+    --timer-danger: #ff69b4;
+    --target-correct: #98ff98;
+    --target-wrong: #ff69b4;
+    --border-radius: 20px;
+    --border-radius-lg: 25px;
+    --font-display: 'Quicksand', sans-serif;
+    --shadow-light: 0 4px 15px rgba(255, 105, 180, 0.15);
+    --shadow-medium: 0 8px 25px rgba(255, 105, 180, 0.25);
+    --shadow-heavy: 0 12px 40px rgba(255, 105, 180, 0.35);
+}
+
+/* ============================================
+   RESET & COMMON STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--font-main);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ============================================
+   CUSTOM CURSOR & CROSSHAIR
+   ============================================ */
+.game-container {
+    cursor: none;
+}
+
+.custom-crosshair {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+}
+
+.custom-crosshair.active {
+    display: block;
+}
+
+/* Action theme crosshair */
+body.theme-action .custom-crosshair {
+    background: 
+        radial-gradient(circle, var(--accent-main) 2px, transparent 2px),
+        linear-gradient(to right, transparent 12px, var(--accent-main) 12px, var(--accent-main) 14px, transparent 14px),
+        linear-gradient(to bottom, transparent 12px, var(--accent-main) 12px, var(--accent-main) 14px, transparent 14px);
+    background-size: 30px 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 5px var(--accent-main));
+}
+
+/* Cute theme crosshair */
+body.theme-cute .custom-crosshair {
+    background: 
+        radial-gradient(circle, var(--accent-main) 3px, transparent 3px),
+        radial-gradient(circle, transparent 8px, var(--accent-main) 8px, var(--accent-main) 9px, transparent 9px);
+    background-size: 30px 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 8px rgba(168, 230, 207, 0.6));
+}
+
+/* ============================================
+   MAIN LAYOUT
+   ============================================ */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-primary);
+}
+
+/* Header Section */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background-color: var(--bg-secondary);
+    border-bottom: 2px solid var(--accent-main);
+    box-shadow: var(--shadow-light);
+    position: relative;
+    z-index: 10;
+}
+
+.header-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Timer Display */
+.timer-display {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    flex: 1;
+    letter-spacing: 2px;
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--border-radius-lg);
+    background-color: var(--bg-primary);
+    color: var(--timer-good);
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    text-shadow: 0 0 10px currentColor;
+}
+
+.timer-display.warning {
+    color: var(--timer-warning);
+}
+
+.timer-display.danger {
+    color: var(--timer-danger);
+}
+
+body.theme-action .timer-display {
+    border: 2px solid currentColor;
+    box-shadow: inset 0 0 10px currentColor;
+}
+
+body.theme-cute .timer-display {
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+}
+
+/* Score Display */
+.score-display {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 700;
+    padding: 0.5rem 1.5rem;
+    background-color: var(--accent-main);
+    color: var(--bg-primary);
+    border-radius: var(--border-radius-lg);
+    min-width: 120px;
+    text-align: center;
+    box-shadow: var(--shadow-medium);
+    letter-spacing: 1px;
+}
+
+/* Settings Button */
+.settings-btn {
+    background-color: var(--accent-main);
+    color: var(--bg-primary);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: var(--border-radius-lg);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-btn:hover {
+    transform: scale(1.1) rotate(20deg);
+    box-shadow: var(--shadow-medium);
+}
+
+.settings-btn:active {
+    transform: scale(0.95);
+}
+
+/* ============================================
+   GAME ARENA (CENTER)
+   ============================================ */
+.game-arena {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Targets Container */
+.targets-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Target Styling */
+.target {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    user-select: none;
+    background-color: var(--accent-main);
+    color: var(--bg-primary);
+    box-shadow: var(--shadow-medium);
+    border: 3px solid var(--accent-secondary);
+}
+
+.target:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-heavy);
+}
+
+.target:active {
+    transform: scale(0.95);
+}
+
+/* Target Hit Animation */
+@keyframes targetHit {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 20px currentColor;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+.target.hit {
+    animation: targetHit 0.5s ease-out forwards;
+}
+
+/* Target Feedback - Wrong */
+@keyframes targetShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+.target.wrong {
+    animation: targetShake 0.4s ease-in-out;
+    background-color: var(--target-wrong);
+    box-shadow: 0 0 15px var(--target-wrong);
+}
+
+/* Feedback Text */
+.feedback-text {
+    position: absolute;
+    font-size: 3rem;
+    font-weight: 700;
+    font-family: var(--font-display);
+    pointer-events: none;
+    z-index: 50;
+}
+
+@keyframes feedbackFloat {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-60px) scale(1.2);
+    }
+}
+
+.feedback-text.correct {
+    color: var(--target-correct);
+    text-shadow: 0 0 10px var(--target-correct);
+    animation: feedbackFloat 1s ease-out forwards;
+}
+
+.feedback-text.wrong {
+    color: var(--target-wrong);
+    text-shadow: 0 0 10px var(--target-wrong);
+    animation: feedbackFloat 0.8s ease-out forwards;
+}
+
+body.theme-cute .feedback-text {
+    font-size: 2.5rem;
+}
+
+/* ============================================
+   GUN & AMMO SECTION (BOTTOM)
+   ============================================ */
+.shooter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+    background-color: var(--bg-secondary);
+    border-top: 2px solid var(--accent-main);
+    min-height: 200px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Gun Container */
+.gun-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Gun SVG/Graphic */
+.gun-graphic {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-origin: center;
+}
+
+body.theme-action .gun-graphic {
+    filter: drop-shadow(0 0 15px var(--accent-main));
+}
+
+body.theme-cute .gun-graphic {
+    filter: drop-shadow(0 4px 15px rgba(255, 105, 180, 0.3));
+}
+
+/* Ammo Box Display */
+.ammo-display {
+    background-color: var(--accent-main);
+    color: var(--bg-primary);
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius-lg);
+    font-size: 1.2rem;
+    font-weight: 600;
+    min-width: 250px;
+    text-align: center;
+    box-shadow: var(--shadow-medium);
+    font-family: var(--font-display);
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+@keyframes ammoReload {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.ammo-display.reloading {
+    animation: ammoReload 0.5s ease-in-out;
+}
+
+/* ============================================
+   MODAL/SETTINGS PANEL
+   ============================================ */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-heavy);
+    max-width: 400px;
+    border: 2px solid var(--accent-main);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--font-display);
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+}
+
+.theme-selector {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.theme-option {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid var(--accent-main);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-family: var(--font-main);
+}
+
+.theme-option:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-light);
+}
+
+.theme-option.active {
+    background-color: var(--accent-main);
+    color: var(--bg-primary);
+    box-shadow: var(--shadow-medium);
+}
+
+.modal-close {
+    background-color: var(--accent-main);
+    color: var(--bg-primary);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    font-family: var(--font-main);
+    font-size: 1rem;
+}
+
+.modal-close:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-light);
+}
+
+.modal-close:active {
+    transform: translateY(0);
+}
+
+/* ============================================
+   GAME OVER MODAL
+   ============================================ */
+.game-over-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.game-over-modal.active {
+    display: flex;
+}
+
+.game-over-content {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 3rem 2rem;
+    box-shadow: var(--shadow-heavy);
+    text-align: center;
+    border: 3px solid var(--accent-main);
+    animation: gameOverPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes gameOverPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.game-over-title {
+    font-size: 3rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+    margin-bottom: 1.5rem;
+    color: var(--accent-main);
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--accent-main);
+}
+
+.game-over-score {
+    font-size: 4rem;
+    font-weight: 700;
+    font-family: var(--font-display);
+    color: var(--accent-secondary);
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+}
+
+.game-over-label {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+}
+
+.game-over-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.game-over-button {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-main);
+}
+
+.game-over-button.restart {
+    background-color: var(--accent-main);
+    color: var(--bg-primary);
+}
+
+.game-over-button.restart:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+}
+
+.game-over-button.home {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: 2px solid var(--accent-main);
+}
+
+.game-over-button.home:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-light);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .game-header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .timer-display {
+        font-size: 2rem;
+    }
+
+    .score-display {
+        font-size: 1.5rem;
+    }
+
+    .target {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+
+    .feedback-text {
+        font-size: 2rem;
+    }
+
+    .gun-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .ammo-display {
+        min-width: 200px;
+        font-size: 1rem;
+    }
+
+    .modal-content {
+        max-width: 90%;
+    }
+
+    .game-over-title {
+        font-size: 2rem;
+    }
+
+    .game-over-score {
+        font-size: 3rem;
+    }
+}
