@@ -30,4 +30,14 @@ export class PracticeClientService extends BaseService{
   getFolderVocab(folderId: number): Observable<PracticeUserFolderModel[]> {
     return this._httpClient.get<PracticeUserFolderModel[]>(`${this._apiBase}/folder-vocab/${folderId}`);
   }
+
+  // Upload thư mục mới (có file Excel/CSV)
+  uploadNewFolder(formData: FormData): Observable<any> {
+    return this._httpClient.post(`${this._apiBase}/upload-folder-excel`, formData);
+  }
+
+  // Xóa thư mục
+  deleteFolder(folderId: number): Observable<any> {
+    return this._httpClient.delete(`${this._apiBase}/delete-folder/${folderId}`);
+  }
 }
