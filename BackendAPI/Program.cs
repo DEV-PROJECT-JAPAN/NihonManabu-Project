@@ -1,21 +1,36 @@
-﻿using BackendAPI.Interfaces;
+﻿using BackendAPI.DTOs;
+using BackendAPI.Interfaces;
 using BackendAPI.Models.Data;
+<<<<<<< HEAD
 using BackendAPI.DTOs;
+=======
+using BackendAPI.Models;
+>>>>>>> develop
 using BackendAPI.Services;
 using DocumentFormat.OpenXml.EMMA;
 using Microsoft.EntityFrameworkCore;
-
+using QuestPDF.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// =========================================================================
+// 1. CẤU HÌNH CÁC DỊCH VỤ HỆ THỐNG (SYSTEM SERVICES)
+// =========================================================================
+QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+// Thêm gói cấu hình giúp JSON tự động bỏ qua các mối quan hệ lặp vòng
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true; // Giúp format JSON đẹp dễ nhìn hơn
+    });
 
-
-// 1. Đăng ký HttpContextAccessor để Service đọc được thông tin Request mạng
+// Chấp cánh cho Service đọc được thông tin Request từ Client gửi lên
 builder.Services.AddHttpContextAccessor();
 
+<<<<<<< HEAD
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -25,6 +40,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGrammarService<Grammar>, GrammarService<Grammar>>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ReminderBackgroundService>();
+=======
+// =========================================================================
+// 2. CẤU HÌNH KẾT NỐI DATABASE (ENTITY FRAMEWORK CORE)
+// =========================================================================
+>>>>>>> develop
 
 builder.Services.AddDbContext<JapaneseDbContext>(options =>
     options.UseSqlServer(
@@ -44,7 +64,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILevelService, LevelService>();
 builder.Services.AddScoped<IVocabularyService, VocabularyService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
+<<<<<<< HEAD
 builder.Services.AddScoped<IPracticeService, PracticeService>();
+=======
+>>>>>>> develop
 
 
 ////DTO
@@ -74,17 +97,21 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-
-
-// Configure the HTTP request pipeline.
+// Cấu hình môi trường Phát triển (Development)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(); // Bật giao diện Swagger để test API phát một
 }
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+<<<<<<< HEAD
 app.MapControllers();
+=======
+app.UseCors("AllowAngular");
+app.MapControllers();
+
+>>>>>>> develop
 // Kích hoạt nổ máy, đưa Server vào trạng thái lắng nghe mạng
 app.Run();

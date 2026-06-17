@@ -1,0 +1,174 @@
+<div class="container-fluid py-4 animate-fade-in">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="page-title-zone">
+            <h2 class="fw-bold text-white m-0 tracking-wide header-title">QUẢN LÝ CÂU HỎI LUYỆN TẬP</h2>
+            <p class="text-muted small mb-0 mt-1">Hệ thống bộ lọc 3 tầng quản lý kho câu hỏi trắc nghiệm và sắp xếp câu
+            </p>
+        </div>
+
+        <a [routerLink]="['/admin/question/create']"
+            [queryParams]="{ levelId: selectedLevelId, lessonId: selectedLessonId, grammarId: selectedGrammarId }"
+            class="btn btn-gradient-orange px-4 py-2-.5 shadow-neon-orange">
+            <i class="fas fa-plus mr-2"></i> Thêm Câu Hỏi Mới
+        </a>
+    </div>
+
+    @if (message) {
+    <div class="alert alert-custom-info alert-dismissible fade show mb-4" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-info-circle mr-2"></i>
+            <span>{{ message }}</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white" (click)="message = ''" aria-label="Close"></button>
+    </div>
+    }
+
+    <div class="filter-premium-card mb-4">
+        <div class="row align-items-center g-3 p-3">
+
+            <div class="col-md-3">
+                <label class="filter-label"><i class="fas fa-filter mr-1 text-primary-blue"></i> Bước 1: Chọn Cấp
+                    Độ</label>
+                <div class="input-group admin-input-group">
+                    <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
+                    <select class="form-select border-0 text-white" [(ngModel)]="selectedLevelId"
+                        (change)="onLevelChange()">
+                        <option [ngValue]="null">-- Chọn Cấp Độ --</option>
+                        @for (lvl of levels; track lvl.id) {
+                        <option [value]="lvl.id">{{ lvl.name }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="filter-label"><i class="fas fa-book-open mr-1 text-neon-green"></i> Bước 2: Chọn Bài
+                    Học</label>
+                <div class="input-group admin-input-group"
+                    [class.disabled-group]="!selectedLevelId || lessons.length === 0">
+                    <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
+                    <select class="form-select border-0 text-white" [(ngModel)]="selectedLessonId"
+                        (change)="onLessonChange()" [disabled]="!selectedLevelId || lessons.length === 0">
+                        <option [ngValue]="null">-- Chọn Bài Học --</option>
+                        @for (les of lessons; track les.id) {
+                        <option [value]="les.id">Bài {{ les.order }}: {{ les.title }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <label class="filter-label"><i class="fas fa-hashtag mr-1 text-neon-purple"></i> Bước 3: Lọc Theo Ngữ
+                    Pháp</label>
+                <div class="input-group admin-input-group"
+                    [class.disabled-group]="!selectedLessonId || grammars.length === 0">
+                    <span class="input-group-text"><i class="fas fa-project-diagram"></i></span>
+                    <select class="form-select border-0 text-white" [(ngModel)]="selectedGrammarId"
+                        (change)="onGrammarChange()" [disabled]="!selectedLessonId || grammars.length === 0">
+                        <option [ngValue]="null">-- Xem tất cả câu hỏi trong bài học --</option>
+                        @for (grm of grammars; track grm.id) {
+                        <option [value]="grm.id">#{{ grm.id }}: {{ grm.structure }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="admin-table-wrapper shadow-lg">
+        <table class="table admin-custom-table mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th style="width: 8%">ID</th>
+                    <th style="width: 44%">Nội Dung Câu Hỏi</th>
+                    <th style="width: 28%">Phương Án Hiển Thị</th>
+                    <th style="width: 10%" class="text-center">Thể Thức</th>
+                    <th style="width: 10%" class="text-center">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!selectedLessonId) {
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-5 table-empty-state">
+                        <i class="fas fa-hand-pointer text-warning d-block mb-3 empty-icon-glow"></i>
+                        Vui lòng chọn cụ thể một <b class="text-primary-blue">Cấp độ</b> và <b
+                            class="text-neon-green">Bài học</b> ở trên để xem danh sách câu hỏi luyện tập.
+                    </td>
+                </tr>
+                }
+                @else if (questions.length === 0) {
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-5 table-empty-state">
+                        <i class="fas fa-folder-open d-block mb-3 text-muted empty-icon-glow"></i>
+                        Không có câu hỏi nào khớp với điều kiện lọc hiện tại. Hãy bấm nút thêm mới nhé!
+                    </td>
+                </tr>
+                }
+                @else {
+                @for (q of questions; track q.id) {
+                <tr class="admin-tr-hover">
+                    <td><code class="admin-id-tag">#{{ q.id }}</code></td>
+                    <td>
+                        <div class="question-content-text mb-1">
+                            {{ q.content }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column gap-2 answer-preview-list">
+                            @if (q.answers && q.answers.length > 0) {
+                            @for (ans of q.answers; track ans.id) {
+                            <span class="small d-flex align-items-center"
+                                [class.correct-highlight]="isAnswerCorrect(ans)"
+                                [class.text-muted-light]="!isAnswerCorrect(ans)">
+
+                                @if (getQuestionType(q) === 2) {
+                                <i class="fas fa-chevron-right text-warning mr-2 mini-icon"></i>
+                                } @else if (isAnswerCorrect(ans)) {
+                                <i class="fas fa-check mr-2 mini-icon"></i>
+                                } @else {
+                                <i class="far fa-circle mr-2 mini-icon"></i>
+                                }
+
+                                <strong class="order-number-prefix">{{ ans.displayOrder || $any(ans).DisplayOrder
+                                    }}.</strong>
+                                <span class="answer-text-string">{{ ans.text || $any(ans).Text }}</span>
+                            </span>
+                            }
+                            } @else {
+                            <span class="text-danger small italic"><i class="fas fa-exclamation-triangle mr-1"></i> Chưa
+                                thiết lập đáp án!</span>
+                            }
+                        </div>
+                    </td>
+
+                    <td class="text-center">
+                        @if (getQuestionType(q) === 1) {
+                        <span class="badge-pill badge-tracnghiem">Trắc nghiệm</span>
+                        } @else if (getQuestionType(q) === 2) {
+                        <span class="badge-pill badge-sapxep">Sắp xếp câu</span>
+                        } @else {
+                        <span class="badge-pill bg-secondary-pill">Loại {{ getQuestionType(q) }}</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <a [routerLink]="['/admin/question/edit', q.id]"
+                                [queryParams]="{ levelId: selectedLevelId, lessonId: selectedLessonId, grammarId: selectedGrammarId }"
+                                class="btn btn-action-edit">
+                                <i class="fas fa-pen mr-1"></i> Sửa
+                            </a>
+
+                            <button type="button" (click)="onDelete(q.id)" class="btn btn-action-delete">
+                                <i class="fas fa-trash-alt mr-1"></i> Xóa
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

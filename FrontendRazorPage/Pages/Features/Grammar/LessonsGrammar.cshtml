@@ -1,0 +1,131 @@
+﻿@page
+@model FrontendRazorPage.Pages.Features.Grammar.LessonsGrammarModel
+@{
+    ViewData["Title"] = "Chọn Bài Học Thực Hành";
+}
+
+<style>
+    :root {
+        --primary-color: #3B82F6;
+        --border-color: #334155;
+        --text-main: #F1F5F9;
+        --text-muted: #94A3B8;
+        --success-color: #10B981;
+        --success-light: rgba(16, 185, 129, 0.15);
+    }
+
+    body {
+        background-color: #0F172A !important;
+        color: var(--text-main) !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    .custom-card {
+        border: 1px solid var(--border-color) !important;
+        border-radius: 20px !important;
+        background: linear-gradient(145deg, #1E293B, #131C2E) !important;
+        overflow: hidden;
+    }
+
+        .custom-card .card-header {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            padding: 20px 26px;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-main) !important;
+        }
+
+    .custom-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #172033;
+        border: 1px solid var(--border-color);
+        padding: 14px 24px;
+        border-radius: 14px;
+        margin-bottom: 28px;
+    }
+
+    .breadcrumb-step {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-decoration: none !important;
+    }
+
+    .breadcrumb-separator {
+        color: var(--border-color);
+        font-size: 12px;
+    }
+
+    .lesson-modern-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+        gap: 14px;
+        padding: 10px 0;
+    }
+
+    .lesson-modern-item {
+        background: #1E293B !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 12px !important;
+        padding: 18px 10px;
+        text-align: center;
+        text-decoration: none !important;
+        transition: all 0.25s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .lesson-modern-item .number {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main) !important;
+        }
+
+        .lesson-modern-item .sub-text {
+            font-size: 11px;
+            color: var(--text-muted) !important;
+            margin-top: 2px;
+            text-transform: uppercase;
+        }
+
+        .lesson-modern-item:hover {
+            border-color: var(--success-color) !important;
+            background: var(--success-light) !important;
+            transform: scale(1.03);
+        }
+
+            .lesson-modern-item:hover .number {
+                color: var(--success-color) !important;
+            }
+</style>
+
+<div class="container py-4">
+    <div class="custom-breadcrumb">
+        <a asp-page="/Features/Grammar/Index" class="breadcrumb-step"><i class="fas fa-home mr-1"></i> Trang chủ</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <span class="breadcrumb-step text-white font-weight-bold">🎯 @Model.CurrentLevel.Name</span>
+    </div>
+
+    <div class="card custom-card animate__animated animate__fadeIn">
+        <div class="card-header"><i class="fas fa-book-open text-success mr-2"></i> Bước 2: Chọn bài học thực hành</div>
+        <div class="card-body p-4">
+            @if (Model.Lessons != null && Model.Lessons.Any())
+            {
+                <div class="lesson-modern-grid">
+                    @foreach (var les in Model.Lessons)
+                    {
+                        <a asp-page="./GrammarList" asp-route-levelId="@Model.LevelId" asp-route-lessonId="@les.Id" class="lesson-modern-item">
+                            <span class="number">Bài @les.Order</span>
+                            <span class="sub-text">Lesson</span>
+                        </a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

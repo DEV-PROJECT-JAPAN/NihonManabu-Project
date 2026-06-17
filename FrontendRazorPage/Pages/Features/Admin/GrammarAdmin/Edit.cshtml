@@ -1,0 +1,138 @@
+﻿@page "{id:int}"
+@model FrontendRazorPage.Pages.Features.Admin.GrammarAdmin.EditModel
+@{
+    ViewData["Title"] = "Chỉnh sửa Ngữ Pháp";
+    Layout = "_LayoutAdmin";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="mb-3">
+                <a asp-page="./Index" asp-route-levelId="@Model.SelectedLevelId" asp-route-lessonId="@Model.Grammar.LessonId" class="text-decoration-none text-muted small hover-dark">
+                    <i class="bi bi-arrow-left me-1"></i> Trở về danh sách ngữ pháp
+                </a>
+            </div>
+
+            <div class="card shadow border-0 rounded-4 overflow-hidden bg-white">
+                <div class="card-header bg-white p-4 border-bottom border-light">
+                    <h5 class="card-title mb-0 fw-bold d-flex align-items-center text-dark">
+                        <span class="p-2 bg-warning-subtle rounded-3 text-warning me-3 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-pencil-square fs-5"></i>
+                        </span>
+                        Chỉnh Sửa Mẫu Ngữ Pháp
+                    </h5>
+                    <p class="text-muted small mb-0 mt-2 ms-5">Cập nhật nội dung thực thể gốc (ID bản ghi: #@Model.Grammar.Id)</p>
+                </div>
+
+                <div class="card-body p-4">
+                    <form method="post" autocomplete="off">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                        <input type="hidden" asp-for="Grammar.Id" />
+                        <input type="hidden" asp-for="Grammar.CreatedAt" />
+
+                        <div class="form-group mb-4">
+                            <label class="form-label">Cấp Độ Hệ Thống</label>
+                            <div class="input-group custom-input-group">
+                                <span class="input-group-text"><i class="bi bi-layer-forward text-muted"></i></span>
+                                <select id="levelSelect" asp-for="SelectedLevelId" class="form-select border-0 ps-1" style="box-shadow: none;">
+                                    <option value="">-- Chọn Cấp Độ Mới Để Đổi Bài --</option>
+                                    @foreach (var lvl in Model.Levels)
+                                    {
+                                        <option value="@lvl.Id">@lvl.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;"><i class="bi bi-info-circle me-1"></i> Chọn cấp độ nếu Khôi muốn phân bổ lại mẫu ngữ pháp này sang bài học khác</small>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Grammar.LessonId" class="form-label">Bài Học Hiện Tại (ID gốc: #@Model.Grammar.LessonId)</label>
+                            <div class="input-group custom-input-group">
+                                <span class="input-group-text"><i class="bi bi-book text-muted"></i></span>
+                                <select id="lessonSelect" asp-for="Grammar.LessonId" class="form-select border-0 ps-1" style="box-shadow: none;" required>
+                                    <option value="@Model.Grammar.LessonId">Giữ nguyên bài học hiện tại (#@Model.Grammar.LessonId)</option>
+                                    @foreach (var les in Model.Lessons)
+                                    {
+                                        <option value="@les.Id">Bài @les.Order: @les.Title</option>
+                                    }
+                                </select>
+                            </div>
+                            <span asp-validation-for="Grammar.LessonId" class="text-danger small d-block mt-1"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Grammar.Structure" class="form-label">Cấu Trúc Ngữ Pháp</label>
+                            <div class="input-group custom-input-group">
+                                <span class="input-group-text"><i class="bi bi-spellcheck text-muted"></i></span>
+                                <input asp-for="Grammar.Structure" class="form-control" required />
+                            </div>
+                            <span asp-validation-for="Grammar.Structure" class="text-danger small d-block mt-1"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Grammar.Explanation" class="form-label">Giải Thích Ý Nghĩa & Ngữ Cảnh</label>
+                            <textarea asp-for="Grammar.Explanation" class="form-control custom-textarea" rows="5" required></textarea>
+                            <span asp-validation-for="Grammar.Explanation" class="text-danger small d-block mt-1"></span>
+                        </div>
+
+                        <div class="bg-light p-3 rounded-3 mb-4 border border-light-subtle">
+                            <div class="row text-secondary g-2" style="font-size: 0.8rem;">
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-calendar-plus text-muted me-2"></i>
+                                        <div>
+                                            <span class="d-block text-muted" style="font-size: 0.7rem;">Ngày tạo ban đầu</span>
+                                            <span class="fw-semibold text-dark">@Model.Grammar.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 border-start-custom">
+                                    <div class="d-flex align-items-center ps-sm-3">
+                                        <i class="bi bi-calendar-check text-muted me-2"></i>
+                                        <div>
+                                            <span class="d-block text-muted" style="font-size: 0.7rem;">Cập nhật hệ thống</span>
+                                            <span class="fw-semibold text-dark">
+                                                @(Model.Grammar.UpdatedAt.ToString("dd/MM/yyyy HH:mm"))
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end border-top border-light pt-4">
+                            <a asp-page="./Index" asp-route-levelId="@Model.SelectedLevelId" asp-route-lessonId="@Model.Grammar.LessonId" class="btn btn-muted-custom px-4">
+                                Hủy thay đổi
+                            </a>
+                            <button type="submit" class="btn btn-warning-custom px-4 shadow-sm">
+                                <i class="bi bi-cloud-check-fill me-1"></i> Cập Nhật Hệ Thống
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("levelSelect").addEventListener("change", function() {
+        var levelId = this.value;
+        // Lấy chính xác ID bản ghi hiện tại từ Route đường dẫn để không bị lạc mất trang
+        var currentPath = window.location.pathname;
+
+        if (levelId) {
+            window.location.href = currentPath + '?SelectedLevelId=' + levelId;
+        } else {
+            window.location.href = currentPath;
+        }
+    });
+</script>
+
+<style>
+    /* ... Giữ nguyên toàn bộ CSS hổ phách tinh tế của trang Edit cũ Kh

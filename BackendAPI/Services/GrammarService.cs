@@ -16,7 +16,11 @@ namespace BackendAPI.Services
             _context = context;
         }
 
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> develop
         public async Task<List<GrammarDTO>> GetGrammarByLessonAsync(int lessonId)
         {
             if (lessonId <= 0) return new List<GrammarDTO>();
@@ -34,7 +38,11 @@ namespace BackendAPI.Services
                 .ToListAsync();
         }
 
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> develop
 
         public async Task<Grammar> CreateAsync(Grammar grammar)
         {

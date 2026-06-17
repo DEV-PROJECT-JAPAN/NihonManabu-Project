@@ -1,0 +1,165 @@
+<div class="container-fluid py-4 animate-fade-in">
+
+    <div class="mb-4">
+        <button type="button" (click)="goBackToList()"
+            class="btn-clean text-decoration-none small back-link bg-transparent border-0 p-0 d-inline-flex align-items-center">
+            <i class="fas fa-arrow-left mr-2"></i> Quay về ngân hàng câu hỏi bài học
+        </button>
+    </div>
+
+    @if (errorMessage) {
+    <div class="alert alert-danger-neon small mb-4 animate-row" role="alert">
+        <i class="fas fa-exclamation-triangle mr-2"></i> <strong>Lỗi hệ thống:</strong> {{ errorMessage }}
+    </div>
+    }
+
+    <form [formGroup]="questionForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <div class="row g-4">
+
+            <div class="col-lg-5">
+                <div class="admin-premium-card shadow-lg p-4 h-100">
+                    <h5 class="card-title-main m-0 d-flex align-items-center">
+                        <span
+                            class="p-2 icon-box-glow text-neon-orange mr-3 d-flex align-items-center justify-content-center bg-orange-subtle">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                        Chỉnh Sửa Câu Hỏi
+                        <span class="badge bg-id-panel ms-auto font-monospace">
+                            ID #{{ questionId }}
+                        </span>
+                    </h5>
+
+                    <hr class="border-light-opacity my-4">
+
+                    <div class="form-group-spaced">
+                        <label class="premium-form-label">Thể thức hiển thị câu hỏi</label>
+                        <div class="input-group premium-input-group">
+                            <span class="input-group-text"><i class="fas fa-sliders-h"></i></span>
+                            <select class="form-select border-0 text-white" formControlName="questionType"
+                                (change)="handleQuestionTypeChange()">
+                                <option [value]="1">Trắc nghiệm chọn đáp án đúng</option>
+                                <option [value]="2">Sắp xếp các từ thành câu hoàn chỉnh</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group-spaced">
+                        <label class="premium-form-label">Cấu trúc ngữ pháp liên kết <span
+                                class="text-danger-glow">*</span></label>
+                        <div class="input-group premium-input-group"
+                            [class.is-invalid-group]="questionForm.get('grammarId')?.invalid && questionForm.get('grammarId')?.touched">
+                            <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                            <select class="form-select border-0 text-white" formControlName="grammarId">
+                                <option value="">-- Chọn Mẫu Ngữ Pháp Đối Chiếu --</option>
+                                @for (g of grammars; track g.id) {
+                                <option [value]="g.id">#{{ g.id }} : {{ g.structure }}</option>
+                                }
+                            </select>
+                        </div>
+                        @if (questionForm.get('grammarId')?.invalid && questionForm.get('grammarId')?.touched) {
+                        <span class="text-danger-msg small d-block mt-1">
+                            <i class="fas fa-info-circle mr-1"></i> Vui lòng chọn cấu trúc ngữ pháp mẫu đối chiếu.
+                        </span>
+                        }
+                    </div>
+
+                    <div class="form-group-spaced mb-0">
+                        <label class="premium-form-label">Yêu cầu / Đề bài dịch nghĩa <span
+                                class="text-danger-glow">*</span></label>
+                        <textarea class="form-control premium-textarea text-white" formControlName="content" rows="6"
+                            placeholder="Nhập đề bài tại đây..."></textarea>
+                        @if (questionForm.get('content')?.invalid && questionForm.get('content')?.touched) {
+                        <span class="text-danger-msg small d-block mt-1">
+                            <i class="fas fa-info-circle mr-1"></i> Nội dung đề bài không được để trống.
+                        </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="admin-premium-card shadow-lg p-4 d-flex flex-column h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-0">
+                        <h5 class="card-title-main m-0 d-flex align-items-center">
+                            <span
+                                class="p-2 icon-box-glow text-neon-green mr-3 d-flex align-items-center justify-content-center bg-green-subtle">
+                                <i class="fas fa-list-check"></i>
+                            </span>
+                            Chỉnh Sửa Khung Đáp Án
+                        </h5>
+                        <button type="button" class="btn btn-sm btn-add-row fw-bold px-3 shadow-sm"
+                            (click)="addAnswerRow()">
+                            <i class="fas fa-plus mr-1"></i> Thêm Dòng
+                        </button>
+                    </div>
+
+                    <hr class="border-light-opacity my-4">
+
+                    <div
+                        [class]="questionForm.get('questionType')?.value == 2 ? 'alert alert-warning-neon py-2.5 px-3 small mb-4' : 'alert alert-info-neon py-2.5 px-3 small mb-4'">
+                        @if (questionForm.get('questionType')?.value == 2) {
+                        <i class="fas fa-exclamation-triangle mr-2"></i> Chế độ <b>Sắp xếp câu</b>: Nhập các từ rời rạc
+                        theo đúng thứ tự cú pháp chuẩn từ trên xuống dưới.
+                        } @else {
+                        <i class="fas fa-info-circle mr-2"></i> Chế độ <b>Trắc nghiệm</b>: Nhập các phương án lựa chọn
+                        và gạt duy nhất một công tắc thành Đúng làm đáp án chuẩn.
+                        }
+                    </div>
+
+                    <div formArrayName="answers" class="flex-grow-1 answers-scroll-container">
+                        @for (row of answersFormArray.controls; track $index; let i = $index) {
+                        <div [formGroupName]="i" class="row g-3 align-items-center form-row-spaced animate-row">
+
+                            <div class="col-auto">
+                                <span class="badge bg-index-tag font-monospace">{{ i + 1 }}</span>
+                            </div>
+
+                            <div class="col">
+                                <div class="premium-input-group">
+                                    <span class="input-group-text"><i class="fas fa-pen-fancy"></i></span>
+                                    <input type="hidden" formControlName="id" />
+                                    <input type="text" class="form-control border-0 text-white py-2"
+                                        formControlName="text" placeholder="Nhập văn bản lựa chọn..." />
+                                </div>
+                            </div>
+
+                            <div class="col-auto px-2">
+                                <div class="form-check form-switch pt-1 custom-switch-box"
+                                    [style.pointerEvents]="questionForm.get('questionType')?.value == 2 ? 'none' : 'auto'"
+                                    [style.opacity]="questionForm.get('questionType')?.value == 2 ? '0.15' : '1'">
+                                    <input type="checkbox" class="form-check-input check-iscorrect cursor-pointer"
+                                        formControlName="isCorrect" (change)="handleSwitchToggle(i)" />
+                                    <label class="form-check-label small fw-bold ms-2"
+                                        [class.text-neon-green]="row.get('isCorrect')?.value"
+                                        [class.text-muted-dark]="!row.get('isCorrect')?.value">
+                                        {{ row.get('isCorrect')?.value ? 'ĐÚNG' : 'SAI' }}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-row-delete p-2" (click)="removeAnswerRow(i)"
+                                    title="Xóa dòng này">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        }
+                    </div>
+
+                    <div class="mt-4 pt-4 footer-action-bar d-flex justify-content-end gap-2">
+                        <a [routerLink]="['/admin/question/index']"
+                            [queryParams]="{ SelectedLevelId: selectedLevelId, SelectedLessonId: selectedLessonId, SelectedGrammarId: selectedGrammarId }"
+                            class="btn btn-cancel-premium px-4">Hủy bỏ</a>
+
+                        <button type="submit" [disabled]="questionForm.invalid"
+                            class="btn btn-update-premium px-4 text-uppercase">
+                            <i class="fas fa-save mr-2"></i> Lưu Thay Đổi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

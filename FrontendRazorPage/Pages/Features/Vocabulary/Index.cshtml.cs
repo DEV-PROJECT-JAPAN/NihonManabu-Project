@@ -8,7 +8,13 @@ namespace FrontendRazorPage.Pages.Vocabulary
     public class IndexModel : PageModel
     {
         private readonly VocabularyClientService _service;
-        public IndexModel(VocabularyClientService service) => _service = service;
+        private readonly LevelClientService _levelClientService;
+        public IndexModel(VocabularyClientService service, LevelClientService levelClientService)
+        {
+            _service = service;
+            _levelClientService = levelClientService;
+        }
+
 
         // "State" của Component
         public List<LevelModel> Levels { get; set; } = new();
@@ -24,20 +30,11 @@ namespace FrontendRazorPage.Pages.Vocabulary
         // ngOnInit của Angular
         public async Task OnGetAsync()
         {
-            if (LevelId.HasValue && LessonId.HasValue)
-            {
-                Cards = await _service.GetCardsAsync(LessonId.Value);
-            }
-            else if (LevelId.HasValue)
-            {
-                Lessons = await _service.GetLessonsAsync(LevelId.Value);
-            }
-            else
-            {
-                Levels = await _service.GetLevelsAsync();
-            }
-        }
 
+            Levels = await _levelClientService.GetLevelsAsync();
+
+        }
+        //Nhiệm vụ chính của nó là nhận dữ liệu tiến độ học từ vựng
         public async Task<JsonResult> OnPostUpdateProgressAsync([FromBody] UpdateLearningProgresByUserModel input)
         {
             if (input == null || input.VocabularyId <= 0)

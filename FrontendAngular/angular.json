@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "747f8cce-9981-4a29-a33a-f51610641e09"
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -19,13 +20,13 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/favicon.ico",
+              "src/assets",
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/app/img",
+                "output": "/assets/img/"
               }
-            ],
-            "styles": [
-              "src/styles.css"
             ]
           },
           "configurations": {

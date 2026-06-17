@@ -1,0 +1,52 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>QUẢN LÝ CẤP ĐỘ TIẾNG NHẬT</h2>
+        <a routerLink="create" class="btn btn-primary">➕ Thêm Cấp Độ Mới</a>
+    </div>
+
+    @if (message()) {
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {{ message() }}
+        <button type="button" class="btn-close" (click)="message.set('')" aria-label="Close"></button>
+    </div>
+    }
+
+    <div class="card shadow-sm">
+        <table class="table table-hover table-striped mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 10%">ID</th>
+                    <th style="width: 20%">Tên Mức Độ</th>
+                    <th>Mô Tả</th>
+                    <th style="width: 18%">Ngày Tạo</th>
+                    <th style="width: 18%">Ngày Cập Nhật</th>
+                    <th style="width: 15%" class="text-center">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of levels(); track item.id) {
+                <tr>
+                    <td><code>#{{ item.id }}</code></td>
+                    <td><span class="badge bg-primary fs-6">{{ item.name }}</span></td>
+                    <td>{{ item.description }}</td>
+                    <td class="text-muted">{{ item.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td class="text-muted">{{ item.updatedAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a [routerLink]="['edit', item.id]" class="btn btn-warning btn-sm">Sửa</a>
+
+                            <button type="button" class="btn btn-danger btn-sm" (click)="deleteLevel(item.id)">
+                                Xóa
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-muted">Chưa có dữ liệu cấp độ nào.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

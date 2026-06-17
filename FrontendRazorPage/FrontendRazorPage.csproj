@@ -7,4 +7,12 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="QuestPDF" Version="2026.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Features\Nhanh rieng cua toi\" />
+  </ItemGroup>
+
 </Project>

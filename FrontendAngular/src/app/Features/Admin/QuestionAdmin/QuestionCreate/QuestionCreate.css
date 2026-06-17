@@ -1,0 +1,374 @@
+/* =========================================================================
+   🎛️ LUXURY VARIABLES (HẠ TÔNG MÀU DEEP DARK CHỐNG NGỘT NGẠT)
+   ========================================================================= */
+:host {
+    --panel-bg: #0e1424;
+    /* Màu nền khối hộp xanh sẫm dịu mắt */
+    --input-fill: #141b32;
+    /* Màu nền ô input chìm tinh tế */
+    --input-focus: #3b82f6;
+
+    --text-silver: #cbd5e1;
+    /* Chữ xám bạc */
+    --text-dark-muted: #5d6f88;
+    /* Màu nhãn ghi phụ */
+    --border-glow-line: rgba(255, 255, 255, 0.03);
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hiệu ứng trồi trang mượt mà khi load */
+.animate-fade-in {
+    animation: slideUpIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpIn {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hiệu ứng trượt dòng đáp án mới mượt mà khi bấm nút Thêm Dòng */
+.animate-row {
+    animation: rowSlideIn 0.25s ease-out;
+}
+
+@keyframes rowSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Đường dẫn quay lại (Back link) */
+.back-link {
+    color: var(--text-dark-muted);
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
+
+.back-link:hover {
+    color: #ffffff !important;
+    transform: translateX(-2px);
+}
+
+/* =========================================================================
+   📦 PREMIUM PANEL LAYOUT (KHỐI CARD CHÍNH)
+   ========================================================================= */
+.admin-premium-card {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border-glow-line);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.border-light-opacity {
+    border-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+.card-title-main {
+    color: #ffffff;
+    font-size: 17px;
+    letter-spacing: 0.3px;
+    font-weight: 700;
+}
+
+/* Khung bọc Icon phát quang */
+.icon-box-glow {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.bg-blue-subtle {
+    background-color: rgba(59, 130, 246, 0.08) !important;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.bg-green-subtle {
+    background-color: rgba(16, 185, 129, 0.08) !important;
+    border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.text-primary-blue {
+    color: #3b82f6 !important;
+    filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.2));
+}
+
+.text-neon-green {
+    color: #10b981 !important;
+    filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.2));
+}
+
+/* =========================================================================
+   🌟 KHOẢNG TRỐNG CHỐNG DÍNH (MARGIN GIỮA CÁC HÀNG & Ô NHẬP)
+   ========================================================================= */
+.form-group-spaced {
+    margin-bottom: 26px;
+    /* Tạo khoảng cách rộng rãi giữa các trường thông tin vế trái */
+}
+
+.form-row-spaced {
+    margin-bottom: 18px;
+    /* TĂNG KHOẢNG TRỐNG: Giúp các hàng câu hỏi con vế phải tách biệt hoàn toàn */
+}
+
+.premium-form-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dark-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* =========================================================================
+   🎛️ KHỐI INPUTS VÀ TEXTAREA CHÌM PREMIUM
+   ========================================================================= */
+.premium-input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--input-fill);
+    transition: var(--transition-smooth);
+    width: 100%;
+}
+
+.premium-input-group .input-group-text {
+    background: transparent;
+    border: none;
+    color: #3d4a6b;
+    padding-left: 14px;
+    font-size: 14px;
+}
+
+.premium-input-group .form-control,
+.premium-input-group .form-select {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    font-size: 14px;
+    padding: 11px 12px;
+    border: none !important;
+}
+
+.premium-input-group .form-select option {
+    background-color: #161d30;
+    color: white;
+}
+
+.premium-input-group:focus-within {
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+/* Vùng nhập nội dung đề bài chính */
+.premium-textarea {
+    background-color: var(--input-fill) !important;
+    border: 1px solid rgba(255, 255, 255, 0.03) !important;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #ffffff !important;
+    transition: var(--transition-smooth);
+    line-height: 1.5;
+}
+
+.premium-textarea:focus {
+    border-color: rgba(59, 130, 246, 0.4) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12) !important;
+    outline: none;
+}
+
+/* Khung cuộn mượt tự động khi danh sách câu hỏi quá dài bên vế phải */
+.answers-scroll-container {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.answers-scroll-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.answers-scroll-container::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 10px;
+}
+
+/* 🌟 Ô SỐ THỨ TỰ LỚN NẰM BÊN CẠNH Ô NHẬP LIỆU */
+.bg-index-tag {
+    background-color: #161d33;
+    color: #5d6f88;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    min-width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Cấu hình nút công tắc Switch dạng gạt phẳng tinh tế */
+.custom-switch-box {
+    display: flex;
+    align-items: center;
+    min-width: 80px;
+}
+
+.custom-switch-box .form-check-input {
+    cursor: pointer;
+    background-color: #1e293b;
+    border-color: rgba(255, 255, 255, 0.08);
+    width: 2.8em;
+    height: 1.4em;
+}
+
+.custom-switch-box .form-check-input:checked {
+    background-color: #10b981;
+    border-color: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+/* Nút xóa hàng câu hỏi */
+.btn-row-delete {
+    background: transparent;
+    border: none;
+    color: #4b5b75;
+    transition: var(--transition-smooth);
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.btn-row-delete:hover {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.08);
+}
+
+/* =========================================================================
+   🚨 HỘP THÔNG BÁO ALERT NEON
+   ========================================================================= */
+.alert-info-neon {
+    background-color: rgba(59, 130, 246, 0.04);
+    border: 1px solid rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+    border-radius: 8px;
+}
+
+.alert-warning-neon {
+    background-color: rgba(245, 158, 11, 0.04);
+    border: 1px solid rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+    border-radius: 8px;
+}
+
+.alert-danger-neon {
+    background-color: rgba(239, 68, 68, 0.04);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-radius: 8px;
+}
+
+.is-invalid-group {
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.text-danger-glow {
+    color: #ef4444;
+    text-shadow: 0 0 4px rgba(239, 68, 68, 0.2);
+}
+
+.text-danger-msg {
+    color: #ee5e5e;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* =========================================================================
+   ⚙️ FOOTER CONTROL BAR & BUTTONS (HÀNG PHÍM CHỨC NĂNG CHÍNH)
+   ========================================================================= */
+.footer-action-bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Nút bổ sung ô nhập câu hỏi con (Xanh Mint) */
+.btn-add-row {
+    background-color: rgba(16, 185, 129, 0.06);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    border-radius: 6px;
+    font-size: 12px;
+    transition: var(--transition-smooth);
+}
+
+.btn-add-row:hover {
+    background-color: #10b981;
+    color: white;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+/* Nút Lưu Cụm Câu Hỏi (Cam Hổ Phách) */
+.btn-save-premium {
+    background: linear-gradient(135deg, #ff9f43 0%, #ff7f11 100%);
+    color: white !important;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: var(--transition-smooth);
+}
+
+.btn-save-premium:hover:not([disabled]) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 127, 17, 0.25);
+}
+
+.btn-save-premium:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+/* Nút Hủy bỏ */
+.btn-cancel-premium {
+    background-color: #171f38;
+    color: #a3b3cc;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+    text-decoration: none !important;
+}
+
+.btn-cancel-premium:hover {
+    background-color: #222c4e;
+    color: #ffffff;
+}
+
+.text-muted-dark {
+    color: var(--text-dark-muted) !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

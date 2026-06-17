@@ -1,0 +1,704 @@
+﻿@model FrontendRazorPage.Pages.KanjiNotebookModel
+@{
+    Layout = "_Layout";
+}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+rel="stylesheet">
+
+<style>
+    :root {
+        --paper: #f3ecdf;
+        --paper-card: #fbf7ee;
+        --ink: #2b2622;
+        --ink-soft: #6f6557;
+        --seal: #b8392c;
+        --seal-soft: #f1d9d4;
+        --bamboo: #6f8264;
+        --gold: #c9a35c;
+        --line: #e2d6bf;
+        --font-display: 'Shippori Mincho', 'Noto Serif JP', serif;
+        --font-body: 'Be Vietnam Pro', 'Noto Sans JP', sans-serif;
+    }
+
+    /* --- ĐỔI TÊN CLASS CHÍNH ĐỂ TRÁNH XUNG ĐỘT LAYOUT VÀ ÉP LÊN ĐỈNH --- */
+    .kanji-notebook-container {
+        width: 100%;
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 20px 20px 20px;
+        /* Bỏ hẳn padding-top để đẩy kịch lên sát logo */
+    }
+
+    header.kanji-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 12px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .brand-mark {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .brand-mark .seal {
+        width: 56px;
+        height: 56px;
+        border: 3px solid var(--seal);
+        color: var(--seal);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-size: 1.7rem;
+        font-weight: 700;
+        transform: rotate(-3deg);
+        flex-shrink: 0;
+    }
+
+    h1.kanji-title {
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: clamp(1.8rem, 4.2vw, 2.7rem);
+        margin: 0;
+        letter-spacing: 0.02em;
+        color: var(--ink);
+    }
+
+    header.kanji-header p {
+        margin: 4px 0 0;
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+    }
+
+    .count-badge {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+        border: 1px solid var(--line);
+        background: var(--paper-card);
+        border-radius: 999px;
+        padding: 8px 18px;
+        white-space: nowrap;
+    }
+
+    .count-badge b {
+        color: var(--seal);
+        font-size: 1.15rem;
+    }
+
+    /* --- CẤU TRÚC GRID NỘI DUNG CHÍNH --- */
+    .kanji-content-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        align-content: start;
+        /* Khử hoàn toàn căn giữa dọc của main-wrapper */
+    }
+
+    @@media (min-width: 920px) {
+        .kanji-content-grid {
+            grid-template-columns: 1.05fr 0.95fr;
+            align-items: start;
+            /* Đỉnh 2 cột luôn bằng nhau kịch trần */
+        }
+
+        .list-area {
+            order: 1;
+        }
+
+        .detail-area {
+            order: 2;
+            position: sticky;
+            top: 24px;
+        }
+    }
+
+    .categories {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 6px;
+        margin-bottom: 16px;
+    }
+
+    .cat-btn {
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        background: var(--paper-card);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 16px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.15s ease;
+    }
+
+    .cat-btn:hover {
+        border-color: var(--seal);
+        color: var(--ink);
+    }
+
+    .cat-btn.active {
+        background: var(--seal);
+        border-color: var(--seal);
+        color: #fff;
+    }
+
+    .kanji-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+        gap: 10px;
+    }
+
+    .kanji-card {
+        background: var(--paper-card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 8px 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.12s ease, border-color 0.12s ease;
+    }
+
+    .kanji-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--gold);
+    }
+
+    .kanji-card.active {
+        border-color: var(--seal);
+        background: var(--seal-soft);
+    }
+
+    .kanji-card .glyph {
+        font-family: var(--font-display);
+        font-size: 2.1rem;
+        font-weight: 500;
+        line-height: 1;
+        display: block;
+    }
+
+    .kanji-card .meaning {
+        display: block;
+        margin-top: 6px;
+        font-size: 0.72rem;
+        color: var(--ink-soft);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .detail-panel {
+        background: var(--paper-card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: clamp(18px, 3vw, 28px);
+    }
+
+    .detail-top {
+        display: flex;
+        gap: 22px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .stroke-stage {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        flex-shrink: 0;
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--paper);
+        border: 1px solid var(--line);
+    }
+
+    .stroke-stage svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .stroke-stage .guide-svg {
+        z-index: 1;
+    }
+
+    .stroke-stage .kanji-svg {
+        z-index: 2;
+    }
+
+    .stroke-svg-host path {
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 3.4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .stroke-svg-host.hide-numbers g[id^="kvg:StrokeNumbers"] {
+        display: none;
+    }
+
+    .stroke-svg-host g[id^="kvg:StrokeNumbers"] text {
+        fill: var(--seal) !important;
+        font-family: var(--font-body) !important;
+    }
+
+    .detail-info {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .detail-info .glyph-big {
+        font-family: var(--font-display);
+        font-size: clamp(2.6rem, 5vw, 3.4rem);
+        font-weight: 700;
+        line-height: 1;
+        margin: 0 0 6px;
+    }
+
+    .example-box {
+        background: var(--paper);
+        border-left: 4px solid var(--seal);
+        padding: 10px 14px;
+        margin: 12px 0;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .example-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        letter-spacing: 0.05em;
+        font-weight: 600;
+    }
+
+    .example-value {
+        font-size: 1.25rem;
+        font-family: var(--font-display);
+        color: var(--seal);
+        font-weight: 700;
+        margin-top: 2px;
+    }
+
+    .stat-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .stat-pill {
+        font-size: 0.78rem;
+        color: var(--ink-soft);
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 4px 12px;
+    }
+
+    .controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
+
+    .hanko-btn {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #fff;
+        background: var(--seal);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        cursor: pointer;
+        letter-spacing: 0.05em;
+        box-shadow: 0 4px 10px -4px rgba(184, 57, 44, 0.6);
+    }
+
+    .audio-btn {
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--ink);
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.15s;
+    }
+
+    .audio-btn:hover {
+        border-color: var(--gold);
+        background: #fff;
+    }
+
+    .toggle-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        cursor: pointer;
+    }
+
+    .readings {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .reading-block h3 {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        margin: 0 0 8px;
+        color: var(--ink);
+        border-bottom: 2px solid var(--gold);
+        display: inline-block;
+        padding-bottom: 2px;
+    }
+
+    .reading-block .reading-value {
+        font-size: 1.15rem;
+        line-height: 1.7;
+    }
+
+    .status-line {
+        margin-top: 14px;
+        font-size: 0.8rem;
+        color: var(--ink-soft);
+    }
+
+    .placeholder {
+        text-align: center;
+        color: var(--ink-soft);
+        padding: 40px 10px;
+    }
+</style>
+
+<div class="kanji-notebook-container">
+    <header class="kanji-header">
+        <div class="brand-mark">
+            <div class="seal">筆</div>
+            <div>
+                <h1 class="kanji-title">漢字帖 — Sổ tay chữ Hán</h1>
+                <p>Dữ liệu phân loại (Bài học) và từ vựng hoàn toàn tự động từ Database.</p>
+            </div>
+        </div>
+        <div class="count-badge">Đang hiển thị <b id="visible-count">0</b> / <span id="total-count">0</span> chữ</div>
+    </header>
+
+    <div class="kanji-content-grid">
+        <div class="list-area">
+            <div class="categories" id="categories"></div>
+            <div class="kanji-grid" id="kanji-grid"></div>
+        </div>
+
+        <div class="detail-area">
+            <div class="detail-panel" id="detail-panel">
+                <div class="placeholder">和 — Chọn một chữ Hán bên trái để xem chi tiết</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ============ KHỞI TẠO DỮ LIỆU ĐỘNG TỪ BACKEND BẢNG LESSONS & VOCABULARIES ============ */
+
+    // Sử dụng cú pháp Razor (@@Html.Raw) để nhận danh mục bài học từ Model C# và biến thành mảng Object trong JS
+    const DB_CATEGORIES = @Html.Raw(Json.Serialize(Model.CategoryList));
+
+    // Nhận danh sách các chữ Kanji kèm thông tin chi tiết từ Backend truyền xuống
+    const KANJI_DATA = @Html.Raw(Json.Serialize(Model.KanjiList));
+
+    // Thêm một lựa chọn "Tất cả" vào đầu danh sách danh mục để người dùng có thể click xem toàn bộ Kanji
+    const CATEGORIES = [{ key: 'all', label: 'Tất cả' }, ...DB_CATEGORIES];
+
+    // Chuỗi SVG tạo khung lưới ô vuông chuẩn (có đường kẻ phụ đứt đoạn ở chính giữa) làm nền để căn chỉnh chữ Kanji khi vẽ
+    const GUIDE_SVG = `
+        <svg viewBox="0 0 109 109" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="107" height="107" fill="none" stroke="#e2d6bf" stroke-width="2"/>
+        <line x1="54.5" y1="0" x2="54.5" y2="109" stroke="#e2d6bf" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <line x1="0" y1="54.5" x2="109" y2="54.5" stroke="#e2d6bf" stroke-width="1.5" stroke-dasharray="4 4"/>
+        </svg>
+    `;
+
+    // Biến State (trạng thái): Lưu danh mục hiện tại đang được chọn (mặc định là 'all')
+    let activeCategory = 'all';
+
+    // Biến State (trạng thái): Lưu ký tự Kanji hiện tại đang được chọn để xem chi tiết
+    let activeChar = null;
+
+    /**
+     * Hàm khởi chạy chính (Entry Point) khi trang web tải xong
+     */
+    function init() {
+        // Hiển thị tổng số lượng chữ Kanji nhận được từ Database lên giao diện công cụ đếm
+        document.getElementById('total-count').textContent = KANJI_DATA.length;
+
+        // Tiến hành vẽ các nút danh mục (Bài học) ra màn hình
+        renderCategories();
+
+        // Tiến hành vẽ danh sách các ô chữ Kanji tương ứng ra màn hình
+        renderGrid();
+
+        // Nếu trong Database có dữ liệu, mặc định tự động chọn và hiển thị chi tiết chữ Kanji đầu tiên
+        if (KANJI_DATA.length > 0) {
+            selectKanji(KANJI_DATA[0].kanji);
+        }
+    }
+
+    /**
+     * Hàm vẽ các nút danh mục (Bài học) lên thanh menu ngang
+     */
+    function renderCategories() {
+        const wrap = document.getElementById('categories');
+        wrap.innerHTML = ''; // Xóa sạch các nút cũ trước khi vẽ lại
+
+        CATEGORIES.forEach(cat => {
+            const btn = document.createElement('button');
+
+            // Nếu nút này trùng với danh mục đang kích hoạt (activeCategory) thì thêm class 'active' để tô màu nổi bật
+            btn.className = 'cat-btn' + (cat.key === activeCategory ? ' active' : '');
+            btn.textContent = cat.label; // Đặt tên nút (Ví dụ: "Tất cả", "Bài 1",...)
+
+            // Sự kiện khi click vào một nút danh mục
+            btn.addEventListener('click', () => {
+                activeCategory = cat.key; // Cập nhật lại danh mục đang chọn
+                renderCategories();       // Vẽ lại danh mục để cập nhật vị trí nút active
+                renderGrid();             // Lọc và vẽ lại danh sách Kanji theo danh mục mới
+            });
+            wrap.appendChild(btn); // Thêm nút vừa tạo vào vùng chứa trên giao diện
+        });
+    }
+
+    /**
+     * Hàm vẽ danh sách các ô vuông chứa chữ Kanji (Grid) dựa theo bộ lọc danh mục
+     */
+    function renderGrid() {
+        const grid = document.getElementById('kanji-grid');
+        grid.innerHTML = ''; // Xóa sạch danh sách chữ cũ trước khi lọc
+
+        // Lọc danh sách chữ: Nếu chọn 'all' thì lấy hết, nếu chọn bài cụ thể thì lọc theo đúng 'lessonId'
+        const items = KANJI_DATA.filter(k => activeCategory === 'all' || k.lessonId.toString() === activeCategory);
+
+        // Cập nhật lại số lượng chữ đang hiển thị sau khi lọc trên Badge thanh tiêu đề
+        document.getElementById('visible-count').textContent = items.length;
+
+        // Duyệt qua từng chữ Kanji sau khi lọc để tạo thẻ hiển thị
+        items.forEach(item => {
+            const card = document.createElement('div');
+
+            // Nếu ô chữ này đang được người dùng xem chi tiết thì thêm class 'active' để đổi màu nền
+            card.className = 'kanji-card' + (item.kanji === activeChar ? ' active' : '');
+
+            // Dùng Regex tìm phần text nằm trong dấu ngoặc vuông góc, ví dụ: "[MỘC] Cây, gỗ" -> Bốc tách lấy chữ "MỘC"
+            let matches = item.meaning.match(/\[(.*?)\]/);
+            let shortLabel = matches ? matches[1] : item.meaning; // Nếu không có ngoặc vuông, lấy toàn bộ chuỗi nghĩa
+
+            // Ghi nội dung HTML: Chữ Kanji to ở trên, âm Hán Việt viết tắt nằm ở dưới
+            card.innerHTML = `
+                <span class="glyph">${item.kanji}</span>
+                <span class="meaning">${shortLabel}</span>
+            `;
+
+            // Khi người dùng click vào ô chữ này, gọi hàm selectKanji để nạp vùng chi tiết bên phải
+            card.addEventListener('click', () => selectKanji(item.kanji));
+            grid.appendChild(card); // Thêm ô chữ vào lưới hiển thị
+        });
+    }
+
+    /**
+     * Hàm xử lý hiển thị vùng chi tiết (Panel bên phải) khi click chọn một chữ Kanji
+     * @@param {string} char - Ký tự Kanji được chọn (Ví dụ: '木')
+     */
+    async function selectKanji(char) {
+        activeChar = char; // Đánh dấu ký tự này đang được chọn
+        renderGrid();      // Cập nhật lại lưới chữ để ô vừa click chuyển sang trạng thái active (đổi màu)
+
+        // Tìm kiếm Object thông tin đầy đủ của chữ này trong mảng dữ liệu gốc KANJI_DATA
+        const item = KANJI_DATA.find(k => k.kanji === char);
+        const panel = document.getElementById('detail-panel');
+
+        // Dùng Regex bóc tách chuỗi nghĩa, Ví dụ: "[MỘC] Cây, gỗ"
+        // matches[1] sẽ là "MỘC" (Âm Hán Việt)
+        // matches[2] sẽ là "Cây, gỗ" (Nghĩa thuần Việt)
+        let matches = item.meaning.match(/\[(.*?)\]\s*(.*)/);
+        let sinoViet = matches ? matches[1] : "HÁN TỰ";
+        let pureMeaning = matches ? matches[2] : item.meaning;
+
+        // Ghi đè toàn bộ cấu trúc giao diện chi tiết của chữ Kanji vào panel bên phải
+        panel.innerHTML = `
+        <div class="detail-top">
+            <div class="stroke-stage">
+                <div class="guide-svg">${GUIDE_SVG}</div>
+                <div class="kanji-svg stroke-svg-host hide-numbers" id="stroke-host">
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;font-family:var(--font-display);font-size:2.2rem;color:var(--ink-soft);">${char}</div>
+                </div>
+            </div>
+            <div class="detail-info">
+                <p class="glyph-big">${char}</p>
+
+                <div class="example-box">
+                    <div class="example-label">Ví dụ (Âm Hán Việt)</div>
+                    <div class="example-value">${sinoViet}</div>
+                </div>
+
+                <div class="stat-row">
+                    <span class="stat-pill">Nghĩa: ${pureMeaning}</span>
+                </div>
+
+                <div class="controls">
+                    <button class="hanko-btn" id="replay-btn">再生 — Vẽ lại</button>
+                    <button class="audio-btn" id="speak-btn">🔊 音声 — Đọc</button>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="toggle-numbers"> Số nét
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="readings">
+            <div class="reading-block">
+                <h3>かな — Cách đọc Kana</h3>
+                <div class="reading-value">${item.hiragana || 'Chưa cập nhật'}</div>
+            </div>
+            <div class="reading-block">
+                <h3>ローマ字 — Phiên âm Romaji</h3>
+                <div class="reading-value">${item.romaji || 'Chưa cập nhật'}</div>
+            </div>
+        </div>
+        <div class="status-line" id="status-line">Đang nạp SVG nét vẽ...</div>
+        `;
+
+        // Gắn sự kiện cho nút "Vẽ lại": Tìm file SVG đã tải trong host và chạy lại hiệu ứng nét vẽ
+        document.getElementById('replay-btn').addEventListener('click', () => {
+            const host = document.getElementById('stroke-host');
+            const svg = host.querySelector('svg');
+            if (svg) animateStrokes(svg);
+        });
+
+        // Gắn sự kiện cho nút "Đọc": Phát âm chữ Hiragana hoặc bản thân chữ Kanji đó
+        document.getElementById('speak-btn').addEventListener('click', () => {
+            speakJapanese(item.hiragana || char);
+        });
+
+        // Gắn sự kiện cho checkbox "Số nét": Thêm/Xóa class 'hide-numbers' để ẩn/hiển thị số thứ tự các bước vẽ trên hình
+        document.getElementById('toggle-numbers').addEventListener('change', (e) => {
+            const host = document.getElementById('stroke-host');
+            host.classList.toggle('hide-numbers', !e.target.checked);
+        });
+
+        // Gọi hàm bất đồng bộ thực hiện fetch file dữ liệu nét vẽ đồ họa (SVG) từ Internet về máy
+        await loadStrokeOrder(char);
+    }
+
+    /**
+     * Hàm gọi tính năng Text-to-Speech (Chuyển văn bản thành giọng nói) của trình duyệt để đọc tiếng Nhật
+     * @@param {string} text - Chuỗi chữ tiếng Nhật cần phát âm
+     */
+    function speakJapanese(text) {
+        // Kiểm tra xem trình duyệt của người dùng có hỗ trợ công nghệ SpeechSynthesis (HTML5) không
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Ngắt giọng đọc cũ ngay lập tức nếu đang đọc dở
+            const utterance = new SpeechSynthesisUtterance(text); // Tạo một yêu cầu phát âm mới
+            utterance.lang = 'ja-JP'; // Ép trình duyệt sử dụng công cụ/ngôn ngữ tiếng Nhật
+            utterance.rate = 0.85;    // Tốc độ đọc (0.85 là hơi chậm một chút cho học viên dễ nghe)
+            window.speechSynthesis.speak(utterance); // Ra lệnh phát âm thanh ra loa
+        } else {
+            alert("Trình duyệt của bạn chưa hỗ trợ tính năng phát âm thanh SpeechSynthesis.");
+        }
+    }
+
+    /**
+     * Hàm tải file đồ họa vector nét vẽ Kanji từ thư viện CDN KanjiVG
+     * @@param {string} char - Ký tự Kanji cần lấy file vẽ
+     */
+    async function loadStrokeOrder(char) {
+        const host = document.getElementById('stroke-host');
+        const status = document.getElementById('status-line');
+
+        // Đổi chữ Kanji sang mã Hex Unicode và định dạng chuẩn 5 chữ số (Ví dụ: '木' -> mã hex: '06728')
+        const hex = char.codePointAt(0).toString(16).padStart(5, '0');
+        // Đường dẫn API trực tiếp đến kho lưu trữ SVG của dự án mã nguồn mở KanjiVG thông qua jsDelivr CDN
+        const url = `https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`;
+
+        try {
+            const res = await fetch(url); // Gửi yêu cầu tải file qua mạng Internet
+            if (!res.ok) throw new Error(); // Nếu lỗi mạng hoặc không tìm thấy từ, nhảy vào khối catch
+
+            const svgText = await res.text(); // Chuyển kết quả nhận được thành chuỗi văn bản XML/SVG
+            const parser = new DOMParser(); // Khởi tạo bộ phân tích cú pháp chuỗi thành DOM Object
+            const doc = parser.parseFromString(svgText, 'image/svg+xml');
+            const svgEl = doc.querySelector('svg'); // Trích xuất thẻ <svg> gốc bên trong file ra
+
+            // Xóa thuộc tính chiều rộng/cao cứng để SVG tự động co giãn full kích thước 100% của khung chứa CSS
+            svgEl.removeAttribute('width');
+            svgEl.removeAttribute('height');
+
+            host.innerHTML = '';        // Xóa bỏ chữ dạng text tĩnh ban đầu
+            host.appendChild(svgEl);    // Bơm mã đồ họa SVG nét vẽ thật vào ô chứa
+            animateStrokes(svgEl);      // Kích hoạt hàm chạy hoạt ảnh vẽ từng nét từ từ
+            status.textContent = 'Tải nét vẽ thành công.';
+        } catch (err) {
+            // Nếu lỗi (mất mạng, hoặc kho KanjiVG không có từ này), thông báo chuyển sang dùng font hệ thống tĩnh
+            status.textContent = 'Dùng font mặc định hệ thống (Không tải được hoạt ảnh SVG nét vẽ).';
+        }
+    }
+
+    /**
+     * Hàm xử lý kỹ thuật giả lập hoạt ảnh vẽ tay cho từng nét chữ bằng hiệu ứng CSS Stroke Dash
+     * @@param {SVGElement} svgEl - Thẻ SVG chứa các đường dẫn <path> mô tả nét vẽ
+     */
+    function animateStrokes(svgEl) {
+        // Tìm toàn bộ các thẻ <path> nằm trong nhóm nét vẽ của cấu trúc SVG KanjiVG
+        const paths = svgEl.querySelectorAll('g[id^="kvg:StrokePaths"] path');
+
+        paths.forEach(p => {
+            const len = p.getTotalLength(); // Lấy độ dài thực tế (đơn vị pixel) của nét vẽ hiện tại
+            p.style.transition = 'none';    // Tạm thời tắt mọi hiệu ứng chuyển động mượt
+            p.style.strokeDasharray = len;  // Biến nét vẽ liền mạch thành một chuỗi đứt đoạn có khoảng trống bằng đúng chiều dài nét
+            p.style.strokeDashoffset = len; // Đẩy toàn bộ nét vẽ ra khỏi vùng hiển thị (Làm nét vẽ trở nên vô hình)
+        });
+
+        // Sử dụng kỹ thuật RequestAnimationFrame đúp để ép Trình duyệt thực hiện render trạng thái ẩn trước,
+        // sau đó mới áp dụng hiệu ứng chuyển động mượt mà tránh hiện tượng giật lag hình.
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                paths.forEach((p, i) => {
+                    // Đặt thời gian vẽ mỗi nét là 0.5 giây. Các nét sau sẽ đợi nét trước vẽ xong mới vẽ tiếp nhờ độ trễ tăng dần: ${i * 0.55}s
+                    p.style.transition = `stroke-dashoffset 0.5s ease-in-out ${i * 0.55}s`;
+                    p.style.strokeDashoffset = '0'; // Kéo nét vẽ quay trở lại vị trí ban đầu (Tạo hiệu ứng giống như đang có cây bút vẽ từ từ ra nét chữ)
+                });
+            });
+        });
+    }
+
+    // Gọi hàm khởi tạo khi toàn bộ mã kịch bản phía trên đã sẵn sàng nạp vào bộ nhớ trình duyệt
+    init();
+    /////////////////////////DDAAY LAF NHANH DEVELOP CHAP NHANT MOI HON/////////////////////////
+
+</script>

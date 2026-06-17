@@ -11,7 +11,7 @@
     <div class="app-container">
         <aside class="sidebar">
             <div class="menu-items">
-                <a class="menu-item active" asp-page="/Kanji/Index">
+                <a class="menu-item active" asp-page="/Features/Kanji/Index">
                     <i class="fa-solid fa-chess-rook"></i>
                     <span>Hán tự</span>
                 </a>
@@ -71,6 +71,31 @@
                 </div>
             </header>
 
+
+
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const menuLinks = document.querySelectorAll('.sidebar .menu-items a.menu-item');
+                    const currentPath = window.location.pathname.toLowerCase();
+
+                    menuLinks.forEach(link => link.classList.remove('active'));
+
+                    let matched = false;
+                    menuLinks.forEach(link => {
+                        const href = link.getAttribute('href');
+                        if (!href || href === '#') return;
+
+                        const lowerHref = href.toLowerCase();
+                        if (currentPath === lowerHref || (lowerHref !== '/' && currentPath.startsWith(lowerHref))) {
+                            link.classList.add('active');
+                            matched = true;
+                        }
+                    });
+                });
+            </script>
+
+
             <main class="content-body">
                 @RenderBody()
             </main>
@@ -79,4 +104,351 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+
+@* code AI *@
+<div id="anime-mascot-container">
+
+    <div class="thought-bubble" id="aiThoughtBubble">
+        <button class="bubble-close" id="closeBubble">✕ CLOSE</button>
+        <div class="bubble-content" id="bubbleContent">...</div>
+    </div>
+
+    <div class="bot-toggle-wrapper">
+        <label class="switch">
+            <input type="checkbox" id="botActiveToggle"> <span class="slider round"></span>
+        </label>
+        <span class="toggle-label" id="toggleLabel" style="color: #ff5555;">Bot Off</span>
+    </div>
+
+    <div class="pure-anime-bot state-sleep" id="botIcon">💤</div>
+</div>
+<style>
+    /* ================= CONTAINER MASCOT ICON CSS GLOBAL ================= */
+    /* ================= KHUNG ĐIỀU KHIỂN NÚT GẠT CÔNG TẮC ================= */
+    .bot-toggle-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #282a36;
+        padding: 4px 10px;
+        border-radius: 12px;
+        border: 1px solid #44475a;
+        margin-bottom: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .toggle-label {
+        font-size: 0.75rem;
+        font-weight: bold;
+        color: #50fa7b; /* Màu xanh khi đang bật */
+        white-space: nowrap;
+    }
+
+    /* THE CONTAINER OF THE SWITCH */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 34px;
+        height: 20px;
+    }
+
+        /* HIDE DEFAULT CHECKBOX */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    /* THE SLIDER */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #44475a;
+        transition: .3s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+        }
+
+    input:checked + .slider {
+        background-color: #8be9fd; /* Đổi màu thanh gạt khi bật */
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(14px);
+        }
+
+    /* ROUNDED SLIDERS */
+    .slider.round {
+        border-radius: 20px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+    /* KHI BOT BỊ TẮT (OFF): LÀM MỜ VÀ ĐỔI BIỂU CẢM NGỦ */
+    .pure-anime-bot.state-sleep {
+        background: #44475a !important;
+        box-shadow: none !important;
+        opacity: 0.6;
+        animation: none !important;
+    }
+    #anime-mascot-container {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        z-index: 99999;
+        cursor: grab;
+        user-select: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        #anime-mascot-container:active {
+            cursor: grabbing;
+        }
+
+    .pure-anime-bot {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #bd93f9, #8be9fd);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        box-shadow: 0 0 20px rgba(139, 233, 253, 0.5);
+        border: 3px solid #282a36;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: botFloatIdle 2s infinite ease-in-out;
+    }
+
+    @@keyframes botFloatIdle {
+        0%, 100% {
+            transform: translateY(0) scale(1);
+            box-shadow: 0 0 20px rgba(139, 233, 253, 0.5);
+        }
+
+        50% {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 0 30px rgba(139, 233, 253, 0.8);
+        }
+    }
+
+    .pure-anime-bot.state-thinking {
+        background: linear-gradient(135deg, #ff5555, #ffb86c);
+        box-shadow: 0 0 25px rgba(255, 85, 85, 0.7);
+        animation: botWobbleThinking 0.5s infinite linear;
+    }
+
+    @@keyframes botWobbleThinking {
+        0%, 100% {
+            transform: rotate(0deg);
+        }
+
+        25% {
+            transform: rotate(-5deg);
+        }
+
+        75% {
+            transform: rotate(5deg);
+        }
+    }
+
+    .thought-bubble {
+        position: absolute;
+        bottom: 105px;
+        right: 0;
+        width: 380px;
+        max-height: 400px;
+        background: #1e1e2e;
+        border: 2px solid #8be9fd;
+        border-radius: 20px;
+        padding: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        display: none;
+        flex-direction: column;
+        overflow-y: auto;
+        color: #cdd6f4;
+    }
+
+        .thought-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            right: 32px;
+            border-width: 12px 12px 0;
+            border-style: solid;
+            border-color: #8be9fd transparent;
+        }
+
+        .thought-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -9px;
+            right: 33px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #1e1e2e transparent;
+            z-index: 1;
+        }
+
+    .bubble-close {
+        align-self: flex-end;
+        background: #282a36;
+        border: 1px solid #ff79c6;
+        color: #ff79c6;
+        padding: 2px 8px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 8px;
+    }
+
+    .bubble-content {
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+
+        .bubble-content h3 {
+            color: #50fa7b;
+            margin: 8px 0 4px 0;
+            font-size: 1.1rem;
+            border-bottom: 1px dashed #44475a;
+            padding-bottom: 4px;
+        }
+
+        .bubble-content strong {
+            color: #f1fa8c;
+        }
+
+        .bubble-content .bullet-item {
+            display: block;
+            margin-left: 8px;
+            margin-top: 4px;
+            color: #f8f8f2;
+        }
+</style>
 </html>
+
+<script src="/js/translationService.js"></script>
+
+<script>
+           // Đợi toàn bộ cấu trúc giao diện HTML của trang web nạp xong thì mới chạy code bên trong
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // KIỂM TRA ĐIỀU KIỆN ĐẦU VÀO: Nếu class dịch thuật chưa được khai báo thì dừng luôn để tránh crash trang
+        if (typeof window.TranslationClientService !== 'function') return;
+
+        // Khởi tạo thực thể Service để chuẩn bị gọi API dịch thuật ngầm bằng AI
+        const translationService = new window.TranslationClientService();
+
+        // Khai báo các biến đại diện cho các phần tử UI của em Mascot ngoài giao diện
+        const botIcon = document.getElementById('botIcon');          // Thẻ chứa icon biểu cảm (🐱, 🤔)
+        const bubble = document.getElementById('aiThoughtBubble');   // Khung bong bóng hiển thị nội dung kết quả
+        const bubbleContent = document.getElementById('bubbleContent'); // Ruột bên trong bong bóng để bơm văn bản
+        const botToggle = document.getElementById('botActiveToggle'); // Nút gạt kích hoạt Bật/Tắt bot
+
+        // Biến toàn cục lưu vết bộ đếm thời gian (phục vụ kỹ thuật Debounce chống spam API khi bôi đen liên tục)
+        let debounceTimeout;
+        const emojiIdle = "🐱";       // Biểu cảm khi rảnh rỗi
+        const emojiThinking = "🤔";   // Biểu cảm khi đang đợi AI phân tích ngữ pháp
+
+        /**
+         * TÍNH NĂNG CỐT LÕI: BÔI ĐEN CHỮ GỌI AI DỊCH THUẬT
+         * Lắng nghe sự kiện mỗi khi người dùng nhấc ngón tay thả chuột (mouseup) trên toàn bộ trang web.
+         */
+        document.addEventListener('mouseup', function(e) {
+
+            // CHẶN HÀNH VI: Nếu công tắc đang TẮT, HOẶC người dùng đang click trúng vào chính cụm Mascot
+            // thì lập tức thoát hàm ngay, không thực hiện dịch thuật gì cả.
+            if (!botToggle.checked || document.getElementById('anime-mascot-container').contains(e.target)) return;
+
+            // Xóa bộ đếm thời gian cũ nếu trước đó người dùng bôi đen chữ liên tục chưa dừng tay
+            clearTimeout(debounceTimeout);
+
+            // Thiết lập độ trễ 400ms (0.4 giây). Người dùng phải ngừng bôi đen đủ 0.4s thì code bên trong mới chạy.
+            // Đây gọi là kỹ thuật Debounce nhằm tránh việc gọi API bừa bãi khi người dùng đang rê chuột chưa xong.
+            debounceTimeout = setTimeout(async () => {
+
+                // Lấy ra đoạn văn bản (tiếng Nhật) mà người dùng vừa bôi đen, cắt bỏ khoảng trắng thừa ở 2 đầu
+                const selectedText = window.getSelection().toString().trim();
+
+                // TRƯỜNG HỢP 1: CÓ CHỮ ĐƯỢC BÔI ĐEN (Độ dài chuỗi > 0)
+                if (selectedText.length > 0) {
+
+                    // Đổi icon sang trạng thái suy nghĩ 🤔 và mở bong bóng thông báo tạm thời cho người dùng biết
+                    botIcon.textContent = emojiThinking;
+                    bubble.style.display = 'flex';
+                    bubbleContent.innerHTML = '⚡ <b>(Đang phân tích câu chữ...)</b>';
+
+                    try {
+                        // Bắn đoạn chữ bôi đen qua API Service để AI thực hiện bóc tách, dịch nghĩa bất đồng bộ (await)
+                        const result = await translationService.processAiTranslationAsync({ text: selectedText });
+                        if (!botToggle.checked) return;
+                        botIcon.textContent = emojiIdle;
+
+                        // Nếu API trả về trạng thái thành công rực rỡ
+                        if (result.isSuccess) {
+                            // Ép chuỗi Markdown (###, **) thành thẻ HTML đẹp mắt rồi bơm vào bong bóng
+                            bubbleContent.innerHTML = formatMarkdown(result.data);
+                        } else {
+                            // Nếu lưu thất bại hoặc lỗi cước, đóng bong bóng lại trong im lặng
+                            bubble.style.display = 'none';
+                        }
+                    } catch (err) {
+                        // KHỐI BẮT LỖI HỆ THỐNG: Nếu dính lỗi sập mạng, trả lại icon 🐱 và ghi log lỗi ra tab Console F12
+                        botIcon.textContent = emojiIdle;
+                        console.error("Lỗi:", err);
+                    }
+                }
+                // TRƯỜNG HỢP 2: CLICK CHUỘT RA NGOÀI VÙNG TRỐNG (Giải phóng bôi đen)
+                else {
+                    // Nếu bong bóng đang mở sẵn, và vị trí click chuột của người dùng nằm bên ngoài cái bong bóng
+                    if (bubble.style.display === 'flex' && !bubble.contains(e.target)) {
+                        bubble.style.display = 'none'; // Ẩn bong bóng đi ngay lập tức
+                    }
+                }
+            }, 400); // Hết thời gian chờ 400ms của bộ đếm Debounce
+        });
+
+        /**
+         * HÀM PHỤ: BIÊN DỊCH ĐỊNH DẠNG MARKDOWN THÀNH THẺ HTML NGUYÊN BẢN
+         * Giúp kết quả chữ đổ về từ AI hiển thị đẹp mắt, phân tách tiêu đề, chữ in đậm rõ ràng.
+         */
+        function formatMarkdown(text) {
+            if (!text) return "";
+            return text
+                // Chuyển đổi cú pháp tiêu đề '### Chữ' thành thẻ tiêu đề nhóm <h3>Chữ</h3>
+                .replace(/### (.*)/g, '<h3>$1</h3>')
+                // Chuyển đổi cú pháp in đậm '**chữ**' thành thẻ in đậm chuẩn <strong>chữ</strong>
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                // Chuyển đổi dấu gạch đầu dòng '* chữ' thành dấu chấm tròn lề <span class="bullet-item">• chữ</span>
+                .replace(/\* (.*)/g, '<span class="bullet-item">• $1</span>');
+        }
+
+        /**
+         * NÚT ĐÓNG BONG BÓNG THỦ CÔNG (Click vào nút dấu X ở góc bong bóng)
+         */
+        document.getElementById('closeBubble').addEventListener('click', () => {
+            bubble.style.display = 'none';    // Ẩn bong bóng đi ngay
+            botIcon.textContent = emojiIdle; // Đưa icon Mascot về trạng thái con mèo thức rảnh rỗi 🐱
+        });
+    });
+</script>

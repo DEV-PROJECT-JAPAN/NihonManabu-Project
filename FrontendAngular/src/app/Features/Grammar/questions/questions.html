@@ -1,0 +1,155 @@
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<div class="container py-4">
+    <div class="custom-breadcrumb">
+        <a [routerLink]="['/grammar']" class="breadcrumb-step"><i class="fas fa-home mr-1"></i> Trang chủ</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <a [routerLink]="['/grammar/level', levelId]" class="breadcrumb-step">🎯 Trình độ</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <a [routerLink]="['/grammar/level', levelId, 'lesson', lessonId]" class="breadcrumb-step">📖 Bài học</a>
+        <span class="breadcrumb-separator"><i class="fas fa-chevron-right"></i></span>
+        <span class="breadcrumb-step active-step text-truncate" style="max-width: 250px;">📢 {{
+            currentGrammar?.structure }}</span>
+    </div>
+
+    @if (currentGrammar) {
+    <div class="knowledge-premium-box">
+        <div class="knowledge-banner"><i class="fas fa-graduation-cap"></i> KIẾN THỨC CỐT LÕI CỦA BÀI HỌC</div>
+        <div class="knowledge-body">
+            <div class="grammar-main-title">{{ currentGrammar.structure }}</div>
+            <div class="explanation-inner-card">
+                <h6 class="font-weight-bold text-primary mb-2" style="font-size: 13px;"><i
+                        class="fas fa-info-circle mr-1"></i> Ý nghĩa & Giải thích cấu trúc:</h6>
+                <p class="mb-0" style="white-space: pre-line;">{{ currentGrammar.explanation }}</p>
+            </div>
+        </div>
+    </div>
+    }
+
+    @if (questionType === -1) {
+    <div class="mode-selection-container">
+        <a (click)="changeQuestionType(1)" class="mode-card mode-quiz">
+            <div class="mode-icon"><i class="fas fa-list-ul"></i></div>
+            <div class="mode-title">Bài Tập Trắc Nghiệm</div>
+            <div class="mode-desc">Luyện tập chọn đáp án đúng để điền vào chỗ trống trong câu.</div>
+        </a>
+        <a (click)="changeQuestionType(2)" class="mode-card mode-arrange">
+            <div class="mode-icon"><i class="fas fa-random"></i></div>
+            <div class="mode-title">Bài Tập Sắp Xếp</div>
+            <div class="mode-desc">Xếp các thẻ từ xáo trộn thành một câu ngữ pháp hoàn chỉnh đúng nghĩa.</div>
+        </a>
+        <a (click)="changeQuestionType(3)" class="mode-card mode-all">
+            <div class="mode-icon"><i class="fas fa-layer-group"></i></div>
+            <div class="mode-title">Bài Tập Tổng Hợp</div>
+            <div class="mode-desc">Bao gồm toàn bộ tất cả câu hỏi cả trắc nghiệm và sắp xếp câu.</div>
+        </a>
+    </div>
+    } @else {
+    <div class="card custom-card">
+        <div class="card-header d-flex justify-content-between align-items-center py-3">
+            <h6 class="m-0 font-weight-bold"
+                style="color: var(--text-muted); font-size: 14px; text-transform: uppercase;">
+                <i class="fas fa-pencil-alt text-warning mr-2"></i> Khay bài tập thực hành
+            </h6>
+            <a (click)="changeQuestionType(-1)" class="btn-change-mode" style="cursor: pointer;">
+                <i class="fas fa-exchange-alt"></i> Đổi chế độ
+            </a>
+        </div>
+        <div class="card-body p-0" style="background-color: rgba(15, 23, 42, 0.2);">
+            @for (q of questions; track q.id; let idx = $index) {
+            <div class="exercise-clean-row quiz-question-wrapper mx-4">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="text-primary font-weight-bold mr-2">Câu {{ idx + 1 }}.</span>
+                    <h6 class="text-white font-weight-bold m-0">{{ q.content }}</h6>
+                </div>
+
+                @if (q.questionType === 1) {
+                <div class="row mx-n2 mt-2">
+                    @for (a of shuffledAnswersMap[q.id]; track a.id) {
+                    <div class="col-md-6 px-2 mb-2">
+                        <button class="btn btn-answer-box evaluate-answer" [disabled]="quizEvaluated[q.id]"
+                            [class.correct-answer]="quizEvaluated[q.id] && a.isCorrect"
+                            [class.wrong-answer]="quizEvaluated[q.id] && !a.isCorrect && quizSelectedAnswer[q.id]?.id === a.id"
+                            (click)="selectQuizAnswer(q, a)">
+                            <span class="indicator-dot"></span>
+                            <span>{{ a.text }}</span>
+                        </button>
+                    </div>
+                    }
+                </div>
+                @if (quizEvaluated[q.id]) {
+                <div class="quiz-feedback-audio-zone mt-2">
+                    @if (quizSelectedAnswer[q.id]?.isCorrect) {
+                    <button class="btn-audio-speaker"
+                        (click)="speakJapanese(getFilledSentence(q.content, quizSelectedAnswer[q.id]?.text))">
+                        <i class="fas fa-volume-up mr-1"></i> Kết quả đúng! Nghe câu 🔊
+                    </button>
+                    } @else {
+                    <div class="p-2 rounded d-flex justify-content-between align-items-center mt-2"
+                        style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <span class="text-success font-weight-bold">{{ getFilledSentence(q.content,
+                            quizCorrectAnswer[q.id]?.text) }}</span>
+                        <button class="btn-audio-speaker"
+                            (click)="speakJapanese(getFilledSentence(q.content, quizCorrectAnswer[q.id]?.text))">
+                            <i class="fas fa-volume-up"></i> Nghe đáp án chuẩn
+                        </button>
+                    </div>
+                    }
+                </div>
+                }
+                }
+
+                @if (q.questionType === 2) {
+                <div class="arrange-question-block mt-2">
+                    <div class="sentence-assembly-zone mb-3"
+                        [class.correct-zone]="arrangeChecked[q.id] && arrangeIsCorrect[q.id]"
+                        [class.wrong-zone]="arrangeChecked[q.id] && !arrangeIsCorrect[q.id]">
+                        @for (word of arrangeAssembledWords[q.id]; track $index; let wordIdx = $index) {
+                        <span class="badge-word-item assembled-word mr-1"
+                            (click)="removeAssembledWord(q.id, word, wordIdx)">{{ word }}</span>
+                        }
+                    </div>
+
+                    <div class="d-flex flex-wrap p-2 rounded align-items-center word-pool-container"
+                        style="border: 1px solid var(--border-color); gap: 6px; background: rgba(0,0,0,0.15); min-height: 46px;">
+                        @for (a of shuffledAnswersMap[q.id]; track $index; let poolIdx = $index) {
+                        <span class="badge-word-item source-word"
+                            [class.disabled-pool-word]="arrangePoolStatus[q.id][a.text + '_' + poolIdx]"
+                            (click)="handleWordClick(q.id, a.text, poolIdx)">{{ a.text }}</span>
+                        }
+                    </div>
+
+                    @if (arrangeChecked[q.id] && !arrangeIsCorrect[q.id]) {
+                    <div class="feedback-zone-wrapper mt-3">
+                        <div class="p-2 rounded d-flex justify-content-between align-items-center mt-2"
+                            style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.2);">
+                            <span class="text-success font-weight-bold">{{ getCorrectSentenceText(q) }}</span>
+                            <button class="btn-audio-speaker" (click)="speakJapanese(getCorrectSentenceText(q))"><i
+                                    class="fas fa-volume-up"></i> Nghe đáp án chuẩn</button>
+                        </div>
+                    </div>
+                    }
+
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button class="btn btn-link btn-sm text-muted mr-2" (click)="resetArrangeQuestion(q.id)"><i
+                                class="fas fa-redo"></i> Xếp lại</button>
+                        <button class="btn btn-sm btn-primary btn-check-arrange px-4" [disabled]="arrangeChecked[q.id]"
+                            (click)="checkArrangeAnswer(q)">Kiểm tra</button>
+                    </div>
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+    }
+</div>
+<!-- <div class="alert alert-warning m-4">
+    <h5>🔍 TRẠNG THÁI DEBUG HỆ THỐNG:</h5>
+    <p><b>1. QuestionType hiện tại:</b> {{ questionType }}</p>
+    <p><b>1. IdGrammar hỏi đang có:</b> {{ grammarId }}</p>
+    <p><b>2. Số lượng câu hỏi đang có:</b> {{ questions?.length }}</p>
+    <p><b>3. Chi tiết "ruột" dữ liệu JSON:</b></p>
+    <pre style="background: #222; color: #fff; p: 10px; max-height: 200px; overflow: auto;">{{ questions | json }}</pre>
+</div> -->

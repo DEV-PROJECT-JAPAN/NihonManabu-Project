@@ -517,24 +517,21 @@ namespace BackendAPI.Migrations
 
                 SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                b.Property<string>("AudioUrl")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
+                    b.Property<string>("AudioUrl")
+                        .HasColumnType("nvarchar(max)");
 
                 b.Property<DateTime>("CreatedAt")
                     .HasColumnType("datetime2");
 
-                b.Property<string>("ExampleSentence")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ExampleSentence")
+                        .HasColumnType("nvarchar(max)");
 
                 b.Property<string>("Hiragana")
                     .IsRequired()
                     .HasColumnType("nvarchar(100)");
 
-                b.Property<string>("Kanji")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(100)");
+                    b.Property<string>("Kanji")
+                        .HasColumnType("nvarchar(100)");
 
                 b.Property<int>("LessonId")
                     .HasColumnType("int");

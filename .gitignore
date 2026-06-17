@@ -1,2 +1,54 @@
+# =========================================================================
+# 🎯 BIẾN THẾ GIỚI .NET / VISUAL STUDIO THÀNH VÙNG SẠCH RÁC
+# =========================================================================
+# Chặn các thư mục sinh ra khi Biên dịch (Compile) code C#
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# Chặn các file lưu trạng thái cấu hình cá nhân của người code
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Chặn thư mục cấu hình ngầm cực nặng của Visual Studio (Chứa cache, intellisense)
 .vs/
-.vs/
+
+# Chặn file cấu hình môi trường Local (Tránh đẩy chuỗi kết nối Database chứa mật khẩu lên Github)
+[Aa]ppsettings.[Dd]evelopment.json
+
+# =========================================================================
+# 🎯 CÀN QUÉT SẠCH RÁC CỦA ANGULAR / NODE.JS (Dùng **/ để quét mọi ngóc ngách)
+# =========================================================================
+# Tuyệt đối chặn node_modules ở tất cả các thư mục con
+**/node_modules/
+**/.angular/
+**/dist/
+**/tmp/
+**/out-tsc/
+
+# Chặn các file nhật ký ghi lỗi của npm/yarn
+*.log
+Background.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================================================================
+# 🎯 CHẶN CẤU HÌNH CÁ NHÂN CỦA VS CODE & TRÌNH DUYỆT / HỆ ĐIỀU HÀNH
+# =========================================================================
+# Không đẩy thư mục cấu hình ẩn của VS Code lên (Tránh đè cấu hình phím tắt của nhau)
+.vscode/
+
+# File rác tự sinh của hệ điều hành Windows & MacOS
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+
+# Chặn các file lưu lịch sử chạy test ngầm nếu có dùng Moq / Unit Test
+*.code-workspace
+.ionide/

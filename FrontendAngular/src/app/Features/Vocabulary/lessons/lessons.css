@@ -1,0 +1,15 @@
+.fw-black {
+    font-weight: 900 !important;
+}
+
+.hover-card-jlpt {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+    cursor: pointer;
+    border: 1px solid #f1f5f9 !important;
+}
+
+.hover-card-jlpt:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.05) !important;
+    background-color: #fafafa !important;
+}

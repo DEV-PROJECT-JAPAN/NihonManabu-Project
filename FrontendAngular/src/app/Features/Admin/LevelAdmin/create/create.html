@@ -1,0 +1,47 @@
+<div class="container mt-4" style="max-width: 600px;">
+    <div class="card shadow-sm p-4">
+        <h4 class="text-success mb-3">➕ Thêm Cấp Độ Mới</h4>
+        <hr />
+
+        @if (errorMessage()) {
+        <div class="alert alert-danger mb-3">
+            {{ errorMessage() }}
+        </div>
+        }
+
+        <form [formGroup]="levelForm" (ngSubmit)="onSubmit()">
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Tên cấp độ <span class="text-danger">*</span></label>
+                <input type="text" class="form-control"
+                    [class.is-invalid]="levelForm.get('name')?.invalid && levelForm.get('name')?.touched"
+                    placeholder="Ví dụ: N5, N4..." formControlName="name" />
+
+                @if (levelForm.get('name')?.hasError('required') && levelForm.get('name')?.touched) {
+                <div class="invalid-feedback">
+                    Tên cấp độ không được để trống.
+                </div>
+                }
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Mô tả chi tiết</label>
+                <textarea class="form-control" rows="3" placeholder="Nhập mô tả..."
+                    formControlName="description"></textarea>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2">
+                <a routerLink="/admin/level" class="btn btn-secondary">Hủy bỏ</a>
+
+                <button type="submit" class="btn btn-success px-4" [disabled]="isSubmitting()">
+                    @if (isSubmitting()) {
+                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    Đang xử lý...
+                    } @else {
+                    Lưu lại
+                    }
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

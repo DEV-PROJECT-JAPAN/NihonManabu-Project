@@ -1,0 +1,94 @@
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-dark fw-bold mb-1">Chỉnh Sửa Từ Vựng</h2>
+            <p class="text-muted mb-0">Đang chỉnh sửa từ vựng mã số: <code
+                    class="fs-6">#{{ vocabForm.get('id')?.value }}</code></p>
+        </div>
+
+        <a [routerLink]="['/admin/vocabulary']"
+            [queryParams]="{ selectedLevelId: selectedLevelId(), selectedLessonId: selectedLessonId() }"
+            class="btn btn-outline-secondary fw-semibold">
+            <i class="fa-solid fa-arrow-left me-2"></i>Hủy bỏ & Quay lại
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 p-4 mx-auto" style="border-radius: 12px; max-width: 800px;">
+        <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-pen-to-square text-warning me-2"></i>Thay đổi thông tin
+            từ vựng</h5>
+        <hr class="text-muted opacity-25 mt-0 mb-4">
+
+        @if (isLoading()) {
+        <div class="text-center py-5">
+            <div class="spinner-border text-warning mb-3" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Đang tải dữ liệu...</span>
+            </div>
+            <h5 class="text-muted fw-semibold">Đang tải thông tin từ vựng...</h5>
+        </div>
+        } @else {
+
+        @if (errorMessage()) {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-circle-exclamation me-2"></i> {{ errorMessage() }}
+            <button type="button" class="btn-close" (click)="errorMessage.set('')" aria-label="Close"></button>
+        </div>
+        }
+
+        <form [formGroup]="vocabForm" (ngSubmit)="onSubmit()">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary">Chữ Hán (Kanji)</label>
+                    <input formControlName="kanji" class="form-control border-2" placeholder="Ví dụ: 私"
+                        style="border-radius: 8px;" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary">Cách đọc (Hiragana) <span
+                            class="text-danger">*</span></label>
+                    <input formControlName="hiragana" class="form-control border-2"
+                        [class.is-invalid]="vocabForm.get('hiragana')?.invalid && vocabForm.get('hiragana')?.touched"
+                        placeholder="Ví dụ: わたし" style="border-radius: 8px;" />
+                    @if (vocabForm.get('hiragana')?.hasError('required') && vocabForm.get('hiragana')?.touched) {
+                    <span class="text-danger small">Vui lòng nhập cách đọc Hiragana.</span>
+                    }
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary">Romaji<span
+                            class="text-danger">*</span></label>
+                    <input formControlName="romaji" class="form-control border-2" placeholder="Ví dụ: watashi"
+                        style="border-radius: 8px;" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary">Ý nghĩa Tiếng Việt <span
+                            class="text-danger">*</span></label>
+                    <input formControlName="meaning" class="form-control border-2"
+                        [class.is-invalid]="vocabForm.get('meaning')?.invalid && vocabForm.get('meaning')?.touched"
+                        placeholder="Ví dụ: Tôi, bản thân" style="border-radius: 8px;" />
+                    @if (vocabForm.get('meaning')?.hasError('required') && vocabForm.get('meaning')?.touched) {
+                    <span class="text-danger small">Vui lòng nhập ý nghĩa Tiếng Việt.</span>
+                    }
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold text-secondary">Câu Ví Dụ (Nếu có)</label>
+                    <textarea formControlName="exampleSentence" class="form-control border-2" rows="3"
+                        placeholder="Nhập câu ví dụ chỉnh sửa..." style="border-radius: 8px;"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-2 text-end">
+                <button type="submit" class="btn btn-warning fw-bold text-white px-4 py-2 text-uppercase"
+                    style="border-radius: 8px;" [disabled]="isSubmitting()">
+                    @if (isSubmitting()) {
+                    <span class="spinner-border spinner-border-sm me-2"></span> Đang cập nhật...
+                    } @else {
+                    <i class="fa-solid fa-circle-check me-2"></i>Cập Nhật Từ Vựng
+                    }
+                </button>
+            </div>
+        </form>
+        }
+    </div>
+</div>
