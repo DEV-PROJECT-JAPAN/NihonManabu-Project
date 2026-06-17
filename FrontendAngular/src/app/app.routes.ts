@@ -13,7 +13,7 @@ import { Questions } from './Features/Grammar/questions/questions';
 import { LevelsComponent as VocabLevels } from './Features/Vocabulary/levels/levels';
 import { LessonsComponent, LessonsComponent as VocabLessions } from './Features/Vocabulary/lessons/lessons';
 
-// Thêm dòng này lên nhóm import ở đầu file
+
 import { VocabularyComponent } from './Features/Vocabulary/vocabulary/vocabulary';
 import { GrammarListAdmin } from './Features/Admin/GrammarAdmin/GrammarListAdmin/GrammarListAdmin';
 import { GrammarCreate } from './Features/Admin/GrammarAdmin/GrammarCreate/GrammarCreate';
@@ -21,6 +21,16 @@ import { GrammarEdit } from './Features/Admin/GrammarAdmin/GrammarEdit/GrammarEd
 import { QuestionList } from './Features/Admin/QuestionAdmin/QuestionList/QuestionList';
 import { QuestionCreate } from './Features/Admin/QuestionAdmin/QuestionCreate/QuestionCreate';
 import { QuestionEdit } from './Features/Admin/QuestionAdmin/QuestionEdit/QuestionEdit';
+import { LevelIndexComponent } from './Features/Admin/LevelAdmin/index';
+
+import { LevelEditComponent } from './Features/Admin/LevelAdmin/edit/edit';
+import { LevelCreateComponent } from './Features/Admin/LevelAdmin/create/create';
+import { LessonIndexComponent } from './Features/Admin/LessonAdmin/index';
+import { LessonCreateComponent } from './Features/Admin/LessonAdmin/create/create';
+import { LessonEditComponent } from './Features/Admin/LessonAdmin/edit/edit';
+import { VocabularyEditComponent } from './Features/Admin/VocabularyAdmin/edit/edit';
+import { VocabularyIndexComponent } from './Features/Admin/VocabularyAdmin/index';
+import { VocabularyCreateComponent } from './Features/Admin/VocabularyAdmin/create/create';
 
 export const routes: Routes = [
     // 0. Vừa vào web không gõ gì -> Tự động đá sang trang levels của học viên
@@ -77,10 +87,25 @@ export const routes: Routes = [
                     { path: 'edit/:id', component: GrammarEdit },
                 ]
             },
+            // =========================================================
+            // TẦNG 1: PHÂN HỆ LEVEL ADMIN (/admin/level)
+            // =========================================================
+            {
+                path: 'level',
+                children: [
+                    // TẦNG 2: Các trang con bên trong Level Admin
 
-            // =========================================================
-            // TẦNG 1: PHÂN HỆ LESSON ADMIN (/admin/lesson)
-            // =========================================================
+                    // URL: /admin/level (Trang danh sách mặc định)
+                    { path: '', component: LevelIndexComponent },
+
+                    // URL: /admin/level/create (Trang thêm mới)
+                    { path: 'create', component: LevelCreateComponent },
+
+                    // URL: /admin/level/edit/5 (Trang sửa)
+                    { path: 'edit/:id', component: LevelEditComponent }
+                ]
+            },
+
             {
                 path: 'question',
                 children: [
@@ -88,8 +113,25 @@ export const routes: Routes = [
                     { path: 'index', component: QuestionList },
                     { path: 'create', component: QuestionCreate },
                     { path: 'edit/:id', component: QuestionEdit }
+
+
+
                 ]
             },
+            {
+                path: 'lesson',
+                children: [
+
+                    { path: '', component: LessonIndexComponent },
+
+                    // URL: /admin/lesson/create (Trang thêm mới)
+                    { path: 'create', component: LessonCreateComponent },
+
+                    // URL: /admin/lesson/edit/5 (Trang sửa)
+                    { path: 'edit/:id', component: LessonEditComponent }
+                ]
+            },
+
 
             // =========================================================
             // TẦNG 1: PHÂN HỆ VOCABULARY ADMIN (/admin/vocabulary)
@@ -97,7 +139,14 @@ export const routes: Routes = [
             {
                 path: 'vocabulary',
                 children: [
-                    // URL: /admin/vocabulary/edit/5
+                    // URL: /admin/vocabulary (Trang quản lý danh sách từ vựng)
+                    { path: '', component: VocabularyIndexComponent },
+
+                    // URL: /admin/vocabulary/create (Trang thêm từ vựng / import file)
+                    { path: 'create', component: VocabularyCreateComponent },
+
+                    // URL: /admin/vocabulary/edit/5 (Trang sửa từ vựng)
+                    { path: 'edit/:id', component: VocabularyEditComponent }
                 ]
             }
         ]

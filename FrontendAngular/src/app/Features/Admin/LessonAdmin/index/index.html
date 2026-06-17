@@ -1,0 +1,79 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>QUẢN LÝ BÀI HỌC TIẾNG NHẬT</h2>
+        <a routerLink="create" class="btn btn-primary">➕ Thêm Bài Học Mới</a>
+    </div>
+
+    @if (message()) {
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {{ message() }}
+        <button type="button" class="btn-close" (click)="message.set('')" aria-label="Close"></button>
+    </div>
+    }
+
+    <div class="card shadow-sm border-0 mb-4 bg-light">
+        <div class="card-body py-3">
+            <div class="row align-items-center g-3">
+                <div class="col-auto">
+                    <label class="fw-semibold text-secondary m-0">
+                        <i class="fa-solid fa-filter me-1"></i> Lọc theo cấp độ:
+                    </label>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <select [(ngModel)]="selectedLevelId" (ngModelChange)="onFilterChange()"
+                        class="form-select border-2" style="border-radius: 8px;">
+                        <option [value]="0">-- Tất cả bài học --</option>
+
+                        @for (lvl of levels(); track lvl.id) {
+                        <option [value]="lvl.id">{{ lvl.name }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <table class="table table-hover table-striped mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 8%">ID</th>
+                    <th style="width: 10%">Cấp độ ID</th>
+                    <th style="width: 35%">Tiêu Đề Bài Học</th>
+                    <th style="width: 10%" class="text-center">Thứ Tự</th>
+                    <th style="width: 22%">Ngày Tạo</th>
+                    <th style="width: 14%">Ngày Cập Nhật</th>
+                    <th style="width: 15%" class="text-center">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of lessons(); track item.id) {
+                <tr>
+                    <td><code>#{{ item.id }}</code></td>
+                    <td><span class="badge bg-secondary fs-6">{{ item.levelId }}</span></td>
+                    <td class="fw-semibold text-dark">{{ item.title }}</td>
+                    <td class="text-center"><span class="badge bg-info text-dark">{{ item.order }}</span></td>
+                    <td class="text-muted">{{ item.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td class="text-muted" style="font-size: 0.9rem;">{{ item.updatedAt | date:'dd/MM/yyyy HH:mm' }}
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a [routerLink]="['edit', item.id]" [queryParams]="{ selectedLevelId: selectedLevelId() }"
+                                class="btn btn-warning btn-sm">Sửa</a>
+
+                            <button type="button" class="btn btn-danger btn-sm" (click)="deleteLesson(item.id)">
+                                Xóa
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">Chưa có bài học nào được tạo hoặc không tìm thấy
+                        bài học cho cấp độ này.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

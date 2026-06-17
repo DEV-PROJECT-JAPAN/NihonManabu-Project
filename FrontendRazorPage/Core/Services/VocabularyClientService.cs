@@ -3,6 +3,8 @@ using FrontendRazorPage.Models.AdminModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 
+
+
 namespace FrontendRazorPage.Core.Services
 {
     public class VocabularyClientService : BaseClientService
@@ -102,6 +104,8 @@ namespace FrontendRazorPage.Core.Services
                 return false;
             }
         }
+
+
 
     }
 }

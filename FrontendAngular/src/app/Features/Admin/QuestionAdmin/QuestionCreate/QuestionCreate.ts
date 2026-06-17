@@ -177,7 +177,7 @@ export class QuestionCreate implements OnInit {
       next: (success) => {
         if (success) {
           // Lưu thành công, điều hướng quay lại trang list chính kèm bộ lọc vẹn toàn 3 tầng cũ
-          this._router.navigate(['/admin/question'], {
+          this._router.navigate(['/admin/question/index'], {
             queryParams: {
               SelectedLevelId: this.selectedLevelId,
               SelectedLessonId: this.selectedLessonId,

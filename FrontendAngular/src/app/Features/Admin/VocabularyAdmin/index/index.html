@@ -1,0 +1,121 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold text-White m-0">QUẢN LÝ TỪ VỰNG TIẾNG NHẬT</h2>
+        <a [routerLink]="['create']"
+            [queryParams]="{ selectedLevelId: selectedLevelId(), selectedLessonId: selectedLessonId() }"
+            class="btn btn-primary">
+            ➕ Thêm Từ Vựng Mới
+        </a>
+    </div>
+
+    @if (message()) {
+    <div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert">
+        {{ message() }}
+        <button type="button" class="btn-close" (click)="message.set('')" aria-label="Close"></button>
+    </div>
+    }
+
+    <div class="card shadow-sm border-0 mb-4 bg-light">
+        <div class="card-body py-3">
+            <div class="row align-items-center g-3">
+
+                <div class="col-md-4">
+                    <label class="fw-semibold text-secondary small d-block mb-1">
+                        <i class="fa-solid fa-filter me-1"></i> Bước 1: Chọn Cấp Độ
+                    </label>
+                    <select [(ngModel)]="selectedLevelId" (ngModelChange)="onLevelChange()" class="form-select border-2"
+                        style="border-radius: 8px;">
+                        <option [value]="0">-- Chọn Cấp Độ --</option>
+                        @for (lvl of levels(); track lvl.id) {
+                        <option [value]="lvl.id">{{ lvl.name }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-5">
+                    <label class="fw-semibold text-secondary small d-block mb-1">
+                        <i class="fa-solid fa-book-open me-1"></i> Bước 2: Chọn Bài Học
+                    </label>
+                    <select [(ngModel)]="selectedLessonId" (ngModelChange)="onLessonChange()"
+                        class="form-select border-2" style="border-radius: 8px;"
+                        [disabled]="selectedLevelId() === 0 || lessons().length === 0">
+                        <option [value]="0">-- Chọn Bài Học --</option>
+                        @for (les of lessons(); track les.id) {
+                        <option [value]="les.id">{{ les.title }}</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+        <table class="table table-hover table-striped mb-0 align-middle">
+            <thead class="table-dark text-uppercase fs-7">
+                <tr>
+                    <th style="width: 5%">ID</th>
+                    <th style="width: 12%">Chữ Hán (Kanji)</th>
+                    <th style="width: 12%">Hiragana</th>
+                    <th style="width: 10%">Romaji</th>
+                    <th style="width: 16%">Ý Nghĩa Tiếng Việt</th>
+                    <th style="width: 15%">Câu Ví Dụ</th>
+                    <th style="width: 10%">Ngày Tạo</th>
+                    <th style="width: 10%">Cập Nhật</th>
+                    <th style="width: 10%">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (selectedLessonId() === 0) {
+                <tr>
+                    <td colspan="9" class="text-center text-muted py-5">
+                        <i class="fa-solid fa-arrow-pointer fs-2 d-block mb-2 text-warning opacity-75"></i>
+                        Vui lòng chọn cụ thể một <b>Cấp độ</b> và <b>Bài học</b> ở trên để xem danh sách từ vựng.
+                    </td>
+                </tr>
+                } @else {
+                @for (item of vocabularies(); track item.id) {
+                <tr>
+                    <td><code>#{{ item.id }}</code></td>
+                    <td class="fs-5 fw-bold text-dark font-monospace">{{ item.kanji }}</td>
+                    <td class="text-primary fw-semibold">{{ item.hiragana }}</td>
+                    <td class="text-secondary font-monospace">{{ item.romaji }}</td>
+                    <td class="text-dark fw-medium">{{ item.meaning }}</td>
+                    <td class="text-muted small">{{ item.exampleSentence }}</td>
+
+                    <td class="text-muted small">
+                        {{ item.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                    </td>
+
+                    <td class="text-secondary small fw-medium">
+                        {{ item.updatedAt | date:'dd/MM/yyyy HH:mm' }}
+                    </td>
+
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a [routerLink]="['edit', item.id]"
+                                [queryParams]="{ selectedLevelId: selectedLevelId(), selectedLessonId: selectedLessonId() }"
+                                class="btn btn-warning btn-sm fw-semibold text-white px-2" style="border-radius: 6px;">
+                                Sửa
+                            </a>
+
+                            <button type="button" (click)="deleteVocabulary(item.id)"
+                                class="btn btn-danger btn-sm fw-semibold px-2" style="border-radius: 6px;">
+                                Xóa
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="9" class="text-center text-muted py-5">
+                        <i class="fa-regular fa-folder-open fs-2 d-block mb-2 text-opacity-25"></i>
+                        Bài học này hiện tại chưa có từ vựng nào. Bạn hãy bấm nút thêm mới nhé!
+                    </td>
+                </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
