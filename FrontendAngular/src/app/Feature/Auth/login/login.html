@@ -1,0 +1,73 @@
+
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+    <h2>Đăng nhập</h2>
+    
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" type="email" placeholder="Nhập email của bạn">
+      <small class="error-msg" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+        Email không hợp lệ.
+      </small>
+    </div>
+    
+    <div class="form-group">
+      <label for="password">Mật khẩu</label>
+      <input id="password" formControlName="password" type="password" placeholder="Nhập mật khẩu">
+      <small class="error-msg" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+      </small>
+    </div>
+
+    <button type="submit" [disabled]="isLoading || loginForm.invalid" class="submit-btn">
+      {{ isLoading ? 'Đang xử lý...' : 'Đăng nhập' }}
+    </button>
+    
+    <p *ngIf="message" class="message-box">{{ message }}</p>
+
+    <div class="form-footer">
+      <a routerLink="/auth/register">Chưa có tài khoản? Đăng ký ngay</a>
+    </div>
+  </form>
+</div>
+
+<style>
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #0b121f;
+    color: #fff;
+  }
+  .login-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background: #070a13;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+  .form-group { margin-bottom: 15px; }
+  input {
+    width: 100%;
+    padding: 10px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .submit-btn:disabled { background: #475569; }
+  .message-box { color: #f87171; text-align: center; margin-top: 10px; }
+  .form-footer { margin-top: 15px; text-align: center; }
+  .form-footer a { color: #60a5fa; text-decoration: none; font-size: 14px; }
+</style>
