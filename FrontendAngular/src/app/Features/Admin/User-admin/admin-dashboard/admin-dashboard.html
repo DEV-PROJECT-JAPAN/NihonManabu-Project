@@ -1,0 +1,24 @@
+<div class="container mt-4">
+  <h2>Admin Dashboard</h2>
+  <hr />
+
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <div *ngIf="!isLoading && dashboardData" class="row mt-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-primary mb-3 shadow">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Tổng số học viên</span>
+          <i class="bi bi-people-fill fs-4"></i>
+        </div>
+        <div class="card-body">
+          <h1 class="card-title text-center">{{ dashboardData.totalUsers }}</h1>
+          <p class="card-text text-center text-white-50">Tài khoản đã đăng ký trong hệ thống</p>
+        </div>
+      </div>
+    </div>
+    
+    </div>
+</div>

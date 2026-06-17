@@ -1,13 +1,19 @@
 <div class="app-layout-wrapper">
 
+    <!-- ========================================= -->
+    <!-- SIDEBAR NAVIGATION -->
+    <!-- ========================================= -->
     <aside class="app-sidebar">
         <div class="sidebar-brand">
             <a routerLink="/" style="text-decoration: none; display: flex; align-items: center;">
                 <span class="brand-name">NihonManabu</span>
             </a>
         </div>
+        
         <nav class="sidebar-menu">
-            <a href="javascript:void(0)"
+            <!-- Từ vựng -->
+            <a routerLink="/vocabulary/levels"
+               routerLinkActive="active"
                class="menu-item"
                (click)="goToVocabulary()"
                [class.active]="checkActive('vocabulary')">
@@ -15,6 +21,7 @@
                 <span>Từ vựng</span>
             </a>
             
+            <!-- Ngữ pháp -->
             <a routerLink="/grammar/levels"
                routerLinkActive="active"
                class="menu-item">
@@ -22,46 +29,56 @@
                 <span>Ngữ pháp</span>
             </a>
             
-            <a href="javascript:void(0)" class="menu-item">
+            <!-- Lộ trình -->
+            <a routerLink="/pathway" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-route"></i>
                 <span>Lộ trình</span>
             </a>
         
+            <!-- Ghi nhớ / Practice -->
             <a routerLink="/practice" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-chart-line"></i>
                 <span>Ghi nhớ</span>
             </a>
             
-            <a href="javascript:void(0)" class="menu-item">
+            <!-- Chủ động -->
+            <a routerLink="/active-learning" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-user-friends"></i>
                 <span>Chủ động</span>
             </a>
             
-            <a href="javascript:void(0)" class="menu-item">
+            <!-- Shadowing -->
+            <a routerLink="/shadowing" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-headphones"></i>
                 <span>Shadowing</span>
             </a>
 
-            <a routerLink="upgradeACC" routerLinkActive="active" class="menu-item premium-link">
+            <!-- Nâng cấp tài khoản -->
+            <a routerLink="/upgradeACC" routerLinkActive="active" class="menu-item premium-link">
                 <i class="fas fa-bolt"></i>
                 <span>Nâng cấp</span>
             </a>
         </nav>
 
         <div class="sidebar-footer">
-            <a href="javascript:void(0)" class="menu-item setting-btn">
+            <a routerLink="/settings" routerLinkActive="active" class="menu-item setting-btn">
                 <i class="fas fa-cog"></i>
                 <span>Cài đặt</span>
             </a>
         </div>
     </aside>
 
+    <!-- ========================================= -->
+    <!-- MAIN CONTENT AREA -->
+    <!-- ========================================= -->
     <main class="app-main-content">
+        <!-- TOP NAVBAR -->
         <header class="app-top-navbar d-flex justify-content-end align-items-center px-4 py-3">
             <div class="navbar-actions d-flex align-items-center gap-3">
                 <button class="nav-icon-btn"><i class="fas fa-trophy"></i></button>
                 <button class="nav-icon-btn"><i class="fas fa-bell"></i></button>
                 
+                <!-- USER LOGGED IN -->
                 @if (authService.currentUser()) {
                     <div class="profile-dropdown-wrapper">
                         <button class="avatar-toggle-btn" (click)="toggleDropdown($event)">
@@ -92,13 +109,15 @@
                         }
                     </div>
                 } @else {
-                    <button class="btn btn-sm btn-outline-light px-3 login-btn" routerLink="auth/login">
+                    <!-- GUEST LOGIN BUTTON -->
+                    <button class="btn btn-sm btn-outline-light px-3 login-btn" routerLink="/auth/login">
                         <i class="fas fa-sign-in-alt me-1"></i> Đăng nhập
                     </button>
                 }
             </div>
         </header>
 
+        <!-- ROUTER OUTLET -->
         <section class="content-body">
             <router-outlet></router-outlet>
         </section>
@@ -106,6 +125,9 @@
 
 </div>
 
+<!-- ========================================= -->
+<!-- COMPONENT STYLES -->
+<!-- ========================================= -->
 <style>
     .app-layout-wrapper {
         display: flex;
@@ -246,4 +268,35 @@
         padding: 8px 16px;
         font-size: 13px;
     }
-    .dropdown-divider
+    /* Đã sửa lỗi đứt đoạn ở class divider */
+    .dropdown-divider {
+        margin: 6px 0;
+        border-top: 1px solid #334155;
+        opacity: 1;
+    }
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 8px 16px;
+        color: #CBD5E1;
+        font-size: 13px;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+    .dropdown-item:hover {
+        background-color: #334155;
+        color: #fff;
+    }
+    .logout-action {
+        color: #EF4444;
+    }
+    .logout-action:hover {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: #EF4444;
+    }
+    .content-body {
+        flex-grow: 1;
+        padding: 24px;
+        overflow-y: auto;
+    }
+</style>

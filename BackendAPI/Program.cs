@@ -47,7 +47,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-
 // Feature Services
 builder.Services.AddScoped<ILevelService, LevelService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
