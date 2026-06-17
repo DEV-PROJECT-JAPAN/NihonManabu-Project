@@ -20,7 +20,43 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="!isLoading && users.length > 0" class="card mt-4 shadow">
+    <div class="card-header bg-dark text-white">Quản lý quyền người dùng</div>
+    <!-- <button class="btn btn-sm btn-success" (click)="onAddUser()">+ Thêm User</button> -->
+    <div class="card-body">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Tên</th>
+            <th>Email</th>
+            <th>Quyền hiện tại</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              <span class="badge" [class.bg-success]="user.role === 'Admin'" [class.bg-secondary]="user.role === 'User'">
+                {{ user.role }}
+              </span>
+            </td>
+            <!-- <button class="btn btn-sm btn-primary me-2" (click)="onEditUser(user)">Sửa</button> -->
+            <td>
+              <select class="form-select form-select-sm" 
+                      (change)="onChangeRole(user, $any($event.target).value)">
+                <option value="User" [selected]="user.role === 'User'">User</option>
+                <option value="Admin" [selected]="user.role === 'Admin'">Admin</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 
   <div *ngIf="!isLoading && !dashboardData" class="alert alert-warning text-center mt-4">
     Không thể kết nối hoặc không tìm thấy dữ liệu từ hệ thống.
