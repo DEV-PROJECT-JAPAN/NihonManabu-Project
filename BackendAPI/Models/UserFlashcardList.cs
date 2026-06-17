@@ -9,6 +9,6 @@ namespace BackendAPI.Models
         public virtual User User { get; set; }
         public string Name { get; set; } // Tên danh sách flashcard
         public string Description { get; set; } // Mô tả về danh sách flashcard
-        public virtual ICollection<FolderVocabulary> FolderVocabularies { get; set; } = new List<FolderVocabulary>();
+        public virtual ICollection<UserVocabulary> UserVocabularies { get; set; } = new List<UserVocabulary>();
     }
 }

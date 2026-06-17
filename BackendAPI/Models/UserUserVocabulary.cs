@@ -4,12 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackendAPI.Models
 {
-    //=========================================================
-    // Bảng lưu các từ vựng mà người dùng cần ôn tập
-    //=========================================================
     [Table("UserVocabularies")]
     public class UserVocabulary: BaseModels
     {
+      
+        // Khóa ngoại nối sang bảng UserFlashcardLists (Thay thế hoàn toàn ListId của thằng Item cũ)
+        [Required]
+        public int ListId { get; set; }
+
         [Required]
         [StringLength(100)]
         public string Kanji { get; set; }
@@ -23,13 +25,13 @@ namespace BackendAPI.Models
         public string Meaning { get; set; }
 
         [StringLength(100)]
-        public string? Romaji { get; set; } // Thêm dấu ?
+        public string Romaji { get; set; }
 
-        //[StringLength(500)]
-        //public string? AudioUrl { get; set; } = null; // Thêm dấu ?
+        [StringLength(500)]
+        public string AudioUrl { get; set; }
 
-        //[StringLength(1000)]
-        //public string? ExampleSentence { get; set; } = null; // Thêm dấu ?
+        [StringLength(1000)]
+        public string ExampleSentence { get; set; }
 
         // =======================================================
         // CỤM TRƯỜNG QUẢN LÝ TIẾN TRÌNH & THUẬT TOÁN NGẮT QUÃNG (SPACED REPETITION)
@@ -44,7 +46,12 @@ namespace BackendAPI.Models
         [Required]
         public DateTime LastReviewed { get; set; } = DateTime.UtcNow; // Ngày giờ vừa bấm ôn tập gần nhất
 
-        public virtual ICollection<FolderVocabulary> FolderVocabularies { get; set; } = new List<FolderVocabulary>();
+       
+        // =======================================================
+        // NAVIGATION PROPERTY (Mối quan hệ trong EF Core)
+        // =======================================================
 
+        [ForeignKey("ListId")]
+        public virtual UserFlashcardList UserFlashcardList { get; set; }
     }
 }

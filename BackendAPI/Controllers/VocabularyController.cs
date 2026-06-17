@@ -11,14 +11,12 @@ namespace BackendAPI.Controllers
     {
         private readonly IVocabularyService _backendService;
         private readonly IUserService _userContext;
-        private readonly IPracticeService _practiceService;
 
         // Tiêm thẳng Service của Backend vào đây
-        public VocabularyController(IVocabularyService backendService, IUserService userContext, IPracticeService practiceService)
+        public VocabularyController(IVocabularyService backendService, IUserService userContext)
         {
             _backendService = backendService;
             _userContext = userContext;
-            _practiceService = practiceService;
         }
 
         // ==================== KHU VỰC DÀNH CHO USER LEARNING ====================

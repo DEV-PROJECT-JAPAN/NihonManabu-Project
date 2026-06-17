@@ -21,9 +21,6 @@ namespace BackendAPI.Models.Data
         public DbSet<LearningProgress> LearningProgresses { get; set; }
         public DbSet<Badge> Badges { get; set; }
         public DbSet<UserBadge> UserBadges { get; set; }
-        public DbSet<FolderVocabulary> FolderVocabularies { get; set; }
-        public DbSet<UserSubscription> Subscriptions { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

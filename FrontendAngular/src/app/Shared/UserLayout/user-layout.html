@@ -2,12 +2,7 @@
 
     <aside class="app-sidebar">
         <div class="sidebar-brand">
-<<<<<<< HEAD
-            <!--       <img src="assets/logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'"> -->
-            <span class="brand-name">NihonManabu</span>
-=======
             <img [src]="'/assets/img/logo.png'" alt="NihonManabu Logo" class="brand-logo">
->>>>>>> develop
         </div>
 
         <nav class="sidebar-menu">
@@ -16,33 +11,17 @@
             </a>
 
             <a href="javascript:void(0)" class="menu-item" (click)="goToVocabulary()"
-<<<<<<< HEAD
-                [class.active]="checkActive('/vocabulary/levels')">
-                <i class="fas fa-book"></i> <span>Từ vựng</span>
-            </a>
-
-            <a routerLink="/grammar/levels" routerLinkActive="active" class="menu-item">
-=======
                 [class.active]="checkActive('vocabulary')">
                 <i class="fas fa-book"></i> <span>Từ vựng</span>
             </a>
 
             <a href="javascript:void(0)" (click)="goToGrammar()" [class.active]="checkActive('grammar')"
                 class="menu-item">
->>>>>>> develop
                 <i class="fas fa-bullhorn"></i> <span>Ngữ pháp</span>
             </a>
 
             <a href="javascript:void(0)" class="menu-item"><i class="fas fa-route"></i> <span>Lộ trình</span></a>
-<<<<<<< HEAD
-            <!-- sau này thêm phần login vào thì sẽ dụng cách gọi hàm thay vì dùng thẳng route để làm thêm bước xác thực đã login chưa -->
-            <!-- <a href="javascript:void(0)" class="menu-item"><i class="fas fa-chart-line"></i> <span>Ghi nhớ</span></a> -->
-            <a routerLink="/practice" routerLinkActive="active" class="menu-item">
-                <i class="fas fa-chart-line"></i> <span>Ghi nhớ</span>
-            </a>
-=======
             <a href="javascript:void(0)" class="menu-item"><i class="fas fa-chart-line"></i> <span>Ghi nhớ</span></a>
->>>>>>> develop
             <a href="javascript:void(0)" class="menu-item"><i class="fas fa-user-friends"></i> <span>Chủ động</span></a>
             <a href="javascript:void(0)" class="menu-item"><i class="fas fa-headphones"></i> <span>Shadowing</span></a>
             <a href="javascript:void(0)" class="menu-item premium-link"><i class="fas fa-bolt"></i> <span>Nâng
@@ -56,63 +35,29 @@
     </aside>
 
     <main class="app-main-content">
-<<<<<<< HEAD
-        <header class="app-top-navbar d-flex justify-content-end align-items-center px-4 py-3">
-            <div class="navbar-actions d-flex align-items-center gap-3">
-                <button class="nav-icon-btn"><i class="fas fa-trophy"></i></button>
-                <button class="nav-icon-btn"><i class="fas fa-bell"></i></button>
-                <button class="btn btn-sm btn-outline-light px-3 login-btn"><i class="fas fa-sign-in-alt mr-1"></i> Đăng
-                    nhập</button>
-=======
         <header class="app-top-navbar d-flex justify-content-end align-items-center px-4">
             <div class="navbar-actions d-flex align-items-center gap-3">
                 <button class="nav-icon-btn" title="Thành tích"><i class="fas fa-trophy"></i></button>
                 <button class="nav-icon-btn" title="Thông báo"><i class="fas fa-bell"></i></button>
                 <button class="btn btn-sm login-btn"><i class="fas fa-sign-in-alt mr-1"></i> Đăng nhập</button>
->>>>>>> develop
             </div>
         </header>
 
         <section class="content-body">
-<<<<<<< HEAD
-
-            <router-outlet></router-outlet>
-
-        </section>
-
-=======
             <router-outlet></router-outlet>
         </section>
->>>>>>> develop
     </main>
 
 </div>
 <style>
-<<<<<<< HEAD
-    /* Thiết lập bộ khung Flexbox bọc toàn app */
-=======
     /* =========================================================================
    🌐 BỘ KHUNG LAYOUT TỔNG THỂ (FLEXBOX MATRIX)
    ========================================================================= */
->>>>>>> develop
     .app-layout-wrapper {
         display: flex;
         width: 100vw;
         height: 100vh;
         overflow: hidden;
-<<<<<<< HEAD
-        background-color: #0F172A;
-        color: #F1F5F9;
-    }
-
-    /* 🧭 STYLE THANH SIDEBAR BÊN TRÁI */
-    .app-sidebar {
-        width: 240px;
-        height: 100%;
-        background-color: #0B0F19;
-        /* Màu tối sẫm đồng bộ hệ thống */
-        border-right: 1px solid #1E293B;
-=======
         background-color: #0b0f19;
         /* Tối ưu nền sâu thẳm giảm mỏi mắt */
         color: #f1f5f9;
@@ -129,35 +74,12 @@
         background-color: #070a13;
         /* Đậm hơn nền main tạo chiều sâu tách khối rõ ràng */
         border-right: 1px solid rgba(255, 255, 255, 0.04);
->>>>>>> develop
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         flex-shrink: 0;
     }
 
-<<<<<<< HEAD
-    .sidebar-brand {
-        padding: 24px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    }
-
-    .brand-name {
-        font-size: 16px;
-        font-weight: 800;
-        color: #FFFFFF;
-        letter-spacing: 0.5px;
-    }
-
-    .sidebar-menu {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        padding: 16px 12px;
-=======
     /* Khu vực bọc Logo */
     .sidebar-brand {
         height: 80px;
@@ -200,7 +122,6 @@
         gap: 6px;
         /* Tăng khoảng cách giữa các nút */
         padding: 20px 14px;
->>>>>>> develop
         flex-grow: 1;
     }
 
@@ -208,49 +129,6 @@
         display: flex;
         align-items: center;
         gap: 14px;
-<<<<<<< HEAD
-        padding: 12px 16px;
-        color: #94A3B8;
-        font-size: 14px;
-        font-weight: 600;
-        border-radius: 10px;
-        text-decoration: none !important;
-        transition: all 0.2s ease;
-    }
-
-    .menu-item i {
-        width: 18px;
-        font-size: 16px;
-        text-align: center;
-    }
-
-    .menu-item:hover {
-        color: #FFFFFF;
-        background: rgba(255, 255, 255, 0.03);
-    }
-
-    .menu-item.active {
-        color: #FFFFFF;
-        background: #3B82F6;
-    }
-
-    /* Mục Active sáng xanh */
-
-    .premium-link {
-        color: #F59E0B !important;
-    }
-
-    .premium-link:hover {
-        background: rgba(245, 158, 11, 0.1) !important;
-    }
-
-    .sidebar-footer {
-        padding: 12px;
-        border-top: 1px solid rgba(255, 255, 255, 0.03);
-    }
-
-    /* 🖥️ STYLE VÙNG HIỂN THỊ NỘI DUNG BÊN PHẢI */
-=======
         padding: 11px 16px;
         color: #94a3b8;
         font-size: 14px;
@@ -317,21 +195,12 @@
     /* =========================================================================
    🖥️ STYLE VÙNG NỘI DUNG CHÍNH BÊN PHẢI (MAIN APP PLATFORM)
    ========================================================================= */
->>>>>>> develop
     .app-main-content {
         flex-grow: 1;
         height: 100%;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-<<<<<<< HEAD
-    }
-
-    .app-top-navbar {
-        height: 64px;
-        background-color: #0F172A;
-        border-bottom: 1px solid #1E293B;
-=======
         background-color: #0b121f;
     }
 
@@ -340,46 +209,12 @@
         height: 64px;
         background-color: #070a13;
         border-bottom: 1px solid rgba(255, 255, 255, 0.03);
->>>>>>> develop
         flex-shrink: 0;
     }
 
     .nav-icon-btn {
         background: transparent;
         border: none;
-<<<<<<< HEAD
-        color: #94A3B8;
-        font-size: 18px;
-        cursor: pointer;
-        padding: 6px 10px;
-        transition: color 0.2s ease;
-    }
-
-    .nav-icon-btn:hover {
-        color: #FFFFFF;
-    }
-
-    .login-btn {
-        border-color: #334155;
-        color: #CBD5E1;
-        font-weight: 600;
-        border-radius: 8px;
-    }
-
-    .login-btn:hover {
-        background: #3B82F6;
-        border-color: #3B82F6;
-    }
-
-    /* Vùng body chứa bài tập có thanh cuộn dọc tự lập */
-    .content-body {
-        flex-grow: 1;
-        overflow-y: auto;
-        padding: 10px 0;
-    }
-
-    /* Tùy chỉnh thanh cuộn dọc (Scrollbar) siêu mảnh cao cấp */
-=======
         color: #64748b;
         font-size: 16px;
         cursor: pointer;
@@ -424,7 +259,6 @@
     }
 
     /* 🏆 Custom Thanh Cuộn dọc (Scrollbar) High-class */
->>>>>>> develop
     .content-body::-webkit-scrollbar {
         width: 6px;
     }
@@ -434,11 +268,7 @@
     }
 
     .content-body::-webkit-scrollbar-thumb {
-<<<<<<< HEAD
-        background: #1E293B;
-=======
         background: #1e293b;
->>>>>>> develop
         border-radius: 10px;
     }
 
