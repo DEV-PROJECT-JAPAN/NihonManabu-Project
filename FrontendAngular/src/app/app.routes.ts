@@ -79,11 +79,11 @@ export const routes: Routes = [
     // =========================================
     // ROOT
     // =========================================
-    {
-        path: '',
-        redirectTo: 'grammar/levels',
-        pathMatch: 'full'
-    },
+    // {
+    //     path: '',
+    //     redirectTo: 'grammar/levels',
+    //     pathMatch: 'full'
+    // },
 
     // =========================================
     // USER AREA

@@ -18,7 +18,32 @@ var builder = WebApplication.CreateBuilder(args);
 // =========================================================================
 QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "API", Version = "v1" });
+
+    // Cấu hình định dạng bảo mật JWT cho Swagger
+    var securityScheme = new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "JWT Authentication",
+        Description = "Nhập chuỗi token của bạn vào đây dạng: Bearer {your_token}",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Reference = new Microsoft.OpenApi.Models.OpenApiReference
+        {
+            Id = "Bearer",
+            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme
+        }
+    };
+    c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        { securityScheme, Array.Empty<string>() }
+    });
+});
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
 
