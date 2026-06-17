@@ -26,9 +26,9 @@ namespace BackendAPI.Controllers
 
         // 1. API: send-otp
         [HttpPost("send-otp")]
-        public async Task<IActionResult> SendOtp([FromBody] string email)
+        public async Task<IActionResult> SendOtp([FromBody] SendOtpRequest request)
         {
-            if (string.IsNullOrEmpty(email)) return BadRequest("Email không hợp lệ.");
+            if (string.IsNullOrEmpty(request.Email)) return BadRequest (new { message ="Email không hợp lệ." });
 
             try
             {
@@ -45,10 +45,10 @@ namespace BackendAPI.Controllers
                 <p style='color: #666; font-size: 12px;'>Mã này có hiệu lực trong vòng 5 phút. Vui lòng không chia sẻ mã này cho bất kỳ ai.</p>
             </div>";
 
-                await _emailService.SendEmailAsync(email, emailSubject, emailBody);
-                _cache.Set(email, otpCode, TimeSpan.FromMinutes(5));
+                await _emailService.SendEmailAsync(request.Email, emailSubject, emailBody);
+                _cache.Set(request.Email, otpCode, TimeSpan.FromMinutes(5));
 
-                return Ok("Mã OTP đã được gửi đến Gmail của bạn. Hãy kiểm tra hòm thư!");
+                return Ok(new { message ="Mã OTP đã được gửi đến Gmail của bạn. Hãy kiểm tra hòm thư!" });
             }
             catch (Exception ex)
             {
