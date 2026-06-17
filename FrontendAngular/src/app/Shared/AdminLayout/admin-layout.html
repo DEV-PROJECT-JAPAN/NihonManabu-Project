@@ -19,9 +19,18 @@
             </a>
 
             <div class="menu-label">Quản lý nội dung học</div>
-
-
-
+            <a [routerLink]="['/admin/level']" routerLinkActive="active" class="menu-item">
+                <i class="fas fa-layer-group"></i>
+                <span>Quản lý Cấp độ</span>
+            </a>
+            <a [routerLink]="['/admin/lesson']" routerLinkActive="active" class="menu-item">
+                <i class="fas fa-book-open"></i>
+                <span>Quản lý Bài học</span>
+            </a>
+            <a [routerLink]="['/admin/vocabulary']" routerLinkActive="active" class="menu-item">
+                <i class="fas fa-language"></i>
+                <span>Quản lý Từ vựng</span>
+            </a>
 
             <a href="javascript:void(0)" (click)="goToGrammar()" [class.active]="checkActive('admin/grammar')"
                 class="menu-item">
@@ -38,19 +47,6 @@
             </a>
 
             <div class="menu-label">Người dùng & Hệ thống</div>
-
-            <a [routerLink]="['/admin/level']" routerLinkActive="active" class="menu-item">
-                <i class="fas fa-layer-group"></i>
-                <span>Quản lý Cấp độ</span>
-            </a>
-            <a [routerLink]="['/admin/lesson']" routerLinkActive="active" class="menu-item">
-                <i class="fas fa-book-open"></i>
-                <span>Quản lý Bài học</span>
-            </a>
-            <a [routerLink]="['/admin/vocabulary']" routerLinkActive="active" class="menu-item">
-                <i class="fas fa-language"></i>
-                <span>Quản lý Từ vựng</span>
-            </a>
 
             <a [routerLink]="['/admin/users']" routerLinkActive="active" class="menu-item">
                 <div class="menu-icon-wrapper"><i class="fas fa-users-cog"></i></div>
