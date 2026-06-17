@@ -26,7 +26,7 @@ namespace BackendAPI.Controllers
         //lấy danh sách từ vựng của user đã học
         //chạy ổn
         [HttpGet("practice-system")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetVocabularySystemAsync()
         {
             // 1. Lấy ID người dùng từ trạm trung chuyển (Bây giờ ra 1, sau này ra ID thật)
@@ -64,7 +64,7 @@ namespace BackendAPI.Controllers
         // Tải file excel lên để nạp từ vựng vào flashcard list của user
         //chạy ổn
         [HttpPost("upload-folder-excel")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> UploadFolderExcel([FromForm] UploadFolderRequestDTO request)
         {
             if (request.File == null || request.File.Length == 0)

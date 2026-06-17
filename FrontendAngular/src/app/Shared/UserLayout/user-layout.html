@@ -6,15 +6,7 @@
                 <span class="brand-name">NihonManabu</span>
             </a>
         </div>
-
         <nav class="sidebar-menu">
-            <a routerLink="/grammar/levels"
-               routerLinkActive="active"
-               class="menu-item">
-                <i class="fas fa-chess-knight"></i>
-                <span>Hiển thị</span>
-            </a>
-
             <a href="javascript:void(0)"
                class="menu-item"
                (click)="goToVocabulary()"
@@ -22,19 +14,19 @@
                 <i class="fas fa-book"></i>
                 <span>Từ vựng</span>
             </a>
-
+            
             <a routerLink="/grammar/levels"
                routerLinkActive="active"
                class="menu-item">
                 <i class="fas fa-bullhorn"></i>
                 <span>Ngữ pháp</span>
             </a>
-
+            
             <a href="javascript:void(0)" class="menu-item">
                 <i class="fas fa-route"></i>
                 <span>Lộ trình</span>
             </a>
-            
+        
             <a routerLink="/practice" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-chart-line"></i>
                 <span>Ghi nhớ</span>
@@ -49,8 +41,8 @@
                 <i class="fas fa-headphones"></i>
                 <span>Shadowing</span>
             </a>
-            
-            <a href="javascript:void(0)" class="menu-item premium-link">
+
+            <a routerLink="upgradeACC" routerLinkActive="active" class="menu-item premium-link">
                 <i class="fas fa-bolt"></i>
                 <span>Nâng cấp</span>
             </a>
@@ -89,7 +81,7 @@
                                 </div>
                                 <hr class="dropdown-divider">
                                 
-                               <a [routerLink]="['/auth/profile']" class="dropdown-item" (click)="isDropdownOpen = false">
+                                <a [routerLink]="['/auth/profile']" class="dropdown-item" (click)="isDropdownOpen = false">
                                     <i class="fas fa-id-card me-2"></i> Hồ sơ cá nhân
                                 </a>
                                 
@@ -100,10 +92,8 @@
                         }
                     </div>
                 } @else {
-                    <button class="btn btn-sm btn-outline-light px-3 login-btn"
-                            routerLink="auth/login">
-                        <i class="fas fa-sign-in-alt me-1"></i>
-                        Đăng nhập
+                    <button class="btn btn-sm btn-outline-light px-3 login-btn" routerLink="auth/login">
+                        <i class="fas fa-sign-in-alt me-1"></i> Đăng nhập
                     </button>
                 }
             </div>
@@ -117,7 +107,6 @@
 </div>
 
 <style>
-    /* Phần Style CSS của bạn bên dưới giữ nguyên vẹn 100% */
     .app-layout-wrapper {
         display: flex;
         width: 100vw;
@@ -216,26 +205,45 @@
     .nav-icon-btn:hover {
         color: #FFFFFF;
     }
-    .login-btn {
-        border-color: #334155;
+    
+    /* DROPDOWN AVATAR STYLES */
+    .profile-dropdown-wrapper {
+        position: relative;
+    }
+    .avatar-toggle-btn {
+        background: transparent;
+        border: none;
         color: #CBD5E1;
-        font-weight: 600;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 6px;
+    }
+    .avatar-toggle-btn i.fa-user-circle {
+        font-size: 24px;
+    }
+    .arrow-icon {
+        font-size: 11px;
+        transition: transform 0.2s ease;
+    }
+    .arrow-icon.rotated {
+        transform: rotate(180deg);
+    }
+    .profile-mini-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 8px;
+        width: 200px;
+        background-color: #1E293B;
+        border: 1px solid #334155;
         border-radius: 8px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        padding: 6px 0;
     }
-    .login-btn:hover {
-        background: #3B82F6;
-        border-color: #3B82F6;
+    .dropdown-header {
+        padding: 8px 16px;
+        font-size: 13px;
     }
-    .content-body {
-        flex-grow: 1;
-        overflow-y: auto;
-        padding: 10px 0;
-    }
-    .content-body::-webkit-scrollbar {
-        width: 6px;
-    }
-    .content-body::-webkit-scrollbar-thumb {
-        background: #1E293B;
-        border-radius: 10px;
-    }
-</style>
+    .dropdown-divider

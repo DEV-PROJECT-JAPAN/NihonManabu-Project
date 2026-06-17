@@ -1,108 +1,295 @@
 import { Routes } from '@angular/router';
 
+// ==========================
+// LAYOUTS
+// ==========================
 import { UserLayoutComponent } from './Shared/UserLayout/user-layout';
 import { AdminLayoutComponent } from './Shared/AdminLayout/admin-layout';
 
-// USER COMPONENTS (Học viên)
-import { levelsGrammar } from './Features/Grammar/levelsGrammar/levelsGrammar'; 
+// ==========================
+// USER - GRAMMAR
+// ==========================
+import { levelsGrammar } from './Features/Grammar/levelsGrammar/levelsGrammar';
 import { lessonsGrammar } from './Features/Grammar/lessonsGrammar/lessonsGrammar';
 import { GrammarList } from './Features/Grammar/grammar/grammar';
 import { Questions } from './Features/Grammar/questions/questions';
 
-//Auth
+// ==========================
+// USER - VOCABULARY
+// ==========================
+import { LevelsComponent as VocabLevels } from './Features/Vocabulary/levels/levels';
+import { LessonsComponent } from './Features/Vocabulary/lessons/lessons';
+import { VocabularyComponent } from './Features/Vocabulary/vocabulary/vocabulary';
+
+// ==========================
+// USER - AUTH & PROFILE
+// ==========================
 import { Login } from './Feature/Auth/login/login';
 import { RegisterComponent } from './Feature/Auth/register/register';
 import { ProfileComponent } from './Feature/Auth/profile/profile';
 
-import { LevelsComponent as VocabLevels } from './Features/Vocabulary/levels/levels';
-import { LessonsComponent, LessonsComponent as VocabLessions } from './Features/Vocabulary/lessons/lessons';
-
+// ==========================
+// USER - PRACTICE & PAYMENT
+// ==========================
 import { PracticeMain } from './Features/Practice/practice-main/practice-main';
+import { PaymentComponent } from './Features/payment/payment';
 
-import { VocabularyComponent } from './Features/Vocabulary/vocabulary/vocabulary';
+// ==========================
+// ADMIN - GRAMMAR
+// ==========================
 import { GrammarListAdmin } from './Features/Admin/GrammarAdmin/GrammarListAdmin/GrammarListAdmin';
+import { GrammarCreate } from './Features/Admin/GrammarAdmin/GrammarCreate/GrammarCreate';
+import { GrammarEdit } from './Features/Admin/GrammarAdmin/GrammarEdit/GrammarEdit';
+
+// ==========================
+// ADMIN - QUESTION
+// ==========================
+import { QuestionList } from './Features/Admin/QuestionAdmin/QuestionList/QuestionList';
+import { QuestionCreate } from './Features/Admin/QuestionAdmin/QuestionCreate/QuestionCreate';
+import { QuestionEdit } from './Features/Admin/QuestionAdmin/QuestionEdit/QuestionEdit';
+
+// ==========================
+// ADMIN - LEVEL
+// ==========================
+import { LevelIndexComponent } from './Features/Admin/LevelAdmin/index';
+import { LevelCreateComponent } from './Features/Admin/LevelAdmin/create/create';
+import { LevelEditComponent } from './Features/Admin/LevelAdmin/edit/edit';
+
+// ==========================
+// ADMIN - LESSON
+// ==========================
+import { LessonIndexComponent } from './Features/Admin/LessonAdmin/index';
+import { LessonCreateComponent } from './Features/Admin/LessonAdmin/create/create';
+import { LessonEditComponent } from './Features/Admin/LessonAdmin/edit/edit';
+
+// ==========================
+// ADMIN - VOCABULARY
+// ==========================
+import { VocabularyIndexComponent } from './Features/Admin/VocabularyAdmin/index';
+import { VocabularyCreateComponent } from './Features/Admin/VocabularyAdmin/create/create';
+import { VocabularyEditComponent } from './Features/Admin/VocabularyAdmin/edit/edit';
 
 export const routes: Routes = [
-    // 0. Vừa vào web không gõ gì -> Tự động đá sang trang levels của học viên
-    { path: '', redirectTo: 'grammar/levels', pathMatch: 'full' },
-
-    // =========================================================================
-    // 🧭 PHÂN HỆ 1: TẤT CẢ TRANG CỦA NGƯỜI DÙNG (ĂN THEO USER LAYOUT)
-    // =========================================================================
+    // =========================================
+    // ROOT
+    // =========================================
     {
         path: '',
-        component: UserLayoutComponent, // ◄ Bọc toàn bộ giao diện học viên
-        children: [
-            // ✨ Đã chuyển ra đây: Cùng cấp với vocabulary, grammar, practice
-            { path: 'auth/profile', component: ProfileComponent }, // URL chuẩn: /auth/profile
+        redirectTo: 'grammar/levels',
+        pathMatch: 'full'
+    },
 
+    // =========================================
+    // USER AREA
+    // =========================================
+    {
+        path: '',
+        component: UserLayoutComponent,
+        children: [
+            // ✨ Profile cá nhân của người dùng nằm trong User Layout
+            {
+                path: 'auth/profile',
+                component: ProfileComponent
+            },
+
+            // ---------- Vocabulary ----------
             {
                 path: 'vocabulary',
                 children: [
-                    // 🎯 Đã dọn dẹp profile lỗi ở vị trí này
-                    { path: 'levels', component: VocabLevels },                          // /vocabulary/levels
-                    { path: 'lessons/:id', component: LessonsComponent },                 // /vocabulary/lessons/:id
-                    { path: 'list/:levelId/:lessonId', component: VocabularyComponent }   // /vocabulary/list/:levelId/:lessonId
+                    {
+                        path: '',
+                        redirectTo: 'levels',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'levels',
+                        component: VocabLevels
+                    },
+                    {
+                        path: 'lessons/:id',
+                        component: LessonsComponent
+                    },
+                    {
+                        path: 'list/:levelId/:lessonId',
+                        component: VocabularyComponent
+                    }
                 ]
             },
 
-            // ⛩️ ROUTES NGỮ PHÁP (GRAMMAR)
+            // ---------- Grammar ----------
             {
                 path: 'grammar',
                 children: [
-                    { path: 'levels', component: levelsGrammar },
-                    { path: 'level/:levelId', component: lessonsGrammar },
-                    { path: 'level/:levelId/lesson/:lessonId', component: GrammarList },
-                    { path: 'level/:levelId/lesson/:lessonId/grammar/:grammarId', component: Questions }
+                    {
+                        path: '',
+                        redirectTo: 'levels',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'levels',
+                        component: levelsGrammar
+                    },
+                    {
+                        path: 'level/:levelId',
+                        component: lessonsGrammar
+                    },
+                    {
+                        path: 'level/:levelId/lesson/:lessonId',
+                        component: GrammarList
+                    },
+                    {
+                        path: 'level/:levelId/lesson/:lessonId/grammar/:grammarId',
+                        component: Questions
+                    }
                 ]
             },
 
-            // 🚀 ROUTE MỚI CHO PRACTICE (GHI NHỚ)
+            // ---------- Practice ----------
             {
                 path: 'practice', 
                 component: PracticeMain
+            },
+
+            // ---------- Upgrade Account (Payment) ----------
+            {
+                path: 'upgradeACC',
+                component: PaymentComponent
             }
         ]
     },
-    
-    // =========================================================================
-    // 🔐 AUTH ĐỘC LẬP (KHÔNG DÙNG SIDEBAR/NAVBAR CỦA USER)
-    // =========================================================================
+
+    // =========================================
+    // AUTH AREA (ĐỘC LẬP - KHÔNG ĂN THEO LAYOUT CHUNG)
+    // =========================================
     {
         path: 'auth',
         children: [
-            { path: 'login', component: Login },
-            { path: 'register', component: RegisterComponent },
-        ]
-    },
-
-    // =========================================================================
-    // 🧭 PHÂN HỆ 2: TẤT CẢ TRANG QUẢN TRỊ (ĂN THEO ADMIN LAYOUT CYBERPUNK)
-    // =========================================================================
-    {
-        path: 'admin',
-        component: AdminLayoutComponent, 
-        children: [
-            { path: '', redirectTo: 'grammar', pathMatch: 'full' },
             {
-                path: 'grammarAdmin',
-                children: [
-                    { path: 'grammarIndex', component: GrammarListAdmin },
-                ]
+                path: 'login',
+                component: Login
             },
             {
-                path: 'lesson',
-                children: []
-            },
-            {
-                path: 'vocabulary',
-                children: []
+                path: 'register',
+                component: RegisterComponent
             }
         ]
     },
 
-    // =========================================================================
-    // 🚨 CẢNH SÁT GIAO THÔNG (Xử lý URL sai cấu trúc)
-    // =========================================================================
-    { path: '**', redirectTo: 'grammar/levels' }   
+    // =========================================
+    // ADMIN AREA
+    // =========================================
+    {
+        path: 'admin',
+        component: AdminLayoutComponent,
+        children: [
+            {
+                path: '',
+                redirectTo: 'grammar',
+                pathMatch: 'full'
+            },
+
+            // ---------- Admin Grammar ----------
+            {
+                path: 'grammar',
+                children: [
+                    {
+                        path: '',
+                        component: GrammarListAdmin
+                    },
+                    {
+                        path: 'create',
+                        component: GrammarCreate
+                    },
+                    {
+                        path: 'edit/:id',
+                        component: GrammarEdit
+                    }
+                ]
+            },
+
+            // ---------- Admin Question ----------
+            {
+                path: 'question',
+                children: [
+                    {
+                        path: '',
+                        component: QuestionList
+                    },
+                    {
+                        path: 'create',
+                        component: QuestionCreate
+                    },
+                    {
+                        path: 'edit/:id',
+                        component: QuestionEdit
+                    }
+                ]
+            },
+
+            // ---------- Admin Level ----------
+            {
+                path: 'level',
+                children: [
+                    {
+                        path: '',
+                        component: LevelIndexComponent
+                    },
+                    {
+                        path: 'create',
+                        component: LevelCreateComponent
+                    },
+                    {
+                        path: 'edit/:id',
+                        component: LevelEditComponent
+                    }
+                ]
+            },
+
+            // ---------- Admin Lesson ----------
+            {
+                path: 'lesson',
+                children: [
+                    {
+                        path: '',
+                        component: LessonIndexComponent
+                    },
+                    {
+                        path: 'create',
+                        component: LessonCreateComponent
+                    },
+                    {
+                        path: 'edit/:id',
+                        component: LessonEditComponent
+                    }
+                ]
+            },
+
+            // ---------- Admin Vocabulary ----------
+            {
+                path: 'vocabulary',
+                children: [
+                    {
+                        path: '',
+                        component: VocabularyIndexComponent
+                    },
+                    {
+                        path: 'create',
+                        component: VocabularyCreateComponent
+                    },
+                    {
+                        path: 'edit/:id',
+                        component: VocabularyEditComponent
+                    }
+                ]
+            }
+        ]
+    },
+
+    // =========================================
+    // CẢNH SÁT GIAO THÔNG (NOT FOUND REDIRECT)
+    // =========================================
+    {
+        path: '**',
+        redirectTo: 'grammar/levels'
+    }
 ];

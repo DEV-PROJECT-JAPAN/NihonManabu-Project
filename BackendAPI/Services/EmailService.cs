@@ -10,6 +10,8 @@ namespace BackendAPI.Services
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
             var email = new MimeMessage();
+
+            // Thiết lập phong bì thư MimeMessage (của MailKit/MimeKit)
             email.From.Add(new MailboxAddress("NihonManabu System", "dnam2886@gmail.com"));
             email.To.Add(MailboxAddress.Parse(toEmail));
             email.Subject = subject;
@@ -17,17 +19,17 @@ namespace BackendAPI.Services
             var builder = new BodyBuilder { HtmlBody = body };
             email.Body = builder.ToMessageBody();
 
-            // CHỈ DÙNG 1 KHỐI USING Ở ĐÂY
+            // Sử dụng MailKit SmtpClient
             using var smtp = new SmtpClient();
             try
             {
-                // 1. Kết nối
+                // 1. Kết nối tới Server SMTP của Gmail
                 await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
 
-                // 2. Đăng nhập
+                // 2. ĐĂNG NHẬP: Dùng email và mật khẩu ứng dụng xịn
                 await smtp.AuthenticateAsync("dnam2886@gmail.com", "ozob xwsy ybts lsbp");
 
-                // 3. Gửi
+                // 3. Gửi email đi
                 await smtp.SendAsync(email);
             }
             catch (Exception ex)
@@ -36,7 +38,7 @@ namespace BackendAPI.Services
             }
             finally
             {
-                // 4. Ngắt kết nối
+                // 4. Ngắt kết nối an toàn
                 await smtp.DisconnectAsync(true);
             }
         }
