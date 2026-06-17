@@ -22,12 +22,17 @@ namespace BackendAPI.Controllers
         [HttpGet("dashboard")]
         public async Task<IActionResult> GetDashboard()
         {
-            var totalUsers = await _adminService.GetTotalUsers();
-
-            return Ok(new
+            try
             {
-                TotalUsers = totalUsers
-            });
+                var totalUsers = await _adminService.GetTotalUsers();
+                return Ok(new { totalUsers = totalUsers }); // Sửa chữ t thường ở đây luôn nhé!
+            }
+            catch (Exception ex)
+            {
+                // In lỗi chi tiết ra màn hình Console của Backend để dễ Debug
+                Console.WriteLine($"[Dashboard Error]: {ex.Message}");
+                return StatusCode(500, $"Lỗi server: {ex.Message}");
+            }
         }
 
         // =========================

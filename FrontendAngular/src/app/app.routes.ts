@@ -35,6 +35,12 @@ import { PracticeMain } from './Features/Practice/practice-main/practice-main';
 import { PaymentComponent } from './Features/payment/payment';
 
 // ==========================
+// ADMIN - DASHBOARD & GUARDS
+// ==========================
+import { AdminDashboardComponent } from './Features/Admin/User-admin/admin-dashboard/admin-dashboard'; // ◄ Thêm Import Dashboard
+import { adminGuard } from './Core/Guard/adminGuard'; // ◄ Thêm Import Guard (Chỉnh lại path nếu file guard nằm ở thư mục khác)
+
+// ==========================
 // ADMIN - GRAMMAR
 // ==========================
 import { GrammarListAdmin } from './Features/Admin/GrammarAdmin/GrammarListAdmin/GrammarListAdmin';
@@ -181,11 +187,19 @@ export const routes: Routes = [
     {
         path: 'admin',
         component: AdminLayoutComponent,
+        canActivate: [adminGuard], // ◄ Gắn Guard ở đây để bảo vệ TOÀN BỘ các trang admin con
         children: [
+            // Khi vào đường dẫn /admin, hệ thống sẽ tự chuyển hướng vào trang dashboard quản trị mới
             {
                 path: '',
-                redirectTo: 'grammar',
+                redirectTo: 'dashboard', 
                 pathMatch: 'full'
+            },
+
+            // ---------- Admin Dashboard ----------
+            {
+                path: 'dashboard',
+                component: AdminDashboardComponent // ◄ Thêm Route Dashboard quản trị (`/admin/dashboard`)
             },
 
             // ---------- Admin Grammar ----------

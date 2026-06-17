@@ -1,8 +1,5 @@
 <div class="app-layout-wrapper">
 
-    <!-- ========================================= -->
-    <!-- SIDEBAR NAVIGATION -->
-    <!-- ========================================= -->
     <aside class="app-sidebar">
         <div class="sidebar-brand">
             <a routerLink="/" style="text-decoration: none; display: flex; align-items: center;">
@@ -11,7 +8,6 @@
         </div>
         
         <nav class="sidebar-menu">
-            <!-- Từ vựng -->
             <a routerLink="/vocabulary/levels"
                routerLinkActive="active"
                class="menu-item"
@@ -21,7 +17,6 @@
                 <span>Từ vựng</span>
             </a>
             
-            <!-- Ngữ pháp -->
             <a routerLink="/grammar/levels"
                routerLinkActive="active"
                class="menu-item">
@@ -29,35 +24,39 @@
                 <span>Ngữ pháp</span>
             </a>
             
-            <!-- Lộ trình -->
             <a routerLink="/pathway" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-route"></i>
                 <span>Lộ trình</span>
             </a>
         
-            <!-- Ghi nhớ / Practice -->
             <a routerLink="/practice" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-chart-line"></i>
                 <span>Ghi nhớ</span>
             </a>
             
-            <!-- Chủ động -->
             <a routerLink="/active-learning" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-user-friends"></i>
                 <span>Chủ động</span>
             </a>
             
-            <!-- Shadowing -->
             <a routerLink="/shadowing" routerLinkActive="active" class="menu-item">
                 <i class="fas fa-headphones"></i>
                 <span>Shadowing</span>
             </a>
 
-            <!-- Nâng cấp tài khoản -->
-            <a routerLink="/upgradeACC" routerLinkActive="active" class="menu-item premium-link">
-                <i class="fas fa-bolt"></i>
-                <span>Nâng cấp</span>
-            </a>
+            @if (authService.isAdmin()) {
+                <a routerLink="/admin/dashboard" routerLinkActive="active" class="menu-item admin-link">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Trang quản trị</span>
+                </a>
+            }
+
+            @if (!authService.isAdmin()) {
+                <a routerLink="/upgradeACC" routerLinkActive="active" class="menu-item premium-link">
+                    <i class="fas fa-bolt"></i>
+                    <span>Nâng cấp</span>
+                </a>
+            }
         </nav>
 
         <div class="sidebar-footer">
@@ -68,23 +67,18 @@
         </div>
     </aside>
 
-    <!-- ========================================= -->
-    <!-- MAIN CONTENT AREA -->
-    <!-- ========================================= -->
     <main class="app-main-content">
-        <!-- TOP NAVBAR -->
         <header class="app-top-navbar d-flex justify-content-end align-items-center px-4 py-3">
             <div class="navbar-actions d-flex align-items-center gap-3">
                 <button class="nav-icon-btn"><i class="fas fa-trophy"></i></button>
                 <button class="nav-icon-btn"><i class="fas fa-bell"></i></button>
                 
-                <!-- USER LOGGED IN -->
                 @if (authService.currentUser()) {
                     <div class="profile-dropdown-wrapper">
                         <button class="avatar-toggle-btn" (click)="toggleDropdown($event)">
                             <i class="fas fa-user-circle"></i>
                             <span class="ms-2 d-none d-md-inline" style="font-size: 13px; font-weight: 600;">
-                                {{ authService.currentUser()?.role }}
+                                {{ authService.isAdmin() ? 'Quản trị viên' : 'Học viên' }}
                             </span>
                             <i class="fas fa-chevron-down ms-1 arrow-icon" [class.rotated]="isDropdownOpen"></i>
                         </button>
@@ -109,7 +103,6 @@
                         }
                     </div>
                 } @else {
-                    <!-- GUEST LOGIN BUTTON -->
                     <button class="btn btn-sm btn-outline-light px-3 login-btn" routerLink="/auth/login">
                         <i class="fas fa-sign-in-alt me-1"></i> Đăng nhập
                     </button>
@@ -117,7 +110,6 @@
             </div>
         </header>
 
-        <!-- ROUTER OUTLET -->
         <section class="content-body">
             <router-outlet></router-outlet>
         </section>
@@ -125,9 +117,6 @@
 
 </div>
 
-<!-- ========================================= -->
-<!-- COMPONENT STYLES -->
-<!-- ========================================= -->
 <style>
     .app-layout-wrapper {
         display: flex;
@@ -192,6 +181,16 @@
         color: #FFFFFF;
         background: #3B82F6;
     }
+    
+    /* 🛠️ THÊM STYLE: Màu sắc nhận diện nổi bật cho vùng quản trị */
+    .admin-link {
+        color: #10B981 !important;
+    }
+    .admin-link:hover, .admin-link.active {
+        background: rgba(16, 185, 129, 0.1) !important;
+        color: #10B981 !important;
+    }
+
     .premium-link {
         color: #F59E0B !important;
     }
@@ -268,7 +267,6 @@
         padding: 8px 16px;
         font-size: 13px;
     }
-    /* Đã sửa lỗi đứt đoạn ở class divider */
     .dropdown-divider {
         margin: 6px 0;
         border-top: 1px solid #334155;

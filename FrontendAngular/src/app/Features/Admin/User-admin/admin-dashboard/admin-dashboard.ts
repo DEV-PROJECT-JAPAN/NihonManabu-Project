@@ -1,10 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminService, DashboardData } from '../Core/Services/admin-service';
+import { AdminService, DashboardData } from '../../../../Core/Services/admin-service';
+import { Observable } from 'rxjs';
+import { User } from '../../../../Core/Services/admin-service';
+import { ChangeRoleDto } from '../../../../Core/Services/admin-service';
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: 'app-admin-dashboard',
-  templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.css']
+  standalone: true,                    
+  imports: [CommonModule],
+  templateUrl: './admin-dashboard.html', 
+  styleUrls: ['./admin-dashboard.css']  
 })
 export class AdminDashboardComponent implements OnInit {
   dashboardData: DashboardData | null = null;
@@ -15,6 +21,7 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.adminService.getDashboard().subscribe({
       next: (data) => {
+        console.log('Dữ liệu API trả về thực tế:', data);
         this.dashboardData = data;
         this.isLoading = false;
       },

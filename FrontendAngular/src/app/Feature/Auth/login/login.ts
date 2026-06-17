@@ -30,35 +30,42 @@ export class Login {
   onLogin() {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      this.message = ''; // Reset thông báo cũ nếu có
+      this.message = ''; 
 
-      // 1. Gọi API Login để lấy và lưu Token
-      this.authService.login(this.loginForm.value).subscribe({
-        next: (res) => {
-          console.log('Đăng nhập thành công! Đang tiến hành nạp dữ liệu hồ sơ...');
+      const loginPayload = this.loginForm.value;
 
-          // 🚀 2. GỌI NGAY API Profile để cập nhật Signal currentUser hệ thống
-          this.authService.getProfile().subscribe({
-            next: (userProfile) => {
-              console.log('Đã đồng bộ thông tin user vào Signal:', userProfile);
-              this.isLoading = false;
-              
-              // 3. Signal đã có dữ liệu -> Chuyển hướng an toàn về trang chủ, navbar sẽ đổi trạng thái ngay lập tức
-              this.router.navigate(['/']);
-            },
-            error: (profileErr) => {
-              console.error('Lỗi khi tải profile sau đăng nhập:', profileErr);
-              this.isLoading = false;
-              
-              // Nếu không lấy được profile do lỗi mạng/hệ thống, vẫn cho về trang chủ để xử lý tiếp
-              this.router.navigate(['/']);
+      // Ép kiểu 'res: any' để TypeScript không báo đỏ thuộc tính
+      this.authService.login(loginPayload).subscribe({
+        next: (res: any) => { 
+          console.log('Đăng nhập thành công, hệ thống tự động xử lý token...');
+
+          // Trì hoãn nhẹ 100ms để đảm bảo bộ nhớ localStorage đã ổn định hoàn toàn
+          setTimeout(() => {
+            this.isLoading = false;
+
+            // Tiến hành kiểm tra quyền Admin và điều hướng trang công việc
+            if (this.authService.isAdmin()) {
+              this.router.navigate(['/admin/dashboard']); 
+            } else {
+              this.router.navigate(['/grammar/levels']);
             }
-          });
+
+            // Đồng bộ dữ liệu Profile chạy ngầm
+            this.authService.getProfile().subscribe({
+              next: (userProfile) => {
+                console.log('Đã cập nhật xong dữ liệu Signal ngầm:', userProfile);
+              },
+              error: (profileErr) => {
+                console.error('Lỗi khi tải profile chạy ngầm:', profileErr);
+              }
+            });
+          }, 100); 
         },
         error: (err) => {
           console.error('Lỗi đăng nhập:', err);
           this.isLoading = false;
           this.message = 'Email hoặc mật khẩu không chính xác!';
+          alert('Đăng nhập thất bại! Vui lòng kiểm tra lại tài khoản, mật khẩu.');
         }
       });
     }
