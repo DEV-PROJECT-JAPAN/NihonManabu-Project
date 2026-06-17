@@ -1,0 +1,63 @@
+<div class="vip-container">
+  <h1 class="vip-title"><i class="fas fa-crown" style="color: #ff823a;"></i>VIP</h1>
+  <p class="vip-subtitle">Mở khóa sức mạnh tối đa - Ghi nhớ từ vựng không giới hạn</p>
+
+  <div class="perks-grid">
+      <div class="perk-card">
+          <i class="fas fa-infinity"></i>
+          <h4>Không giới hạn</h4>
+          <p>Thêm vô số từ vựng vào Flashcard cá nhân từ file Excel mà không gặp bất kỳ rào cản nào.</p>
+      </div>
+      <div class="perk-card">
+          <i class="fas fa-bolt"></i>
+          <h4>Ưu tiên Gacha</h4>
+          <p>Hệ thống trộn bài tốc độ cao, không có quảng cáo làm phiền luồng tập trung của bạn.</p>
+      </div>
+      <div class="perk-card">
+          <i class="fas fa-medal"></i>
+          <h4>Huy hiệu độc quyền</h4>
+          <p>Sở hữu huy hiệu VIP vàng óng ánh sát bên tên tài khoản, thể hiện đẳng cấp người học chăm chỉ.</p>
+      </div>
+  </div>
+
+  <div class="price-box">
+      @if (currentRole === 'VIP' || currentRole === 'Admin') {
+          <h2 style="color: #22c55e;"><i class="fas fa-check-circle"></i> CHÀO MỪNG ĐẶC QUYỀN</h2>
+          <p>Tài khoản của bạn đang sở hữu đặc quyền {{ currentRole }}. Chúc bạn học tập hiệu quả!</p>
+      } @else {
+          <div style="font-size: 1.2rem; color: #cbd5e1;">Chỉ với</div>
+          <div class="price-amount">50.000đ <span style="font-size: 1rem; color: #94a3b8;">/ tháng</span></div>
+
+          @if (!isLoading && !isQrVisible) {
+            <button class="btn-upgrade" (click)="requestVipQr()">
+                <i class="fas fa-rocket"></i> NÂNG CẤP NGAY
+            </button>
+          }
+
+          @if (isLoading) {
+            <div class="loading-spinner" style="display: block;">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                <p>Đang tạo mã thanh toán an toàn...</p>
+            </div>
+          }
+      }
+  </div>
+
+  @if (isQrVisible && currentRole === 'User') {
+    <div id="qr-section" style="display: block;">
+        <h3 style="color: #0dcaf0; margin-bottom: 15px;">Quét mã QR để thanh toán</h3>
+        <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 20px;">
+            Mã QR đã chứa sẵn Số tiền và Nội dung chuyển khoản. Vui lòng <b>KHÔNG sửa nội dung</b>.
+        </p>
+
+        <img id="qr-image" [src]="qrUrl" alt="Mã VietQR" />
+
+        <div style="margin-top: 25px; padding: 15px; background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; border-radius: 8px; text-align: left;">
+            <p style="margin: 0; color: #cbd5e1; font-size: 0.95rem;">
+                <i class="fas fa-info-circle" style="color: #22c55e;"></i>
+                Sau khi chuyển khoản thành công, hệ thống sẽ tự động xác nhận và cấp quyền VIP cho tài khoản <b>{{ userName }}</b> trong vòng 1-3 phút.
+            </p>
+        </div>
+    </div>
+  }
+</div>

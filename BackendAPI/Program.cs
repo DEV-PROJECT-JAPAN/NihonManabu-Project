@@ -1,10 +1,8 @@
 ﻿using BackendAPI.DTOs;
 using BackendAPI.Interfaces;
 using BackendAPI.Models.Data;
-<<<<<<< HEAD
 using BackendAPI.DTOs;
-=======
->>>>>>> feature/login
+
 using BackendAPI.Models;
 using BackendAPI.Services;
 using DocumentFormat.OpenXml.EMMA;
@@ -32,20 +30,16 @@ builder.Services.AddControllers()
 // Chấp cánh cho Service đọc được thông tin Request từ Client gửi lên
 builder.Services.AddHttpContextAccessor();
 
-<<<<<<< HEAD
 
-=======
->>>>>>> feature/login
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IVocabularyService, VocabularyService>();
 builder.Services.AddScoped<IPracticeService, PracticeService>();
 builder.Services.AddScoped<IUserService, UserService>();
-<<<<<<< HEAD
+
 builder.Services.AddScoped<IGrammarService<MyGrammar>, GrammarService<MyGrammar>>();
-=======
->>>>>>> feature/login
+
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -71,12 +65,11 @@ builder.Services.AddDbContext<JapaneseDbContext>(options =>
 // =========================================================================
 builder.Services.AddScoped<ILevelService, LevelService>();
 builder.Services.AddScoped<ILessonService, LessonService>();
-<<<<<<< HEAD
 builder.Services.AddScoped<IPracticeService, PracticeService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IPaymentWebhookService, PaymentWebhookService>();
+builder.Services.AddScoped<VipExpirationBackgroundService>();
 
-
-=======
->>>>>>> feature/login
 
 
 ////DTO
@@ -85,10 +78,8 @@ builder.Services.AddScoped<IGrammarService<GrammarDTO>, GrammarService<GrammarDT
 
 
 // Đăng ký Service dành cho Admin model gốc, để phục vụ cho các tác vụ quản trị (CRUD) mà không cần phải qua lớp DTO trung gian
-<<<<<<< HEAD
 builder.Services.AddScoped<IGrammarService<MyGrammar>, GrammarService<MyGrammar>>();
-=======
->>>>>>> feature/login
+
 builder.Services.AddScoped(typeof(IQuestionAdminService<>), typeof(QuestionAdminService<>));
 // =========================================================================
 // 4. XÂY DỰNG VÀ CẤU HÌNH PIPELINE XỬ LÝ REQUEST (MIDDLEWARES)
@@ -119,11 +110,4 @@ app.UseCors("AllowAngular");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-<<<<<<< HEAD
-app.UseCors("AllowAngular");
-app.MapControllers();
-
-=======
->>>>>>> feature/login
-// Kích hoạt nổ máy, đưa Server vào trạng thái lắng nghe mạng
 app.Run();
