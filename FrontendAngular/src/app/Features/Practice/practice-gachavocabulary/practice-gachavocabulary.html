@@ -20,12 +20,12 @@
             </div>
 
             <div class="flip-card-back">
-              <button class="audio-btn" (click)="playAudio($event, vocab.hiragana || vocab.kanji || '')">
+              <button class="audio-btn" (click)="playAudio($event, $any(vocab).hiragana || $any(vocab).kanji || '')">
                 <i class="fas fa-volume-up"></i>
               </button>
-              <div class="card-kanji">{{ vocab.kanji }}</div>
-              <div class="card-hiragana">{{ vocab.hiragana }}</div>
-              <div class="card-meaning">{{ vocab.meaning }}</div>
+              <div class="card-kanji">{{ $any(vocab).kanji }}</div>
+              <div class="card-hiragana">{{ $any(vocab).hiragana }}</div>
+              <div class="card-meaning">{{ $any(vocab).meaning }}</div>
             </div>
 
           </div>

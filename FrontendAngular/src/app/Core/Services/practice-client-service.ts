@@ -27,8 +27,8 @@ export class PracticeClientService extends BaseService{
   }
 
   // Lấy từ vựng trong 1 thư mục cụ thể
-  getFolderVocab(folderId: number): Observable<PracticeUserFolderModel[]> {
-    return this._httpClient.get<PracticeUserFolderModel[]>(`${this._apiBase}/folder-vocab/${folderId}`);
+  getFolderVocab(FolderId: number): Observable<PracticeUserFolderModel[]> {
+    return this._httpClient.get<PracticeUserFolderModel[]>(`${this._apiBase}/practice-user/${FolderId}`);
   }
 
   // Upload thư mục mới (có file Excel/CSV)

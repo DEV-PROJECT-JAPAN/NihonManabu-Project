@@ -10,11 +10,18 @@
   </app-practice-menu>
 }
 
-@if (currentView === 'system' || currentView === 'folder-gacha') {
+@if (currentView === 'system') {
   <app-practice-gachavocabulary
     [vocabList]="activeSystemVocabList" 
     [title]="activeTitle"
     (onBack)="currentView === 'system' ? goToMenu() : openFoldersView()">
+  </app-practice-gachavocabulary>
+}
+@else if (currentView === 'folder-gacha') {
+  <app-practice-gachavocabulary
+    [vocabList]="activeFolderVocabList"
+    [title]="activeTitle"
+    (onBack)="goToMenu()">
   </app-practice-gachavocabulary>
 }
 

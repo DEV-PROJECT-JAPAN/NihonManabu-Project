@@ -714,7 +714,7 @@
         }
       }
     },
-    "/api/Practice/practice-user": {
+    "/api/Practice/practice-user/{FolderId}": {
       "get": {
         "tags": [
           "Practice"
@@ -722,7 +722,8 @@
         "parameters": [
           {
             "name": "FolderId",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"

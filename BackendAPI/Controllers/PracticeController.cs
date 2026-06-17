@@ -37,8 +37,8 @@ namespace BackendAPI.Controllers
             return Ok(vocabularies);
         }
         //chức năng ôn tập, lấy từ vựng của người dùng
-        [HttpGet("practice-user")]
-        public async Task<IActionResult> PracticeUser([FromQuery] int FolderId)
+        [HttpGet("practice-user/{FolderId}")]
+        public async Task<IActionResult> PracticeUser( int FolderId)
         {
             //lấy id người dùng từ trạm trung chuyển (Bây giờ ra 1, sau này ra ID thật)
             int userId = _userContext.GetCurrentUserId();
