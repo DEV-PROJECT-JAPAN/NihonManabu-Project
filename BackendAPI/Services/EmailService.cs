@@ -1,71 +1,41 @@
 ﻿using BackendAPI.Interfaces;
-<<<<<<< HEAD
-using System.Net;
-using System.Net.Mail;
-=======
+// 🚨 ĐÃ XÓA BỎ "using System.Net.Mail;" để triệt hạ tận gốc lỗi tranh chấp SmtpClient
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 
-
->>>>>>> develop
 namespace BackendAPI.Services
 {
     public class EmailService : IEmailService
     {
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-<<<<<<< HEAD
-            // 1. Điền thông tin Email Support mới và Mật khẩu ứng dụng 16 ký tự vào đây
-            var fromEmail = "nihongolearning.support@gmail.com";
-            //var fromEmail = "support.vankhoi@gmail.com";
-            var appPassword = "jzzoyzquvkqoikzq"; // Chuỗi viết liền không dấu cách
+            // =========================================================================
+            // CHUẨN HÓA: SỬ DỤNG 100% THƯ VIỆN MAILKIT (BỎ LUỒNG TRÙNG LẶP CŨ)
+            // =========================================================================
 
-            // 2. Thiết lập xe tải vận chuyển SMTP kết nối đến máy chủ Google
-            // 2. Thiết lập xe tải vận chuyển SMTP
-            using var smtpClient = new SmtpClient("smtp.gmail.com");
-            smtpClient.Port = 587;
-            smtpClient.EnableSsl = true;
-
-            // MẤU CHỐT LÀ DÒNG NÀY: Phải tắt mặc định trước khi nạp mật khẩu ứng dụng
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential(fromEmail, appPassword);
-            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-
-            // 3. Đóng gói phong bì thư (Hỗ trợ hiển thị giao diện HTML)
-            using var mailMessage = new MailMessage
-            {
-                From = new MailAddress(fromEmail, "Nihongo Learning Support"),
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true,
-            };
-
-            mailMessage.To.Add(toEmail);
-
-            // 4. Bắn mail đi bất đồng bộ
-            await smtpClient.SendMailAsync(mailMessage);
-=======
             var email = new MimeMessage();
-            // Thay "Tên Ứng Dụng" và Email của bạn vào đây
+
+            // Thiết lập thông tin người gửi (Hiện tại đang dùng tài khoản dnam2886)
             email.From.Add(new MailboxAddress("NihonManabu System", "dnam2886@gmail.com"));
             email.To.Add(MailboxAddress.Parse(toEmail));
             email.Subject = subject;
 
-            // Thiết lập nội dung Email dạng HTML cho đẹp
+            // Thiết lập nội dung Email dạng HTML
             var builder = new BodyBuilder { HtmlBody = body };
             email.Body = builder.ToMessageBody();
 
+            // Lúc này SmtpClient chắc chắn 100% là của MailKit, không còn ai tranh chấp nữa!
             using var smtp = new SmtpClient();
             try
             {
-                // Kết nối tới Server SMTP của Gmail qua cổng 587
+                // 1. Kết nối tới Server SMTP của Gmail qua cổng 587 bằng phương thức bảo mật StartTls
                 await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
 
-                // ĐĂNG NHẬP: Điền Email và chuỗi 16 ký tự Mật khẩu ứng dụng vừa tạo ở Bước 1 vào đây
+                // 2. ĐĂNG NHẬP: Điền Email và chuỗi 16 ký tự Mật khẩu ứng dụng xịn của anh vào đây
                 await smtp.AuthenticateAsync("dnam2886@gmail.com", "ozob xwsy ybts lsbp");
 
-                // Thực hiện gửi
+                // 3. Thực hiện gửi bất đồng bộ
                 await smtp.SendAsync(email);
             }
             catch (Exception ex)
@@ -74,10 +44,9 @@ namespace BackendAPI.Services
             }
             finally
             {
-                // Ngắt kết nối an toàn
+                // 4. Ngắt kết nối an toàn để giải phóng tài nguyên hệ thống
                 await smtp.DisconnectAsync(true);
             }
->>>>>>> develop
         }
     }
 }
