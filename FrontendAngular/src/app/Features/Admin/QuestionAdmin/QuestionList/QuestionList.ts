@@ -143,7 +143,7 @@ export class QuestionList implements OnInit {
    * Hành động xóa câu hỏi vĩnh viễn
    */
   onDelete(id: number): void {
-    if (confirm('Khôi có chắc chắn muốn xóa câu hỏi này không?')) {
+    if (confirm('bạn có chắc chắn muốn xóa câu hỏi này không?')) {
       this._questionService.deleteQuestionAsync(id).subscribe(success => {
         if (success) {
           this.message = 'Xóa câu hỏi thành công!';

@@ -1,0 +1,426 @@
+:host {
+    --paper: #f3ecdf;
+    --paper-card: #fbf7ee;
+    --ink: #1e1b18;
+    --ink-soft: #4a423a;
+    --seal: #b8392c;
+    --seal-soft: #f1d9d4;
+    --bamboo: #6f8264;
+    --gold: #c9a35c;
+    --line: #e2d6bf;
+    --font-display: Shippori Mincho, ShipporiMincho, 'Shippori Mincho', 'Noto Serif JP', serif;
+    --font-body: 'Be Vietnam Pro', 'Noto Sans JP', sans-serif;
+    display: block;
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+
+/* 🛠️ FIX VIỀN TRẮNG VÀ FORM ĐĂNG NHẬP: Tạo khoảng cách an toàn, không ép đè lên Navbar của UserLayout */
+/* 🛠️ SỬA LẠI KHỐI NÀY ĐỂ NUỐT CHỬNG VỆT TRẮNG */
+/* 🛠️ FIX TRIỆT ĐỂ: Nuốt chửng viền trắng bằng box-shadow đổi màu dải hở */
+.kanji-notebook-container {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto !important;
+    /* Trả về margin 0 chuẩn để nút Đăng nhập không bị nhảy */
+    padding: 15px 20px 20px 20px !important;
+    box-sizing: border-box;
+
+    /* Ép một dải bóng màu đen/xám đậm hắt ngược lên trên để lấp kín vệt hở trắng */
+    box-shadow: 0 -20px 0 0 #11141a;
+}
+
+header.kanji-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 12px;
+    margin-top: 0 !important;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.brand-mark .seal {
+    width: 56px;
+    height: 56px;
+    border: 3px solid var(--seal);
+    color: var(--seal);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 700;
+    transform: rotate(-3deg);
+    flex-shrink: 0;
+}
+
+h1.kanji-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.8rem, 4.2vw, 2.7rem);
+    margin: 0;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+}
+
+header.kanji-header p {
+    margin: 4px 0 0;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+}
+
+.count-badge {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    background: var(--paper-card);
+    border-radius: 999px;
+    padding: 8px 18px;
+    white-space: nowrap;
+}
+
+.count-badge b {
+    color: var(--seal);
+    font-size: 1.15rem;
+}
+
+.kanji-content-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-content: start;
+}
+
+@media (min-width: 920px) {
+    .kanji-content-grid {
+        grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .list-area {
+        order: 1;
+    }
+
+    .detail-area {
+        order: 2;
+        position: sticky;
+        top: 24px;
+    }
+}
+
+.categories {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 16px;
+}
+
+.cat-btn {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+}
+
+.cat-btn:hover {
+    border-color: var(--seal);
+    color: var(--ink);
+}
+
+.cat-btn.active {
+    background: var(--seal);
+    border-color: var(--seal);
+    color: #fff;
+}
+
+.kanji-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 10px;
+}
+
+/* 🖤 MÀU ĐEN TUYỀN: Ô lưới chữ Hán hiển thị đậm nét rõ ràng */
+.kanji-card {
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 8px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.kanji-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--gold);
+}
+
+.kanji-card.active {
+    border-color: var(--seal);
+    background: var(--seal-soft);
+}
+
+.kanji-card .glyph {
+    font-family: var(--font-display);
+    font-size: 2.1rem;
+    font-weight: 700;
+    line-height: 1;
+    display: block;
+    color: #000000 !important;
+}
+
+.kanji-card .meaning {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.detail-panel {
+    background: var(--paper-card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: clamp(18px, 3vw, 28px);
+}
+
+.detail-top-box {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.stroke-stage {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--paper);
+    border: 1px solid var(--line);
+}
+
+.stroke-stage ::ng-deep svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.stroke-stage .guide-svg {
+    z-index: 1;
+}
+
+.stroke-stage .kanji-svg {
+    z-index: 2;
+}
+
+/* Nét vẽ vector màu đen mực tàu */
+::ng-deep .stroke-svg-host path {
+    fill: none;
+    stroke: #000000 !important;
+    stroke-width: 3.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.stroke-svg-host.hide-numbers ::ng-deep g[id^="kvg:StrokeNumbers"] {
+    display: none;
+}
+
+::ng-deep .stroke-svg-host g[id^="kvg:StrokeNumbers"] text {
+    fill: var(--seal) !important;
+    font-family: var(--font-body) !important;
+}
+
+.detail-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Định hình chữ Hán to bên phải không bị đè che khuất */
+.detail-info .glyph-big {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 12px 0;
+    color: #000000 !important;
+}
+
+.example-box {
+    background: var(--paper);
+    border-left: 4px solid var(--seal);
+    padding: 10px 14px;
+    margin: 12px 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.example-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.example-value {
+    font-size: 1.25rem;
+    font-family: var(--font-display);
+    color: var(--seal);
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.stat-pill {
+    font-size: 0.78rem;
+    color: #ffffff;
+    background: var(--ink-soft);
+    border: 1px solid var(--ink-soft);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-weight: 500;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.hanko-btn {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+    background: var(--seal);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 10px -4px rgba(184, 57, 44, 0.6);
+}
+
+.audio-btn {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+}
+
+.audio-btn:hover {
+    border-color: var(--gold);
+    background: #fff;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    cursor: pointer;
+}
+
+.readings {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.reading-block h3 {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    margin: 0 0 8px;
+    color: var(--ink);
+    border-bottom: 2px solid var(--gold);
+    display: inline-block;
+    padding-bottom: 2px;
+}
+
+.reading-block .reading-value {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #000000 !important;
+    font-weight: 600;
+}
+
+.example-sentence-block {
+    background-color: var(--paper) !important;
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 16px;
+    border-start: 4px solid var(--seal) !important;
+}
+
+.example-sentence-label {
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--ink-soft) !important;
+    font-weight: 600;
+}
+
+.example-sentence-value {
+    font-size: 1.15rem;
+    color: #000000 !important;
+    margin-top: 6px;
+    font-family: var(--font-display);
+    font-weight: 600;
+}
+
+.status-line {
+    margin-top: 14px;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+}
+
+.placeholder {
+    text-align: center;
+    color: var(--ink-soft);
+    padding: 40px 10px;
+}

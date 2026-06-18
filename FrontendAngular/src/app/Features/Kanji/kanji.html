@@ -1,0 +1,106 @@
+<div class="kanji-notebook-container">
+
+    <header class="kanji-header">
+        <div class="brand-mark">
+            <div class="seal">筆</div>
+            <div>
+                <h1 class="kanji-title">漢字帖 — Sổ tay chữ Hán</h1>
+                <p>Hệ thống tự động bốc dữ liệu từ vựng động trực tiếp từ Database.</p>
+            </div>
+        </div>
+        <div class="count-badge">
+            Đang hiển thị <b>{{ filteredKanjiList.length }}</b> / {{ vocabularyList.length }} chữ
+        </div>
+    </header>
+
+    <div class="kanji-content-grid">
+
+        <div class="list-area">
+            <div class="categories" id="categories">
+                @for (cat of categoryList; track cat.key) {
+                <button [className]="'cat-btn' + (cat.key === activeCategory ? ' active' : '')"
+                    (click)="selectCategory(cat.key)">
+                    {{ cat.label }}
+                </button>
+                }
+            </div>
+
+            <div class="kanji-grid" id="kanji-grid">
+                @for (item of filteredKanjiList; track item.id) {
+                <div [className]="'kanji-card' + (item.kanji === selectedWord?.kanji ? ' active' : '')"
+                    (click)="selectWordCard(item)">
+                    <span class="glyph">{{ item.kanji }}</span>
+                    <span class="meaning">{{ getSinoVietnamese(item.meaning, 'sino') }}</span>
+                </div>
+                }
+            </div>
+        </div>
+
+        <div class="detail-area">
+            <div class="detail-panel" id="detail-panel">
+
+                @if (selectedWord) {
+                <div class="detail-main-wrapper">
+
+                    <div class="detail-top-box">
+                        <div class="stroke-stage">
+                            <div class="guide-svg" [innerHTML]="guideSvg"></div>
+                            <div #strokeHost [class.stroke-svg-host]="true" [class.hide-numbers]="!showStrokeNumbers"
+                                id="stroke-host">
+                            </div>
+                        </div>
+
+                        <div class="detail-info">
+                            <p class="glyph-big">{{ selectedWord.kanji }}</p>
+
+                            <div class="example-box">
+                                <div class="example-label">Âm Hán Việt / Từ Loại</div>
+                                <div class="example-value">{{ getSinoVietnamese(selectedWord.meaning, 'sino') }}</div>
+                            </div>
+
+                            <div class="stat-row">
+                                <span class="stat-pill">Nghĩa: {{ getSinoVietnamese(selectedWord.meaning, 'pure')
+                                    }}</span>
+                            </div>
+
+                            <div class="controls">
+                                <button class="hanko-btn" (click)="replayAnimation()">再生 — Vẽ lại</button>
+                                <button class="audio-btn"
+                                    (click)="speakJapanese(selectedWord.textToSpeak || selectedWord.hiragana)">🔊 音声 —
+                                    Đọc</button>
+                                <label class="toggle-label">
+                                    <input type="checkbox" [(ngModel)]="showStrokeNumbers"> Số nét
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="readings">
+                        <div class="reading-block">
+                            <h3>かな — Cách đọc Kana</h3>
+                            <div class="reading-value">{{ selectedWord.hiragana || 'Chưa cập nhật' }}</div>
+                        </div>
+                        <div class="reading-block">
+                            <h3>ローマ字 — Phiên âm Romaji</h3>
+                            <div class="reading-value">{{ selectedWord.romaji || 'Chưa cập nhật' }}</div>
+                        </div>
+                    </div>
+
+                    @if (selectedWord.exampleSentence) {
+                    <div class="example-sentence-block">
+                        <div class="example-sentence-label">例文 — Câu ví dụ minh họa</div>
+                        <div class="example-sentence-value">{{ selectedWord.exampleSentence }}</div>
+                    </div>
+                    }
+
+                    <div class="status-line" id="status-line">{{ statusLine }}</div>
+                </div>
+                } @else {
+                <div class="placeholder">和 — Hệ thống đang đồng bộ dữ liệu chữ Hán từ Database...</div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+</div>

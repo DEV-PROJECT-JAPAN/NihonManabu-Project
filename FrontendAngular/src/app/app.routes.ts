@@ -31,6 +31,7 @@ import { LessonEditComponent } from './Features/Admin/LessonAdmin/edit/edit';
 import { VocabularyEditComponent } from './Features/Admin/VocabularyAdmin/edit/edit';
 import { VocabularyIndexComponent } from './Features/Admin/VocabularyAdmin/index';
 import { VocabularyCreateComponent } from './Features/Admin/VocabularyAdmin/create/create';
+import { Kanji } from './Features/Kanji/kanji'
 
 export const routes: Routes = [
     // 0. Vừa vào web không gõ gì -> Tự động đá sang trang levels của học viên
@@ -61,7 +62,14 @@ export const routes: Routes = [
                     { path: 'level/:levelId/lesson/:lessonId', component: GrammarList },
                     { path: 'level/:levelId/lesson/:lessonId/grammar/:grammarId', component: Questions }
                 ]
+            },
+            {
+                path: 'kanji',
+                children: [
+                    { path: '', component: Kanji }
+                ]
             }
+
         ]
     },
 
